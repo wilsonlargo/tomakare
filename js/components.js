@@ -1,0 +1,67 @@
+//Modulo que administra los proyectos y la construcción de los objetos visibles
+
+//Esta variable guarda el proyecto activo como clase
+let ActiveProyect;
+
+class clsProyecto {
+    constructor(nombre, vigencia) {
+        this.nombre = nombre;
+        this.vigencia = vigencia;
+        this.clsAreas = []
+    };
+
+    //Todo esta clase se deriva a una cadena tipo Json
+    convertToJSON() {
+        const cache = [];
+        return JSON.stringify(this, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.includes(value)) return;
+                cache.push(value);
+            }
+            return value;
+        });
+    }
+
+    //Inicia la transformación del objeto firebase en un objeto para la clase proyecto
+    static loadAsInstance(objProyecto) {
+
+        //Crea una nueva clase proyecto
+        const proyecto = new clsProyecto(objProyecto.nombre, objProyecto.vigencia);
+        //Lo carga en uan variable global
+        GLOBAL.state.proyecto = proyecto;
+        //Identifica el marcador único ID
+        proyecto.id = objProyecto.id;
+        //Todo lo devuelve como un objeto clase ay configurado
+        return proyecto;
+    }
+
+    //Función interna de esta clase para guardar la info dentro de esta clase activa
+    GuardarProyecto() {
+        const id = GLOBAL.firestore.updateProyecto(
+            JSON.parse(ActiveProyect.convertToJSON()))
+    }
+
+    BorrarProyecto() {
+        //Ejecuro la función global en dataconfig.js
+        GLOBAL.firestore.borrarProyecto(this.id);
+    }
+
+}
+
+//Función externa para crear un proyecto
+function CrearProyecto() {
+
+    let filteredUsers = aUsers.filter(user => user.usuario==activeEmail);
+
+    if (filteredUsers.length==1) {
+        console.log(filteredUsers.length)
+    }
+
+   
+
+
+
+
+
+}
+

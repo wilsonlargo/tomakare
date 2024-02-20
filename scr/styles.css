@@ -1,0 +1,21 @@
+.bg-org {
+    background-color: #840A54;
+
+
+}
+
+.text-org {
+    color: #840A54;
+
+}
+
+.btn-org {
+    transition-duration: 0.4s;
+    background-color: #840A54;
+    color: white;
+}
+
+.btn-org:hover {
+    background-color:#A42F6A;
+    color: white;
+}
