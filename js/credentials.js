@@ -5,12 +5,6 @@ function IniCredential(){
     //Evoca la función global de ingreso, en archivo (dataconfig.js)        
     GLOBAL.firestore.CredentialIn(email,password)
 
-    
-
-    
-
-
-
 }
 
 function SignOut(){

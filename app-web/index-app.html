@@ -36,7 +36,7 @@
 <header class="sticky-top">
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid bg-org">
-            <a class="navbar-brand text-white" href="#">Navbar</a>
+            <a class="navbar-brand text-white" href="#">Aplicación</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -44,8 +44,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="#" onclick="CrearProyecto()">Crear una vigencia</a>
+                    <li class="nav-item" id="itemCrearPrj">
+                        <a class="nav-link active text-white" aria-current="page" href="#"
+                            onclick="CrearProyecto()">Crear una vigencia</a>
+                    </li>
+                    <li class="nav-item" id="itemCrearPrj">
+                        <!--evoca la función de cargar las vigencias que están en la DB-->
+                        <a class="nav-link active text-white" aria-current="page" href="#"
+                            onclick="cargarProyectos()">Mostrar vigencias</a>
                     </li>
                 </ul>
                 <form class="d-flex m-1" role="search">
@@ -57,7 +63,30 @@
 </header>
 
 <body>
+    <div id="panelVigencias" class="d-flex justify-content-center align-items-center vh-10 mt-1">
+        <div class="list-group" id="paneListlVigencias">
+        </div>
+    </div>
+    <div id="contenedor-vigencia" class="ms-3 me-3" hidden="true">
+        <a href="#" class="nav-link rounded-2 bg-gradiente-org p-1">
+            <form class="d-flex m-1">
+                <button class="btn btn-org me-2" onclick="GuardarVigencia()"><i class="bi bi-floppy"></i> Guardar</button>
+                <button class="btn btn-org" onclick="BorrarVigencia()"><i class="bi bi-trash3"></i> Borrar</button>
+            </form>
+        </a>
+        <div id="PanelDel" hidden="true">
+            <form class="d-flex m-1">
+                <div class="h6 me-2 mt-2">¿Está seguro de borrar esta vigencia?</div>
+                <button type="button" class="btn btn-danger me-2" onclick="BorrarVigenciaFinal()">Borrar</button>
+                <button type="button" class="btn btn-secondary" onclick="hiddePanelBorrar()">Cancelar</button>
+            </form>
 
+        </div>
+        <div id="ContenedorControls" class="mt-2">
+
+        </div>
+
+    </div>
 </body>
 
 </html>

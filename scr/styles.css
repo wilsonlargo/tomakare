@@ -19,3 +19,17 @@
     background-color:#A42F6A;
     color: white;
 }
+
+.list-group-org {
+    transition-duration: 0.4s;
+    background-color: #840A54;
+    color: white;
+}
+.list-group-org:hover {
+    background-color:#A42F6A;
+    color: white;
+}
+
+.bg-gradiente-org{
+    background: linear-gradient(#840A54, #A42F6A);
+}

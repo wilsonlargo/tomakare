@@ -34,7 +34,7 @@ function mensajes(text,color){
     Toastify({
         text: text,
         duration: 3000,
-        destination: "https://github.com/apvarun/toastify-js",
+        destination: "",
         newWindow: true,
         close: true,
         gravity: "bottom", // `top` or `bottom`
@@ -47,4 +47,8 @@ function mensajes(text,color){
         onClick: function () { } // Callback after click
     }).showToast();
     
+}
+
+function hiddePanelBorrar(){
+    document.getElementById("PanelDel").hidden="false"
 }
