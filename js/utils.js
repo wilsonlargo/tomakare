@@ -20,7 +20,7 @@ let activeEmail;
 const HTML = {
     inputContol(parent, idInput, label) {
         const controlHTML = document.createElement("form")
-        controlHTML.className = "form-floating ms-5 me-5 mb-1"
+        controlHTML.className = "form-floating mb-2"
         controlHTML.innerHTML = `
             <input type="text" class="form-control" id="${idInput}" value="${parent.nombre}">
             <label for="${idInput}">${label}</label>
