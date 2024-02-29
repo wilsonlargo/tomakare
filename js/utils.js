@@ -1,8 +1,6 @@
 //======================================================================================================
 //Este módulo adminstra las acciones secundarias como variables globales de apoyo,
 //construtores generales de controles
-
-
 //Guarda información global de los proyectos cargados, y del proyecto activo
 const GLOBAL = {
     state: {
@@ -49,6 +47,9 @@ function mensajes(text,color){
     
 }
 
+
 function hiddePanelBorrar(){
     document.getElementById("PanelDel").hidden="false"
 }
+
+//Funciones que administran el sistema de mensajes de toast bootstrap

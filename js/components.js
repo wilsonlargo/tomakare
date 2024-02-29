@@ -121,7 +121,7 @@ async function cargarProyectos() {
                 const newItem = document.createElement("a")
                 newItem.innerHTML = `
                 <a href="#" class="nav-link rounded-2">
-                    <li class="list-group-item list-group-org bg-org">${vigencia.nombre} (${vigencia.vigencia})</li>
+                    <li class="list-group-item list-group bg-primary text-white">${vigencia.nombre} (${vigencia.vigencia})</li>
                 </a>
                 `
                 newItem.onclick = () => showVigencia(vigencia)

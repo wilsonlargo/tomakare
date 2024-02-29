@@ -35,7 +35,7 @@
 
 <header class="sticky-top">
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid bg-org">
+        <div class="container-fluid bg-primary">
             <a class="navbar-brand text-white" href="#">Aplicación</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -55,7 +55,7 @@
                     </li>
                 </ul>
                 <form class="d-flex m-1" role="search">
-                    <button class="btn btn-org" onclick="SignOut()">Salir</button>
+                    <button class="btn bg-primary text-white" onclick="SignOut()">Salir</button>
                 </form>
             </div>
         </div>
@@ -68,10 +68,12 @@
         </div>
     </div>
     <div id="contenedor-vigencia" class="ms-3 me-3" hidden="true">
-        <a href="#" class="nav-link rounded-2 bg-gradiente-org p-1">
+        <a href="#" class="nav-link rounded-2 bg-primary p-1">
             <form class="d-flex m-1">
-                <button class="btn btn-org me-2" onclick="GuardarVigencia()"><i class="bi bi-floppy"></i> Guardar</button>
-                <button class="btn btn-org" onclick="BorrarVigencia()"><i class="bi bi-trash3"></i> Borrar</button>
+                <button class="btn btn-primary me-2 text-white" onclick="GuardarVigencia()">
+                    <i class="bi bi-floppy"></i> Guardar</button>
+                <button class="btn btn-primary" onclick="BorrarVigencia()">
+                    <i class="bi bi-trash3"></i> Borrar</button>
             </form>
         </a>
         <div id="PanelDel" hidden="true">
@@ -87,6 +89,70 @@
         </div>
 
     </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary-subtle fw-medium">
+                        Consejería de Derechos de los Pueblos Indígenas
+                    </div>
+                    <div class="card-body bg-org-gray">
+                        <p>Información de la consejería</p>
+                        <footer class="card-footer bg-org-gray p-1">
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary-subtle fw-medium">
+                        Consejería de Derechos de los Pueblos Indígenas
+                    </div>
+                    <div class="card-body bg-org-gray">
+                        <p>Información de la consejería</p>
+                        <footer class="card-footer bg-org-gray p-1">
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary-subtle fw-medium">
+                        Consejería de Derechos de los Pueblos Indígenas
+                    </div>
+                    <div class="card-body bg-org-gray">
+                        <p>Información de la consejería</p>
+                        <footer class="card-footer bg-org-gray p-1">
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+  
+
+
+        </div>
+    </div>
+
+
+
 </body>
 
 </html>

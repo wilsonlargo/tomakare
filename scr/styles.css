@@ -15,6 +15,10 @@
     color: white;
 }
 
+
+
+
+
 .btn-org:hover {
     background-color:#A42F6A;
     color: white;
@@ -32,4 +36,14 @@
 
 .bg-gradiente-org{
     background: linear-gradient(#840A54, #A42F6A);
+}
+
+.bg-gradiente-org-2{
+    background: linear-gradient(#CD6155, #D98880);
+}
+
+.bg-org-gray {
+    transition-duration: 0.4s;
+    background-color: #F2F3F4;
+
 }
