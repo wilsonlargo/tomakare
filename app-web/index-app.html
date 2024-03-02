@@ -67,13 +67,15 @@
         <div class="list-group" id="paneListlVigencias">
         </div>
     </div>
-    <div id="contenedor-vigencia" class="ms-3 me-3" hidden="true">
-        <a href="#" class="nav-link rounded-2 bg-primary p-1">
+    <div id="contenedor-vigencia" class="ms-3 me-3">
+        <a href="#" class="nav-link rounded-2 bg-primary p-1" id="conteneder-bar-proyectos" hidden="true">
             <form class="d-flex m-1">
                 <button class="btn btn-primary me-2 text-white" onclick="GuardarVigencia()">
                     <i class="bi bi-floppy"></i> Guardar</button>
                 <button class="btn btn-primary" onclick="BorrarVigencia()">
                     <i class="bi bi-trash3"></i> Borrar</button>
+                <button class="btn btn-primary" onclick=" AgregarArea()">
+                    <i class="bi bi-file-earmark-plus"></i> Agregar área</button>
             </form>
         </a>
         <div id="PanelDel" hidden="true">
@@ -82,75 +84,32 @@
                 <button type="button" class="btn btn-danger me-2" onclick="BorrarVigenciaFinal()">Borrar</button>
                 <button type="button" class="btn btn-secondary" onclick="hiddePanelBorrar()">Cancelar</button>
             </form>
-
         </div>
         <div id="ContenedorControls" class="mt-2">
 
         </div>
+        <!--Aqui el contenedor visual de las tarjetas que se crean por cada área-->
 
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary-subtle fw-medium">
-                        Consejería de Derechos de los Pueblos Indígenas
-                    </div>
-                    <div class="card-body bg-org-gray">
-                        <p>Información de la consejería</p>
-                        <footer class="card-footer bg-org-gray p-1">
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary-subtle fw-medium">
-                        Consejería de Derechos de los Pueblos Indígenas
-                    </div>
-                    <div class="card-body bg-org-gray">
-                        <p>Información de la consejería</p>
-                        <footer class="card-footer bg-org-gray p-1">
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary-subtle fw-medium">
-                        Consejería de Derechos de los Pueblos Indígenas
-                    </div>
-                    <div class="card-body bg-org-gray">
-                        <p>Información de la consejería</p>
-                        <footer class="card-footer bg-org-gray p-1">
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-  
+    <div class="d-flex flex-wrap m-3" id="contenedor-tarjetas">
 
-
-        </div>
     </div>
+    <a href="#" class="nav-link rounded-2 bg-primary p-1 ms-3 me-2" id="contenedor-bar-areas" hidden="true">
+        <form class="d-flex m-1">
+            <button class="btn btn-primary me-2 text-white" id="btRetornarArea">
+                <i class="bi bi-arrow-return-left"></i></button>
+            <button class="btn btn-primary me-2 text-white" onclick="GuardarVigencia()">
+                <i class="bi bi-floppy"></i> Guardar</button>
+            <button class="btn btn-primary" id="btBorrarArea">
+                <i class="bi bi-trash3"></i> Borrar</button>
+            <button class="btn btn-primary" id="btAgregarMandato">
+                <i class="bi bi-file-earmark-plus"></i> Agregar mandato</button>
+        </form>
+    </a>
+    <div id="contenedor-area" class="m-3">
 
+    </div>
+    
 
 
 </body>

@@ -1,0 +1,8 @@
+        const loadAreas = (clsAreas, parent) => {
+            return clsAreas.map(area => {
+                console.log(clsAreas)
+                const areaObj = new Area(area.nombre, parent);
+                //areaObj.mandatos = loadActividades(area.actividades, areaObj);
+                return areaObj;
+            });
+        }
