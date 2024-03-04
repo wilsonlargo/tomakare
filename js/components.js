@@ -25,13 +25,24 @@ class clsProyecto {
     //Inicia la transformación del objeto firebase en un objeto para la clase proyecto
     static loadAsInstance(objProyecto) {
         //Esta acción carga las actividades que están en firebase y la sube convierte en 
-        //un objeto que llena la lista de areas 
-        const loadActividades = (clsAreas, parent) => {
-            return clsAreas.map(Areas => {
-                const areaObj = new Area(Areas.nombre, Areas.detalle, Areas.administrador, parent);
-                return areaObj;
+        //un objeto que llena la lista de areas
+        const loadAreas = (fromClsAreas) => {
+            return fromClsAreas.map(Areas => {
+                const areaNew = new Area(Areas.nombre, Areas.detalle, Areas.administrador, Areas.funciones);
+                areaNew.cslMandatos = loadMandatos(Areas.cslMandatos);
+
+                return areaNew;
             })
         }
+
+        const loadMandatos = (fromClsMandatos) => {
+            return fromClsMandatos.map(mandato => {
+                const mandatoNew = new Mandato(mandato.nombre);
+                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
+                return mandatoNew;
+            });
+        }
+
 
         //Crea una nueva clase proyecto
         const proyecto = new clsProyecto(objProyecto.nombre, objProyecto.vigencia);
@@ -40,7 +51,7 @@ class clsProyecto {
         //Identifica el marcador único ID
         proyecto.id = objProyecto.id;
 
-        proyecto.clsAreas = loadActividades(objProyecto.clsAreas, proyecto);
+        proyecto.clsAreas = loadAreas(objProyecto.clsAreas);
         return proyecto;
 
     }
@@ -88,6 +99,7 @@ class clsProyecto {
 
         //Evidencia cuantas areas hay en el proyecto y las muestra
         const cTarjetas = document.getElementById("contenedor-tarjetas")
+        cTarjetas.className = "d-flex flex-wrap m-3"
         let i = 0;
         cTarjetas.innerHTML = ''
         this.clsAreas.forEach(area => {
@@ -107,32 +119,49 @@ class clsProyecto {
 class Area {
     //constructor(nombre, detalle, administrador, parent) // aquí una version previa con parent, para ahcer las consultas
     //en restropectiva con el objeto parent
-    constructor(nombre, detalle, administrador, id) {
+    constructor(nombre, detalle, administrador, funciones, id) {
         this.nombre = nombre;
         this.detalle = detalle;
         this.administrador = administrador;
-        this.mandatos = [];
+        this.funciones = funciones;
         this.id = id
+        this.cslMandatos = [];
+
         //this.parent=parent
     }
 
+    addMandato(Mandato) {
+        this.cslMandatos.push(Mandato);
+    }
+    deleteMandato(id) {
+        this.cslMandatos.splice(id, 1);
+    }
+
     makerHtmlCards() {
+
+        const cTarjetas = document.getElementById("contenedor-tarjetas")
+        cTarjetas.className = "d-flex flex-wrap m-3"
+
         //Este es el contenedor general del área
         const component = document.createElement('div')
         //Crea un control tarjeta con botones
         const cCards = HTML.cardAreas(this.nombre, this.detalle,
             //Esta función incrustada asigna el comando al boton borrar área
             () => {
-                ActiveProyect.deleteArea(this.id)
-                ActiveProyect.GuardarProyecto()
-                showVigencia(ActiveProyect)
+                modal.modalDelete(
+                    //Asigna un comando de confirmación a un
+                    //boton dentro del formulario, confirmar
+                    () => {
+                        ActiveProyect.deleteArea(this.id)
+                        ActiveProyect.GuardarProyecto()
+                        showVigencia(ActiveProyect)
+                    }
+                )
             },
-            //Esta función incrustada asigna el comando al boton ver
+            //Esta función incrustada asigna el comando al boton ver área
             () => {
-                document.getElementById('contenedor-area').hidden = false
-                document.getElementById("contenedor-vigencia").hidden = true
-                document.getElementById('contenedor-tarjetas').innerHTML = ''
-                document.getElementById("contenedor-bar-areas").hidden = false
+                HiddenControl.hiddentoArea()
+                document.getElementById("contenedor-area").hidden = false
                 const bRetorno = document.getElementById("btRetornarArea")
                 bRetorno.onclick = () => showVigencia(ActiveProyect)
 
@@ -144,7 +173,6 @@ class Area {
     }
 
     makerHtmlArea() {
-
         document.getElementById("contenedor-area").innerHTML = ''
 
         //Creamos ahora los input, información del área
@@ -155,21 +183,98 @@ class Area {
         intNomArea.addEventListener('input', () => this.nombre = intNomArea.value);
         intNomArea.value = this.nombre;
 
+        //Input administrador de área
+        const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
+        document.getElementById("contenedor-area").appendChild(adminArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intAdminArea = document.getElementById(this.id + "adminArea")
+        intAdminArea.addEventListener('input', () => this.administrador = intAdminArea.value);
+        intAdminArea.value = this.administrador;
+
         //Creamos ahora los input, información del área
-        const detalleArea = HTML.inputTextArea(this, this.id + "detalleArea", "Descripción del área")
+        const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
         document.getElementById("contenedor-area").appendChild(detalleArea)
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
         const intDetArea = document.getElementById(this.id + "detalleArea")
         intDetArea.addEventListener('input', () => this.detalle = intDetArea.value);
         intDetArea.value = this.detalle;
 
+        //Input funciones
+        const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
+        document.getElementById("contenedor-area").appendChild(funcionesArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
+        intFuntionsArea.addEventListener('input', () => this.funciones = intFuntionsArea.value);
+        intFuntionsArea.value = this.funciones;
 
+        //Agrega un comando al boton que agrega mandatos
+        //con esto identifica en que área está y agrega un indice
+        const btnAgregarMandato = document.getElementById("btAgregarMandato")
+        btnAgregarMandato.onclick = () => {
+            AgregarMandato(this.id)
+        }
 
+        this.reloadComandos()
+    }
+
+    reloadComandos() {
+
+        //Evidencia cuantas areas hay en el proyecto y las muestra
+        const cMandatos = document.getElementById("contenedor-mandatos")
+        cMandatos.innerHTML = ''
+        let i = 0;
+
+        this.cslMandatos.forEach(mandato => {
+            mandato.id = i++
+            mandato.parentId = this.id
+            mandato.makerHtmlMandato(cMandatos);
+            cMandatos.appendChild(mandato.component);
+            mandato.makerComandos()
+        })
 
 
     }
 }
 
+class Mandato {
+    constructor(nombre, id, parentId) {
+        this.nombre = nombre;
+        this.id = id
+        this.parentId = parentId
+    }
+    makerHtmlMandato() {
+        //document.getElementById("contenedor-area").innerHTML = ''
+        const component = HTML.inputSpan(this.id, this.nombre)
+        this.component = component;
+
+    }
+    makerComandos() {
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const refInputMandato = document.getElementById(this.id + "InputMandato")
+        refInputMandato.addEventListener('input', () => this.nombre = refInputMandato.value);
+        refInputMandato.value = this.nombre;
+
+        const refBtnBorrarMandato = document.getElementById(this.id + "btnBorrarMandato")
+        refBtnBorrarMandato.addEventListener('click', () => {
+            ActiveProyect.clsAreas[this.parentId].deleteMandato(this.id)
+            //Recarga los mandatos
+            const AreaActiva = ActiveProyect.clsAreas[this.parentId]
+            const cMandatos = document.getElementById("contenedor-mandatos")
+            cMandatos.innerHTML = ''
+            let i = 0;
+            AreaActiva.cslMandatos.forEach(mandato => {
+                mandato.id = i++
+                mandato.makerHtmlMandato();
+                cMandatos.appendChild(mandato.component);
+                mandato.makerComandos()
+                
+            })
+            GuardarVigencia()
+        });
+
+
+    }
+}
 //Función externa para crear un proyecto
 async function CrearProyecto() {
     //Verifia que el usuario está dentro de la lista de administrador/
@@ -199,11 +304,9 @@ async function CrearProyecto() {
 async function cargarProyectos() {
     try {
         //Oculamos y mostramos los contendores principales
+        HiddenControl.hiddetoProyectos()
+        //Muestra el panel de vigencias
         document.getElementById("paneListlVigencias").hidden = false
-        document.getElementById("contenedor-vigencia").hidden = true
-        document.getElementById("contenedor-tarjetas").hidden = true
-        document.getElementById("contenedor-area").hidden = true
-        document.getElementById("contenedor-bar-areas").hidden = true
 
         const proyectos = GLOBAL.state.proyectos;
         if (proyectos.length === 0) {
@@ -246,12 +349,9 @@ async function cargarProyectos() {
 }
 
 async function showVigencia(vigencia) {
-    document.getElementById("paneListlVigencias").hidden = true
+    HiddenControl.hiddetoVigencias()
+    //Muestra el contenedor de vigencias y sus tarjetas
     document.getElementById("contenedor-vigencia").hidden = false
-    document.getElementById("contenedor-tarjetas").hidden = true
-    document.getElementById("contenedor-area").hidden = true
-    document.getElementById("contenedor-bar-areas").hidden = true
-
 
     mensajes("Vigencia abierta: " + vigencia.nombre, "green")
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
@@ -269,7 +369,6 @@ async function GuardarVigencia() {
 
 function readOnlyControls(estado) {
     document.getElementById("conteneder-bar-proyectos").hidden = estado
-
 }
 
 
@@ -279,34 +378,53 @@ async function BorrarVigencia() {
     if (filteredUsers.length == 0) {
         mensajes("Usted no tiene permisos de administrador", "orange")
     } else {
-        mensajes("Usuario administrador", "blue")
-        document.getElementById("PanelDel").hidden = false
+        modal.modalDelete(
+            () => {
+                //Esta función encrustada borra una vigencia
+                ActiveProyect.BorrarProyecto();
+                mensajes("La vigencia ha sido eliminada", "blue")
+                cargarProyectos()
+
+
+            }
+        )
+
     }
-
-
-
-
-}
-async function BorrarVigenciaFinal() {
-    ActiveProyect.BorrarProyecto();
-    mensajes("La vigencia ha sido eliminada", "blue")
-    document.getElementById("PanelDel").hidden = "true"
-
 }
 
 //Esta función cita la función interna de proyecto para crear una nueva área
 async function AgregarArea() {
-    ActiveProyect.addArea(new Area("Nueva área", "Descripción del área", "Administrador"))
+    ActiveProyect.addArea(new Area("Nombre área", "Descripción del área", "Administrador", "Funciones"))
     GuardarVigencia()
 
     //Evidencia cuantas areas hay en el proyecto y las muestra
     const cTarjetas = document.getElementById("contenedor-tarjetas")
+    cTarjetas.className = "d-flex flex-wrap m-3"
     cTarjetas.innerHTML = ''
     ActiveProyect.clsAreas.forEach(area => {
-        area.makerHtml();
+        area.makerHtmlCards()
         cTarjetas.appendChild(area.component);
     });
-
     mensajes("Elemento creado", "Green")
+}
+async function AgregarMandato(parentId) {
+    const AreaActiva = ActiveProyect.clsAreas[parentId]
+    //Se agrega uan neuva clase mandato, ojo- se marca indice del elemento y el indice del padre, apra mirar los
+    //elementos anidados
+    const mandato = new Mandato('Nuevo mandato', 0, parentId);
+    AreaActiva.addMandato(mandato)
+
+    const cMandatos = document.getElementById("contenedor-mandatos")
+    cMandatos.innerHTML = ''
+    let i = 0;
+    AreaActiva.cslMandatos.forEach(mandato => {
+        mandato.id = i++
+        mandato.makerHtmlMandato();
+        cMandatos.appendChild(mandato.component);
+        mandato.makerComandos()
+
+    })
+    GuardarVigencia()
+    mensajes("Se creó un mandato", "green")
 }
 

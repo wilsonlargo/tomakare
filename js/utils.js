@@ -25,19 +25,39 @@ const HTML = {
         `
         return controlHTML
     },
-    inputTextArea(parent, idInput, label) {
+    inputTextArea(idInput, label) {
         const controlHTML = document.createElement("form")
         controlHTML.className = "form-floating mb-2"
         controlHTML.innerHTML = `
-            <TextArea type="text" class="form-control" id="${idInput}" value="${parent.nombre}">
-            <label for="${idInput}">${label}</label>
+            <textarea class="form-control" placeholder="Escriba aquí su comentario" id="${idInput}" style="height: 100px"></textarea>
+            <label for="${idInput}">${label}</label>            
         `
+        return controlHTML
+    },
+    inputSpan(id,value, comandDel) {
+        
+        const controlHTML = document.createElement("div")
+        controlHTML.className = "input-group mb-3"
+        controlHTML.innerHTML = `                        
+        <span class="input-group-text" id="${id}btnNumeraMandato">
+        ${id+1}
+        </span>
+       <input id="${id}InputMandato" type="text" class="form-control" placeholder="Mandato"
+        aria-label="Mandatos" aria-describedby="basic-addon1"
+        value="${value}">
+        <span class="input-group-text">
+            <button class="btn text-warning fw-medium" id="${id}btnBorrarMandato">
+                <i class="bi bi-trash3 h4 fw-medium"></i>
+            </button>
+        </span>
+        `
+
         return controlHTML
     },
 
     cardAreas(nombre, texto, comandDel, comandShow) {
         const controlHTML = document.createElement("div")
-        controlHTML.style.width="300px"
+        controlHTML.style.width = "300px"
         controlHTML.className = "card shadow-sm m-2"
         controlHTML.innerHTML = `
 
@@ -55,14 +75,16 @@ const HTML = {
             cFooter.className = "card-footer bg-org-gray p-1"
             cFooter.innerHTML = `
              <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm"
+             
                     onclick="a()">
-                    <i class="bi bi-pencil"></i>
+                    
+                    <i class="bi bi-eye"></i>
             </button>
             `
             const btnCircleMostrar = document.createElement("button")
             btnCircleMostrar.className = "btn bg-primary text-white rounded-circle shadow-sm m-1"
             btnCircleMostrar.type = "button"
-            btnCircleMostrar.innerHTML = `<i class="bi bi-eye"></i>`
+            btnCircleMostrar.innerHTML = `<i class="bi bi-pencil"></i>`
             btnCircleMostrar.onclick = comandShow
             cFooter.appendChild(btnCircleMostrar)
 
@@ -80,9 +102,6 @@ const HTML = {
 
         return controlHTML
     },
-
-
-
 }
 
 
@@ -111,5 +130,84 @@ function mensajes(text, color) {
 function hiddePanelBorrar() {
     document.getElementById("PanelDel").hidden = "false"
 }
+
+
+const HiddenControl = {
+    hiddetoVigencias() {
+        document.getElementById("paneListlVigencias").hidden = true
+        document.getElementById("contenedor-area").hidden = true
+        document.getElementById("accordionControl").hidden = true
+        
+        document.getElementById("contenedor-bar-areas").hidden = true
+        document.getElementById("ContenedorControls").hidden = false
+        document.getElementById("conteneder-bar-proyectos").hidden = false
+        
+        
+
+
+
+        const tj = document.getElementById("contenedor-tarjetas")
+        tj.className = ''
+        tj.hidden = true
+    },
+    hiddetoProyectos() {
+        document.getElementById("contenedor-vigencia").hidden = true
+        document.getElementById("contenedor-area").hidden = true
+        document.getElementById("contenedor-bar-areas").hidden = true
+        document.getElementById("accordionControl").hidden = true
+
+        const tj = document.getElementById("contenedor-tarjetas")
+        tj.className = ''
+        tj.hidden = true
+    },
+    hiddeAllcontrol() {
+        document.getElementById("paneListlVigencias").hidden = true
+        document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("contenedor-bar-areas").hidden = true
+        document.getElementById("contenedor-area").hidden = true
+        document.getElementById("ContenedorControls").hidden = true
+        document.getElementById("accordionControl").hidden = true
+
+
+
+        //Al parecer contenedores flexibles no se ocultan bien
+        //Cambio la clase y luego lo oculto y asi en otro sentido
+        const tj = document.getElementById("contenedor-tarjetas")
+        tj.className = ''
+        tj.hidden = true
+
+
+
+    },
+    hiddentoArea() {
+        document.getElementById("paneListlVigencias").hidden = true
+        document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("ContenedorControls").hidden = true
+
+        const tj = document.getElementById("contenedor-tarjetas")
+        tj.className = ''
+        tj.hidden = true
+
+        document.getElementById("contenedor-bar-areas").hidden = false
+        document.getElementById("accordionControl").hidden = false
+    }
+}
+
+const modal = {
+
+    modalDelete(comando) {
+        const modal = new bootstrap.Modal(document.getElementById('myModal'));
+        const texto = document.getElementById("textoModal")
+        texto.textContent="¿Está seguro de eliminar este elemento?"
+
+        modal.show();
+        const btn = document.getElementById('btnBorrarConfirm')
+        btn.onclick = comando
+
+    }
+
+
+}
+
 
 
