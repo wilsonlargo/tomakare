@@ -34,6 +34,16 @@ const HTML = {
         `
         return controlHTML
     },
+
+    inputTextArea2(idInput, label, idText) {
+        const controlHTML = document.createElement("form")
+        controlHTML.className = "form-floating mb-2"
+        controlHTML.innerHTML = `
+            <textarea class="form-control" placeholder="Escriba aquí su comentario" id="${idInput}${idText}" style="height: 100px"></textarea>
+            <label for="${idInput}${idText}">${label}</label>            
+        `
+        return controlHTML
+    },
     inputSpan(id,value, comandDel) {
         
         const controlHTML = document.createElement("div")
@@ -47,6 +57,26 @@ const HTML = {
         value="${value}">
         <span class="input-group-text">
             <button class="btn text-warning fw-medium" id="${id}btnBorrarMandato">
+                <i class="bi bi-trash3 h4 fw-medium"></i>
+            </button>
+        </span>
+        `
+
+        return controlHTML
+    },
+    inputSpan2(id,value, idtext) {
+        
+        const controlHTML = document.createElement("div")
+        controlHTML.className = "input-group mb-3"
+        controlHTML.innerHTML = `                        
+        <span class="input-group-text" id="${id}btnNumeraLinea">
+        ${id+1}
+        </span>
+       <input id="${id}${idtext}" type="text" class="form-control" placeholder=""
+        aria-label="Mandatos" aria-describedby="basic-addon1"
+        value="${value}">
+        <span class="input-group-text">
+            <button class="btn text-warning fw-medium" id="${id}btnBorrarLinea">
                 <i class="bi bi-trash3 h4 fw-medium"></i>
             </button>
         </span>

@@ -30,6 +30,7 @@ class clsProyecto {
             return fromClsAreas.map(Areas => {
                 const areaNew = new Area(Areas.nombre, Areas.detalle, Areas.administrador, Areas.funciones);
                 areaNew.cslMandatos = loadMandatos(Areas.cslMandatos);
+                areaNew.cslLineas = loadLineas(Areas.cslLineas);
 
                 return areaNew;
             })
@@ -38,10 +39,18 @@ class clsProyecto {
         const loadMandatos = (fromClsMandatos) => {
             return fromClsMandatos.map(mandato => {
                 const mandatoNew = new Mandato(mandato.nombre);
-                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
                 return mandatoNew;
             });
         }
+
+        const loadLineas = (fromClsLineas) => {
+            return fromClsLineas.map(linea => {
+                const lineaNew = new Linea(linea.nombre, linea.descripcion);
+                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
+                return lineaNew;
+            });
+        }
+
 
 
         //Crea una nueva clase proyecto
@@ -50,7 +59,6 @@ class clsProyecto {
         GLOBAL.state.proyecto = proyecto;
         //Identifica el marcador único ID
         proyecto.id = objProyecto.id;
-
         proyecto.clsAreas = loadAreas(objProyecto.clsAreas);
         return proyecto;
 
@@ -126,6 +134,7 @@ class Area {
         this.funciones = funciones;
         this.id = id
         this.cslMandatos = [];
+        this.cslLineas = [];
 
         //this.parent=parent
     }
@@ -136,6 +145,14 @@ class Area {
     deleteMandato(id) {
         this.cslMandatos.splice(id, 1);
     }
+
+    addLinea(Linea) {
+        this.cslLineas.push(Linea);
+    }
+    deleteLinea(id) {
+        this.cslLineas.splice(id, 1);
+    }
+
 
     makerHtmlCards() {
 
@@ -214,12 +231,18 @@ class Area {
             AgregarMandato(this.id)
         }
 
+        //Agrega un comando al boton que agrega lineas
+        //con esto identifica en que área está y agrega un indice
+        const btAgregarLinea = document.getElementById("btAgregarLinea")
+        btAgregarLinea.onclick = () => {
+            AgregarLinea(this.id)
+        }
+
         this.reloadComandos()
     }
 
     reloadComandos() {
 
-        //Evidencia cuantas areas hay en el proyecto y las muestra
         const cMandatos = document.getElementById("contenedor-mandatos")
         cMandatos.innerHTML = ''
         let i = 0;
@@ -230,6 +253,27 @@ class Area {
             mandato.makerHtmlMandato(cMandatos);
             cMandatos.appendChild(mandato.component);
             mandato.makerComandos()
+        })
+
+        const cLineas = document.getElementById("contenedor-lineas")
+        cLineas.innerHTML = ''
+        let l = 0;
+
+        this.cslLineas.forEach(linea => {
+            const btOpen = document.createElement('a')
+            btOpen.innerHTML = `  
+            <a class="btn btn-primary h4" data-bs-toggle="collapse" 
+            href="#${l}collapseLine" 
+            role="button" 
+            aria-expanded="false" 
+            aria-controls="${l}collapseLine">(${l+1}) ${linea.nombre}</a>`
+            cLineas.appendChild(btOpen);
+
+            linea.id = l++
+            linea.parentId = this.id
+            linea.makerHtmlLinea(cLineas);
+            cLineas.appendChild(linea.component);
+            linea.makerComandos()
         })
 
 
@@ -246,7 +290,6 @@ class Mandato {
         //document.getElementById("contenedor-area").innerHTML = ''
         const component = HTML.inputSpan(this.id, this.nombre)
         this.component = component;
-
     }
     makerComandos() {
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
@@ -266,11 +309,81 @@ class Mandato {
                 mandato.id = i++
                 mandato.makerHtmlMandato();
                 cMandatos.appendChild(mandato.component);
-                mandato.makerComandos()             
+                mandato.makerComandos()
             })
             GuardarVigencia()
         });
 
+
+    }
+}
+
+class Linea {
+    constructor(nombre, descripcion, id, parentId) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.id = id;
+        this.parentId = parentId;
+        this.programa = []
+    }
+
+    makerHtmlLinea() {
+        //Creamso un contenedor de entrada texto para la info de la línea
+
+        const component = document.createElement('div')
+        component.className = "collapse"
+        component.id = this.id + 'collapseLine'
+
+
+
+
+        const inputSpan = HTML.inputSpan2(this.id, this.nombre, 'InputLinea')
+        const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
+
+
+        component.appendChild(inputSpan)
+        component.appendChild(inputText)
+
+        this.component = component;
+
+    }
+    makerComandos() {
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const refInputLinea = document.getElementById(this.id + "InputLinea")
+        refInputLinea.addEventListener('input', () => this.nombre = refInputLinea.value);
+        refInputLinea.value = this.nombre;
+
+        const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
+        refDescripLinea.addEventListener('input', () => this.descripcion = refDescripLinea.value);
+        refDescripLinea.value = this.descripcion;
+
+
+
+        const refBtnBorrarLinea = document.getElementById(this.id + "btnBorrarLinea")
+        refBtnBorrarLinea.addEventListener('click', () => {
+            ActiveProyect.clsAreas[this.parentId].deleteLinea(this.id)
+            //Recarga los mandatos
+            const AreaActiva = ActiveProyect.clsAreas[this.parentId]
+            const cLineas = document.getElementById("contenedor-lineas")
+            cLineas.innerHTML = ''
+            let i = 0;
+            AreaActiva.cslLineas.forEach(linea => {
+                const btOpen = document.createElement('a')
+                btOpen.innerHTML = `  
+                <a class="btn btn-primary h4" data-bs-toggle="collapse" 
+                href="#${i}collapseLine" 
+                role="button" 
+                aria-expanded="false" 
+                aria-controls="${i}collapseLine">(${i+1}) ${linea.nombre}</a>`
+                cLineas.appendChild(btOpen);
+    
+                linea.id = i++
+                linea.makerHtmlLinea();
+                cLineas.appendChild(linea.component);
+                linea.makerComandos()
+            })
+            GuardarVigencia()
+        });
 
     }
 }
@@ -425,5 +538,41 @@ async function AgregarMandato(parentId) {
     })
     GuardarVigencia()
     mensajes("Se creó un mandato", "green")
+}
+
+async function AgregarLinea(parentId) {
+    //Identificamos en que área estamos pos su id
+    const AreaActiva = ActiveProyect.clsAreas[parentId]
+
+    //Creamos un anueva línea de acción dentro de la clase Area
+    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, parentId);
+    AreaActiva.addLinea(linea)
+
+    const cLineas = document.getElementById("contenedor-lineas")
+    cLineas.innerHTML = '';
+
+    let i = 0;
+    AreaActiva.cslLineas.forEach(linea => {
+
+        const btOpen = document.createElement('a')
+        btOpen.innerHTML = `  
+        <a class="btn btn-primary h4" data-bs-toggle="collapse" 
+        href="#${i}collapseLine" 
+        role="button" 
+        aria-expanded="false" 
+        aria-controls="${i}collapseLine">(${i+1}) ${linea.nombre}</a>`
+        cLineas.appendChild(btOpen);
+
+        linea.id = i++
+        linea.makerHtmlLinea();
+        cLineas.appendChild(linea.component);
+        linea.makerComandos()
+
+    })
+    GuardarVigencia()
+    mensajes("Se creó una nueva línea", "green")
+
+
+
 }
 
