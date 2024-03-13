@@ -266,8 +266,7 @@ class Mandato {
                 mandato.id = i++
                 mandato.makerHtmlMandato();
                 cMandatos.appendChild(mandato.component);
-                mandato.makerComandos()
-                
+                mandato.makerComandos()             
             })
             GuardarVigencia()
         });

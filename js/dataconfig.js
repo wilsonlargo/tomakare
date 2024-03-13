@@ -1,9 +1,6 @@
 //======================================================================================================
-//Este módulo adminstra las acciones globales relacioanda con la base de datos, operaciones de
+//Este módulo adminstra las acciones globales relacionadas con la base de datos, operaciones de
 //crear, abrir, eliminar proyectos, así como permitir el ingreso a los datos
-
-
-
 
 //Importa las instanacias de firebase y administración de base de datos
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
