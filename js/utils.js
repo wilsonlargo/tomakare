@@ -85,6 +85,28 @@ const HTML = {
         return controlHTML
     },
 
+    inputSpan3(id, idParent,value, idtext) {
+        
+        const controlHTML = document.createElement("div")
+        controlHTML.className = "input-group mb-3"
+        controlHTML.innerHTML = `                        
+        <span class="input-group-text">
+        ${id+1}
+        </span>
+
+       <input id="${idParent}${id}Input${idtext}" type="text" class="form-control" placeholder="${idtext}"
+        aria-label="${idtext}" aria-describedby="basic-addon1"
+        value="${value}">
+
+        <span class="input-group-text">
+            <button class="btn text-warning fw-medium" id="${idParent}${id}btnBorrar${idtext}">
+                <i class="bi bi-trash3 h4 fw-medium"></i>
+            </button>
+        </span>
+        `
+        return controlHTML
+    },
+
     cardAreas(nombre, texto, comandDel, comandShow) {
         const controlHTML = document.createElement("div")
         controlHTML.style.width = "300px"

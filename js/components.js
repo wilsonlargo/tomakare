@@ -45,7 +45,7 @@ class clsProyecto {
 
         const loadLineas = (fromClsLineas) => {
             return fromClsLineas.map(linea => {
-                const lineaNew = new Linea(linea.nombre, linea.descripcion);
+                const lineaNew = new Linea(linea.nombre, linea.descripcion, linea.id, linea.parent);
                 lineaNew.clsPrograma = loadProgramas(linea.clsPrograma, lineaNew);
                 return lineaNew;
             });
@@ -53,7 +53,7 @@ class clsProyecto {
 
         const loadProgramas = (fromClsProgramas, lineaNew) => {
             return fromClsProgramas.map(programa => {
-                const ProgramaNew = new Linea(programa.nombre, programa.descripcion, programa.id, lineaNew.id);
+                const ProgramaNew = new Programa(programa.nombre, programa.descripcion, programa.id, lineaNew);
                 //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
                 return ProgramaNew;
             });
@@ -246,7 +246,7 @@ class Area {
         //con esto identifica en que área está y agrega un indice
         const btAgregarLinea = document.getElementById("btAgregarLinea")
         btAgregarLinea.onclick = () => {
-            AgregarLinea(this.id)
+            AgregarLinea(this)
         }
 
         this.reloadComandos()
@@ -320,7 +320,7 @@ class Mandato {
                 mandato.id = i++
                 mandato.makerHtmlMandato();
                 cMandatos.appendChild(mandato.component);
-                mandato.makerComandos()
+
             })
             GuardarVigencia()
         });
@@ -330,11 +330,11 @@ class Mandato {
 }
 
 class Linea {
-    constructor(nombre, descripcion, id, parentId) {
+    constructor(nombre, descripcion, id, parent) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.id = id;
-        this.parentId = parentId;
+        this.parent = parent;
         this.clsPrograma = []
     }
 
@@ -361,33 +361,55 @@ class Linea {
         btnAddPrograma.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar programa`
 
 
-        const LineaActiva = ActiveProyect.clsAreas[this.parentId].cslLineas[this.id]
+
 
         btnAddPrograma.onclick = () => {
             const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, this);
-            LineaActiva.addPrograma(programa)
-            GuardarVigencia()
+            this.addPrograma(programa)
+            programa.makerHTMLPrograma()
+            contenedor_programas.appendChild(programa.component)
+            //GuardarVigencia()
             mensajes("Se creó un nuevo programa", "green")
         }
+
+        const contenedor_programas = document.createElement('div')
+        contenedor_programas.className = "ms-3"
+        contenedor_programas.id = this.id + 'contenedor-programas'
+        contenedor_programas.innerHTML=""
 
 
         component.appendChild(inputSpan)
         component.appendChild(inputText)
         component.appendChild(btnAddPrograma)
 
-        //Evocamos la clase preograma
-       
 
-        LineaActiva.clsPrograma.forEach(programa => {
-            const cProgramaC = document.createElement('p')
-            cProgramaC.textContent = programa.nombre
-            component.appendChild(cProgramaC)
-            //programa.makerHTMLPrograma()
+        //Evocamos la clase programa y contamos cuantos hay
+        let i = 0;
+        this.clsPrograma.forEach(programa => {
+            const btOpen = document.createElement('a')
+            btOpen.innerHTML = `  
+                <a class="btn btn-secondary h4" data-bs-toggle="collapse" 
+                href="#${this.id}${i}collapseProgram" 
+                role="button" 
+                aria-expanded="false" 
+                aria-controls="${this.id}${i}collapseProgram">(${i + 1}) ${programa.nombre}</a>`
+
+            contenedor_programas.appendChild(btOpen)
+
+            programa.id = i++
+            programa.makerHTMLPrograma()
+            contenedor_programas.appendChild(programa.component)
+
 
         })
 
+        component.appendChild(contenedor_programas)
+
+
 
         this.component = component;
+
+
 
     }
     makerComandos() {
@@ -439,15 +461,33 @@ class Programa {
     }
 
     makerHTMLPrograma() {
-        console.log(this.parentId.clsPrograma)
+        const component = document.createElement('div')
+        component.className = "collapse mb-4"
+        component.id = `${this.parentId.id}${this.id}collapseProgram`
+
+        const inputSpan = HTML.inputSpan3(this.id, this.parentId.id, this.nombre, `Programa`)
+        inputSpan.addEventListener('input', () => {
+            const control = document.getElementById(`${this.parentId.id}${this.id}InputPrograma`)
+            this.nombre=control.value
+        })
+
+        component.appendChild(inputSpan)
 
 
 
+        //${idParent}${id}Input${idtext}
 
+        //const inputText = HTML.inputTextArea2(this.id, "Descripción del programa", `${this.parentId.id}InputTextProgram`)
+        //component.appendChild(inputText)
+
+        this.component = component
     }
 
 }
 
+function aaaa(){
+
+}
 
 
 //Función externa para crear un proyecto
@@ -603,12 +643,13 @@ async function AgregarMandato(parentId) {
     mensajes("Se creó un mandato", "green")
 }
 
-async function AgregarLinea(parentId) {
+async function AgregarLinea(parent) {
     //Identificamos en que área estamos pos su id
-    const AreaActiva = ActiveProyect.clsAreas[parentId]
+    const AreaActiva = parent
+    console.log(AreaActiva)
 
     //Creamos un anueva línea de acción dentro de la clase Area
-    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, parentId);
+    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, parent);
     AreaActiva.addLinea(linea)
 
     const cLineas = document.getElementById("contenedor-lineas")
