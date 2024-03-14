@@ -46,10 +46,19 @@ class clsProyecto {
         const loadLineas = (fromClsLineas) => {
             return fromClsLineas.map(linea => {
                 const lineaNew = new Linea(linea.nombre, linea.descripcion);
-                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
+                lineaNew.clsPrograma = loadProgramas(linea.clsPrograma, lineaNew);
                 return lineaNew;
             });
         }
+
+        const loadProgramas = (fromClsProgramas, lineaNew) => {
+            return fromClsProgramas.map(programa => {
+                const ProgramaNew = new Linea(programa.nombre, programa.descripcion, programa.id, lineaNew.id);
+                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
+                return ProgramaNew;
+            });
+        }
+
 
 
 
@@ -61,6 +70,8 @@ class clsProyecto {
         proyecto.id = objProyecto.id;
         proyecto.clsAreas = loadAreas(objProyecto.clsAreas);
         return proyecto;
+
+
 
     }
 
@@ -266,7 +277,7 @@ class Area {
             href="#${l}collapseLine" 
             role="button" 
             aria-expanded="false" 
-            aria-controls="${l}collapseLine">(${l+1}) ${linea.nombre}</a>`
+            aria-controls="${l}collapseLine">(${l + 1}) ${linea.nombre}</a>`
             cLineas.appendChild(btOpen);
 
             linea.id = l++
@@ -324,25 +335,55 @@ class Linea {
         this.descripcion = descripcion;
         this.id = id;
         this.parentId = parentId;
-        this.programa = []
+        this.clsPrograma = []
     }
+
+    addPrograma(Programa) {
+        this.clsPrograma.push(Programa);
+    }
+    deletePrograma(id) {
+        this.clsPrograma.splice(id, 1);
+    }
+
 
     makerHtmlLinea() {
         //Creamso un contenedor de entrada texto para la info de la línea
 
         const component = document.createElement('div')
-        component.className = "collapse"
+        component.className = "collapse mb-4"
         component.id = this.id + 'collapseLine'
-
-
-
 
         const inputSpan = HTML.inputSpan2(this.id, this.nombre, 'InputLinea')
         const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
 
+        const btnAddPrograma = document.createElement('button');
+        btnAddPrograma.className = "btn text-primary"
+        btnAddPrograma.innerHTML=`<i class="bi bi-file-plus me-2"></i>Agregar programa`
+
+        btnAddPrograma.onclick = () => {
+            const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, this);
+            
+            GuardarVigencia()
+            mensajes("Se creó un nuevo programa", "green")
+        }
+
 
         component.appendChild(inputSpan)
         component.appendChild(inputText)
+        component.appendChild(btnAddPrograma)
+
+        //Evocamos la clase preograma
+        const LineaActiva = ActiveProyect.clsAreas[this.parentId].cslLineas[this.id]
+
+
+        LineaActiva.clsPrograma.forEach(programa => {
+            const cProgramaC = document.createElement('p')
+            cProgramaC.textContent=programa.nombre
+            component.appendChild(cProgramaC)
+            //programa.makerHTMLPrograma()
+
+        })
+
 
         this.component = component;
 
@@ -356,7 +397,6 @@ class Linea {
         const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
         refDescripLinea.addEventListener('input', () => this.descripcion = refDescripLinea.value);
         refDescripLinea.value = this.descripcion;
-
 
 
         const refBtnBorrarLinea = document.getElementById(this.id + "btnBorrarLinea")
@@ -374,9 +414,9 @@ class Linea {
                 href="#${i}collapseLine" 
                 role="button" 
                 aria-expanded="false" 
-                aria-controls="${i}collapseLine">(${i+1}) ${linea.nombre}</a>`
+                aria-controls="${i}collapseLine">(${i + 1}) ${linea.nombre}</a>`
                 cLineas.appendChild(btOpen);
-    
+
                 linea.id = i++
                 linea.makerHtmlLinea();
                 cLineas.appendChild(linea.component);
@@ -387,6 +427,27 @@ class Linea {
 
     }
 }
+class Programa {
+    constructor(nombre, descripcion, id, parentId) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.id = id;
+        this.parentId = parentId;
+        this.proyectos = [];
+    }
+
+    makerHTMLPrograma() {
+        console.log(this.parentId.clsPrograma)
+
+
+
+
+    }
+
+}
+
+
+
 //Función externa para crear un proyecto
 async function CrearProyecto() {
     //Verifia que el usuario está dentro de la lista de administrador/
@@ -560,7 +621,7 @@ async function AgregarLinea(parentId) {
         href="#${i}collapseLine" 
         role="button" 
         aria-expanded="false" 
-        aria-controls="${i}collapseLine">(${i+1}) ${linea.nombre}</a>`
+        aria-controls="${i}collapseLine">(${i + 1}) ${linea.nombre}</a>`
         cLineas.appendChild(btOpen);
 
         linea.id = i++
@@ -571,8 +632,5 @@ async function AgregarLinea(parentId) {
     })
     GuardarVigencia()
     mensajes("Se creó una nueva línea", "green")
-
-
-
 }
 
