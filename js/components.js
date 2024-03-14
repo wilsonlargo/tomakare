@@ -358,11 +358,14 @@ class Linea {
 
         const btnAddPrograma = document.createElement('button');
         btnAddPrograma.className = "btn text-primary"
-        btnAddPrograma.innerHTML=`<i class="bi bi-file-plus me-2"></i>Agregar programa`
+        btnAddPrograma.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar programa`
+
+
+        const LineaActiva = ActiveProyect.clsAreas[this.parentId].cslLineas[this.id]
 
         btnAddPrograma.onclick = () => {
             const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, this);
-            
+            LineaActiva.addPrograma(programa)
             GuardarVigencia()
             mensajes("Se creó un nuevo programa", "green")
         }
@@ -373,12 +376,11 @@ class Linea {
         component.appendChild(btnAddPrograma)
 
         //Evocamos la clase preograma
-        const LineaActiva = ActiveProyect.clsAreas[this.parentId].cslLineas[this.id]
-
+       
 
         LineaActiva.clsPrograma.forEach(programa => {
             const cProgramaC = document.createElement('p')
-            cProgramaC.textContent=programa.nombre
+            cProgramaC.textContent = programa.nombre
             component.appendChild(cProgramaC)
             //programa.makerHTMLPrograma()
 
