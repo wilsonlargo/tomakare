@@ -273,7 +273,8 @@ class Area {
         this.cslLineas.forEach(linea => {
             const btOpen = document.createElement('a')
             btOpen.innerHTML = `  
-            <a class="btn btn-primary h4" data-bs-toggle="collapse" 
+            <a class="btn btn-primary h4" data-bs-toggle="collapse"
+            id="${l}btnOpeLinea"  
             href="#${l}collapseLine" 
             role="button" 
             aria-expanded="false" 
@@ -428,8 +429,15 @@ class Linea {
     makerComandos() {
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
         const refInputLinea = document.getElementById(this.id + "InputLinea")
-        refInputLinea.addEventListener('input', () => this.nombre = refInputLinea.value);
+        refInputLinea.addEventListener('input', () => {
+
+            this.nombre = refInputLinea.value
+            const controlOpen= document.getElementById(`${this.id}btnOpeLinea`)
+            controlOpen.textContent= `(${this.id + 1}) ${this.nombre}`
+        });
         refInputLinea.value = this.nombre;
+
+
 
         const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
         refDescripLinea.addEventListener('input', () => this.descripcion = refDescripLinea.value);

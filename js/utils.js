@@ -39,7 +39,10 @@ const HTML = {
         const controlHTML = document.createElement("form")
         controlHTML.className = "form-floating mb-2"
         controlHTML.innerHTML = `
-            <textarea class="form-control" placeholder="Escriba aquí su comentario" id="${idInput}${idText}" style="height: 100px"></textarea>
+            <textarea class="form-control" 
+            placeholder="Escriba aquí su comentario" 
+            id="${idInput}${idText}" style="height: 100px">
+            spellcheck="true"</textarea>
             <label for="${idInput}${idText}">${label}</label>            
         `
         return controlHTML
@@ -50,7 +53,8 @@ const HTML = {
         controlHTML.innerHTML = `
             <textarea class="form-control" 
             id="${idParent}${id}inputText${idtext}" 
-            style="height: 100px">${value}</textarea>
+            style="height: 100px"
+            spellcheck="true">${value}</textarea>
             <label for="${idParent}${id}inputText${idtext}">${label}</label>            
         `
         return controlHTML
