@@ -363,19 +363,10 @@ class Linea {
 
 
 
-        btnAddPrograma.onclick = () => {
-            const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, this);
-            this.addPrograma(programa)
-            programa.makerHTMLPrograma()
-            contenedor_programas.appendChild(programa.component)
-            //GuardarVigencia()
-            mensajes("Se creó un nuevo programa", "green")
-        }
-
         const contenedor_programas = document.createElement('div')
         contenedor_programas.className = "ms-3"
         contenedor_programas.id = this.id + 'contenedor-programas'
-        contenedor_programas.innerHTML=""
+        contenedor_programas.innerHTML = ""
 
 
         component.appendChild(inputSpan)
@@ -388,20 +379,42 @@ class Linea {
         this.clsPrograma.forEach(programa => {
             const btOpen = document.createElement('a')
             btOpen.innerHTML = `  
-                <a class="btn btn-secondary h4" data-bs-toggle="collapse" 
+                <a class="btn btn-secondary h4" data-bs-toggle="collapse"
+                id="${this.id}${i}btnOpenProgram"  
                 href="#${this.id}${i}collapseProgram" 
                 role="button" 
                 aria-expanded="false" 
-                aria-controls="${this.id}${i}collapseProgram">(${i + 1}) ${programa.nombre}</a>`
+                aria-controls="${this.id}${i}collapseProgram">${this.id + 1}.${i + 1}. ${programa.nombre}</a>`
 
             contenedor_programas.appendChild(btOpen)
 
             programa.id = i++
             programa.makerHTMLPrograma()
             contenedor_programas.appendChild(programa.component)
-
-
         })
+        //Este botón crea un nuevo programa y lo agrega al contenedor tipo acordeón
+
+        btnAddPrograma.onclick = () => {
+            const numNew = this.clsPrograma.length
+            const programa = new Programa('Nuevo programa', 'Descripción del programa', numNew, this);
+            this.addPrograma(programa)
+            const btOpen = document.createElement('a')
+            btOpen.innerHTML = `  
+                <a class="btn btn-secondary h4" data-bs-toggle="collapse"
+                id="${this.id}${numNew}btnOpenProgram" 
+                href="#${this.id}${numNew}collapseProgram" 
+                role="button" 
+                aria-expanded="false" 
+                aria-controls="${this.id}${numNew}collapseProgram">${this.id + 1}.${numNew + 1}. ${programa.nombre}</a>`
+
+            contenedor_programas.appendChild(btOpen)
+
+            programa.id = numNew
+            programa.makerHTMLPrograma()
+            contenedor_programas.appendChild(programa.component)
+            GuardarVigencia()
+        }
+
 
         component.appendChild(contenedor_programas)
 
@@ -468,24 +481,53 @@ class Programa {
         const inputSpan = HTML.inputSpan3(this.id, this.parentId.id, this.nombre, `Programa`)
         inputSpan.addEventListener('input', () => {
             const control = document.getElementById(`${this.parentId.id}${this.id}InputPrograma`)
-            this.nombre=control.value
+            this.nombre = control.value
+            const controldel = document.getElementById(`${this.parentId.id}${this.id}btnOpenProgram`)
+            controldel.textContent=`${this.parentId.id + 1}.${this.id + 1}. ${this.nombre}`
         })
 
+        inputSpan.addEventListener('click', () => {
+
+            const refBtnBorrarPrograma = document.getElementById(`${this.parentId.id}${this.id}btnBorrarPrograma`)
+            try {
+                refBtnBorrarPrograma.addEventListener('click', () => {
+                    //Recarga los controles
+                    this.parentId.deletePrograma(this.id)
+                    this.component.remove()
+                    const controldel = document.getElementById(`${this.parentId.id}${this.id}btnOpenProgram`)
+                    controldel.remove()
+                    GuardarVigencia()
+                });
+            } catch (error) {
+
+            }
+
+        })
+
+        const inputText = HTML.inputTextArea3(this.id, this.parentId.id, 'Descripción programa', `Programa`,this.descripcion)
+        inputText.addEventListener('input', () => {
+            const refDescripPrograma = document.getElementById(`${this.parentId.id}${this.id}inputTextPrograma`)
+            refDescripPrograma.addEventListener('input', () => this.descripcion = refDescripPrograma.value);
+        })
+
+
+
+
+        
         component.appendChild(inputSpan)
+        component.appendChild(inputText)
 
 
 
-        //${idParent}${id}Input${idtext}
 
-        //const inputText = HTML.inputTextArea2(this.id, "Descripción del programa", `${this.parentId.id}InputTextProgram`)
-        //component.appendChild(inputText)
+
 
         this.component = component
     }
 
 }
 
-function aaaa(){
+function aaaa() {
 
 }
 

@@ -44,7 +44,18 @@ const HTML = {
         `
         return controlHTML
     },
-    inputSpan(id,value, comandDel) {
+    inputTextArea3(id, idParent,label, idtext,value) {
+        const controlHTML = document.createElement("form")
+        controlHTML.className = "form-floating mb-2"
+        controlHTML.innerHTML = `
+            <textarea class="form-control" 
+            id="${idParent}${id}inputText${idtext}" 
+            style="height: 100px">${value}</textarea>
+            <label for="${idParent}${id}inputText${idtext}">${label}</label>            
+        `
+        return controlHTML
+    },
+    inputSpan(id,value) {
         
         const controlHTML = document.createElement("div")
         controlHTML.className = "input-group mb-3"
