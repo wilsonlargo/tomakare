@@ -42,7 +42,7 @@ const HTML = {
             <textarea class="form-control" 
             placeholder="Escriba aquí su comentario" 
             id="${idInput}${idText}" style="height: 100px">
-            spellcheck="true"</textarea>
+            spellcheck</textarea>
             <label for="${idInput}${idText}">${label}</label>            
         `
         return controlHTML
@@ -54,7 +54,7 @@ const HTML = {
             <textarea class="form-control" 
             id="${idParent}${id}inputText${idtext}" 
             style="height: 100px"
-            spellcheck="true">${value}</textarea>
+            spellcheck>${value}</textarea>
             <label for="${idParent}${id}inputText${idtext}">${label}</label>            
         `
         return controlHTML
