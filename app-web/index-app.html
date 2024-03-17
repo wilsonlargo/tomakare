@@ -31,6 +31,9 @@
     <!--Configuraciónes para inbterfas de usuario y adminsitración de DB-->
     <script src="../js/components.js"></script>
 
+    <!--Configuraciónes para inbterfas de usuario y adminsitración de DB-->
+    <script src="../js/Proyecciones.js"></script>
+
 </head>
 
 <header class="sticky-top">
@@ -53,13 +56,9 @@
                         <a class="nav-link active text-white" aria-current="page" href="#"
                             onclick="cargarProyectos()">Mostrar vigencias</a>
                     </li>
-                    <li class="nav-item" id="itemCrearPrj">
-                        <!--evoca la función de cargar las vigencias que están en la DB-->
-                        <a class="nav-link active text-white" aria-current="page" href="#"
-                            onclick="aaaa()">preuba</a>
-                    </li>
 
-                    
+
+
                 </ul>
                 <form class="d-flex m-1" role="search">
                     <button class="btn bg-primary text-white" onclick="SignOut()">Salir</button>
@@ -172,7 +171,60 @@
             </div>
         </div>
     </div>
+    <div id="divProyeciones" hidden="true">
+        <div class="sticky-top rounded-2 bg-warning p-1 ms-3 me-2 sticky-top shadow-sm" id="barra-proyecciones">
+            <form class="d-flex m-1">
+                <a class="btn btn-warning text-white" href="#" id="btRetornarProyeccion" role="button">
+                    <i class="bi bi-arrow-return-left me-1"></i>Retornar</a>
+                <a class="btn btn-warning text-white" href="#" onclick="GuardarVigencia()" role="button">
+                    <i class="bi bi-floppy"></i>
+                </a>
+                <a class="btn btn-warning text-white" href="#" id="btnBorrarProyeccion" role="button">
+                    <i class="bi bi-trash3"></i>
+                </a>
+            </form>
+            <div>
 
+            </div>
+
+
+        </div>
+        <div class="m-3">
+            <form class="form-floating mb-1">
+                <input type="text" class="form-control" id="input-nombre-proy" placeholder="Nombre del proyecto"
+                    value="">
+                <label for="input-nombre-proy">Nombre del proyecto</label>
+            </form>
+            <form class="form-floating mb-1">
+                <textarea class="form-control" placeholder="Objetivo General" id="input-objetivo-proy"
+                    style="height: 100px"></textarea>
+                <label for="input-objetivo-proy">Objetivo General</label>
+            </form>
+            <form class="form-floating mb-1">
+                <input type="text" class="form-control" id="input-administrador-proy" placeholder="Administrador"
+                    value="">
+                <label for="input-administrador-proy">Administrador del proyecto</label>
+            </form>
+            <div class="form-check form-switch mb-1">
+                <input class="form-check-input" type="checkbox" role="switch" id="input-financiado-proy">
+                <label class="form-check-label" for="input-financiado-proy">Proyecto Financiado</label>
+            </div>
+            <div id="divFinanciacion" class="border m-2 rounded border-secondary p-2" hidden='true'>
+                <form class="form-floating mb-1">
+                    <input type="text" class="form-control" id="input-fuente-proy" placeholder="Financiador"
+                        value="">
+                    <label for="input-fuente-proy">Financiador</label>
+                </form>
+                <form class="form-floating mb-1">
+                    <input type="text" class="form-control" id="input-valor-proy" placeholder="Valor"
+                        value="">
+                    <label for="input-valor-proy">Valor del proyecto</label>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
 
 </body>
 

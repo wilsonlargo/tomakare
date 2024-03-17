@@ -54,8 +54,24 @@ class clsProyecto {
         const loadProgramas = (fromClsProgramas, lineaNew) => {
             return fromClsProgramas.map(programa => {
                 const ProgramaNew = new Programa(programa.nombre, programa.descripcion, programa.id, lineaNew);
-                //actividadObj.evidencias = loadEvidencias(actividad.evidencias, actividadObj);
+                ProgramaNew.clsGestion=loadGestion(programa.clsGestion,ProgramaNew)
                 return ProgramaNew;
+            });
+        }
+
+        const loadGestion = (fromClsGestiones, ProgramaNew) => {
+            return fromClsGestiones.map(gestion => {
+                const GestionNew = new Gestion(
+                    gestion.nombre, 
+                    gestion.ogeneral,
+                    gestion.manager,
+                    gestion.financiado,
+                    gestion.fuente,
+                    gestion.valor,                  
+                    
+                    gestion.id,
+                    ProgramaNew);
+                return GestionNew;
             });
         }
 
@@ -361,18 +377,21 @@ class Linea {
         btnAddPrograma.className = "btn text-primary"
         btnAddPrograma.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar programa`
 
-
-
-
         const contenedor_programas = document.createElement('div')
         contenedor_programas.className = "ms-3"
         contenedor_programas.id = this.id + 'contenedor-programas'
         contenedor_programas.innerHTML = ""
 
+        //Creamos un boton para agregar gestiones
+        const hrProgramas = document.createElement('hr')
+        hrProgramas.className='fw-bold'
+        hrProgramas.textContent = "Programas"
+
 
         component.appendChild(inputSpan)
         component.appendChild(inputText)
         component.appendChild(btnAddPrograma)
+        component.appendChild(hrProgramas)
 
 
         //Evocamos la clase programa y contamos cuantos hay
@@ -415,16 +434,9 @@ class Linea {
             contenedor_programas.appendChild(programa.component)
             GuardarVigencia()
         }
-
-
         component.appendChild(contenedor_programas)
 
-
-
         this.component = component;
-
-
-
     }
     makerComandos() {
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
@@ -436,9 +448,6 @@ class Linea {
             controlOpen.textContent= `(${this.id + 1}) ${this.nombre}`
         });
         refInputLinea.value = this.nombre;
-
-
-
         const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
         refDescripLinea.addEventListener('input', () => this.descripcion = refDescripLinea.value);
         refDescripLinea.value = this.descripcion;
@@ -478,8 +487,16 @@ class Programa {
         this.descripcion = descripcion;
         this.id = id;
         this.parentId = parentId;
-        this.proyectos = [];
+        this.clsGestion = [];
     }
+
+    addGestion(Gestion) {
+        this.clsGestion.push(Gestion);
+    }
+    deleteGestion(id) {
+        this.clsGestion.splice(id, 1);
+    }
+
 
     makerHTMLPrograma() {
         const component = document.createElement('div')
@@ -518,26 +535,52 @@ class Programa {
             refDescripPrograma.addEventListener('input', () => this.descripcion = refDescripPrograma.value);
         })
 
+        //Creamos un boton para agregar gestiones
+        const hrGestion = document.createElement('hr')
+        hrGestion.textContent = "Proyectos"
 
-
-
+        const btnGestion = document.createElement('a')
+        btnGestion.className='btn text-primary'
+        btnGestion.innerHTML=`<i class="bi bi-file-plus me-2"></i>Agregar proyecto`
+        
+        btnGestion.onclick= ()=>{
+            const gestion = new Gestion('Nueva proyección','Objetivo general','Administrador',0,this)
+            
+            gestion.id = this.clsGestion.length
+            gestion.makerHTMLProyeccion()
+            divGestion.appendChild(gestion.component)
+            this.addGestion(gestion)
+            GuardarVigencia()
+        }
         
         component.appendChild(inputSpan)
         component.appendChild(inputText)
+        component.appendChild(hrGestion)
+        component.appendChild(btnGestion)
+        component.appendChild(hrGestion)
 
+        //Creamos un contededor de los proyectos
+        const divGestion = document.createElement('div')
+        divGestion.className='ms-3'
+        divGestion.id=`${this.parentId.id}${this.id}contendedor-proyecciones`
+        component.appendChild(divGestion)
 
+        //Cargar las proyecciones
+        let g=0;
+        this.clsGestion.forEach(gestion =>{
+            gestion.id = g++
+            gestion.makerHTMLProyeccion()
+            divGestion.appendChild(gestion.component)
 
-
-
+        })        
 
         this.component = component
     }
 
 }
 
-function aaaa() {
 
-}
+
 
 
 //Función externa para crear un proyecto
@@ -572,6 +615,7 @@ async function cargarProyectos() {
         HiddenControl.hiddetoProyectos()
         //Muestra el panel de vigencias
         document.getElementById("paneListlVigencias").hidden = false
+        document.getElementById('divProyeciones').hidden = true
 
         const proyectos = GLOBAL.state.proyectos;
         if (proyectos.length === 0) {
@@ -621,6 +665,8 @@ async function showVigencia(vigencia) {
     mensajes("Vigencia abierta: " + vigencia.nombre, "green")
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
     ActiveProyect.makerHtml()
+
+    document.getElementById('divProyeciones').hidden=true
 }
 async function GuardarVigencia() {
     try {
