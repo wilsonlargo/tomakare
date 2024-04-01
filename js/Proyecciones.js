@@ -22,13 +22,14 @@ class Gestion {
     }
 
     makerHTMLProyeccion() {
-
         //Este boton permite tener acceso al espacio de proyectos
         const btOpen = document.createElement('a')
-        btOpen.id = `${this.parentId.id}${this.id}btnOpeProyeccion`
+        
+        btOpen.id = `${this.parentId}${this.id}btnOpeProyeccion`
+       
         btOpen.innerHTML = `  
             <a class="btn btn-warning h4"
-            id="${this.parentId.id}${this.id}btnOpeProyeccion"             
+            id="${this.parentId}${this.id}btnOpeProyeccion"             
             role="button">${this.nombre}</a>`
         btOpen.onclick = () => {
             document.getElementById('accordionControl').hidden = true
@@ -38,7 +39,7 @@ class Gestion {
             //Creamos en el contenedor un botón de retorno a nuestro espacio de programas
             //Configura las acciones relacionadas con la visibilidad de los componentes
             const btnRetorno = document.getElementById('btRetornarProyeccion')
-            btnRetorno.href = `#${this.parentId.id}${this.id}btnOpeProyeccion`
+            btnRetorno.href = `#${this.parentId}${this.id}btnOpeProyeccion`
             btnRetorno.onclick = () => {
                 document.getElementById('accordionControl').hidden = false
                 document.getElementById('contenedor-bar-areas').hidden = false

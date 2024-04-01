@@ -544,7 +544,7 @@ class Programa {
         btnGestion.innerHTML=`<i class="bi bi-file-plus me-2"></i>Agregar proyecto`
         
         btnGestion.onclick= ()=>{
-            const gestion = new Gestion('Nueva proyección','Objetivo general','Administrador',0,this)
+            const gestion = new Gestion('Nueva proyección','Objetivo general','Administrador',this.clsGestion.length,this)
             
             gestion.id = this.clsGestion.length
             gestion.makerHTMLProyeccion()
