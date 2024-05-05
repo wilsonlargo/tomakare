@@ -54,7 +54,7 @@ class clsProyecto {
         const loadProgramas = (fromClsProgramas, lineaNew) => {
             return fromClsProgramas.map(programa => {
                 const ProgramaNew = new Programa(programa.nombre, programa.descripcion, programa.id, lineaNew);
-                ProgramaNew.clsGestion=loadGestion(programa.clsGestion,ProgramaNew)
+                ProgramaNew.clsGestion = loadGestion(programa.clsGestion, ProgramaNew)
                 return ProgramaNew;
             });
         }
@@ -62,13 +62,13 @@ class clsProyecto {
         const loadGestion = (fromClsGestiones, ProgramaNew) => {
             return fromClsGestiones.map(gestion => {
                 const GestionNew = new Gestion(
-                    gestion.nombre, 
+                    gestion.nombre,
                     gestion.ogeneral,
                     gestion.manager,
                     gestion.financiado,
                     gestion.fuente,
-                    gestion.valor,                  
-                    
+                    gestion.valor,
+
                     gestion.id,
                     ProgramaNew);
                 return GestionNew;
@@ -113,7 +113,7 @@ class clsProyecto {
 
     makerHtml() {
         //Contendor visual de toda la vigencia, se limpia 
-        const contenedor = document.getElementById("ContenedorControls")
+        const contenedor = document.getElementById("panel-escritorio")
         contenedor.innerHTML = ""
 
         //Con la función utils.js/html.inputControl creo un nuevo control de entrada
@@ -121,31 +121,35 @@ class clsProyecto {
         contenedor.appendChild(cNombre)
         //Configuramos el control de entrada para que se actualice, con un metodo onclick
         const intNombre = document.getElementById("inVigenciaNombre")
-        intNombre.addEventListener('input', () => this.nombre = intNombre.value);
+        intNombre.addEventListener('input', () => 
+        {
+            this.nombre = intNombre.value
+            GuardarVigencia()
+        });
         intNombre.value = this.nombre;
 
         const cVigencia = HTML.inputContol(this, "inVigenciaVigencia", "Vigencia")
         contenedor.appendChild(cVigencia)
         //Configuramos el control de entrada para que se actualice, con un metodo onclick
         const intVigencia = document.getElementById("inVigenciaVigencia")
-        intVigencia.addEventListener('input', () => this.vigencia = intVigencia.value);
+        intVigencia.addEventListener('input', () => {
+            this.vigencia = intVigencia.value
+            document.getElementById("btnVig" + this.id).textContent=this.vigencia
+            GuardarVigencia()
+        });
         intVigencia.value = this.vigencia;
 
+        
 
         //Evidencia cuantas areas hay en el proyecto y las muestra
-        const cTarjetas = document.getElementById("contenedor-tarjetas")
-        cTarjetas.className = "d-flex flex-wrap m-3"
+        const cAreas = document.getElementById("panel-areas")
         let i = 0;
-        cTarjetas.innerHTML = ''
+        cAreas.innerHTML = ''
         this.clsAreas.forEach(area => {
-
             area.id = i++
-            area.makerHtmlCards();
-            cTarjetas.appendChild(area.component);
+            area.makerHtmlAreasItem();
+            cAreas.appendChild(area.component);
         });
-
-
-
     }
 
 }
@@ -181,37 +185,12 @@ class Area {
     }
 
 
-    makerHtmlCards() {
 
-        const cTarjetas = document.getElementById("contenedor-tarjetas")
-        cTarjetas.className = "d-flex flex-wrap m-3"
-
+    makerHtmlAreasItem() {
         //Este es el contenedor general del área
-        const component = document.createElement('div')
-        //Crea un control tarjeta con botones
-        const cCards = HTML.cardAreas(this.nombre, this.detalle,
-            //Esta función incrustada asigna el comando al boton borrar área
-            () => {
-                modal.modalDelete(
-                    //Asigna un comando de confirmación a un
-                    //boton dentro del formulario, confirmar
-                    () => {
-                        ActiveProyect.deleteArea(this.id)
-                        ActiveProyect.GuardarProyecto()
-                        showVigencia(ActiveProyect)
-                    }
-                )
-            },
-            //Esta función incrustada asigna el comando al boton ver área
-            () => {
-                HiddenControl.hiddentoArea()
-                document.getElementById("contenedor-area").hidden = false
-                const bRetorno = document.getElementById("btRetornarArea")
-                bRetorno.onclick = () => showVigencia(ActiveProyect)
-
-                this.makerHtmlArea()
-            })
-        component.appendChild(cCards)
+        const component = document.createElement('button')
+        component.className = "btn btn-outline-secondary w-100 mt-1"
+        component.textContent = this.nombre
 
         this.component = component;
     }
@@ -384,7 +363,7 @@ class Linea {
 
         //Creamos un boton para agregar gestiones
         const hrProgramas = document.createElement('hr')
-        hrProgramas.className='fw-bold'
+        hrProgramas.className = 'fw-bold'
         hrProgramas.textContent = "Programas"
 
 
@@ -444,8 +423,8 @@ class Linea {
         refInputLinea.addEventListener('input', () => {
 
             this.nombre = refInputLinea.value
-            const controlOpen= document.getElementById(`${this.id}btnOpeLinea`)
-            controlOpen.textContent= `(${this.id + 1}) ${this.nombre}`
+            const controlOpen = document.getElementById(`${this.id}btnOpeLinea`)
+            controlOpen.textContent = `(${this.id + 1}) ${this.nombre}`
         });
         refInputLinea.value = this.nombre;
         const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
@@ -508,7 +487,7 @@ class Programa {
             const control = document.getElementById(`${this.parentId.id}${this.id}InputPrograma`)
             this.nombre = control.value
             const controldel = document.getElementById(`${this.parentId.id}${this.id}btnOpenProgram`)
-            controldel.textContent=`${this.parentId.id + 1}.${this.id + 1}. ${this.nombre}`
+            controldel.textContent = `${this.parentId.id + 1}.${this.id + 1}. ${this.nombre}`
         })
 
         inputSpan.addEventListener('click', () => {
@@ -529,7 +508,7 @@ class Programa {
 
         })
 
-        const inputText = HTML.inputTextArea3(this.id, this.parentId.id, 'Descripción programa', `Programa`,this.descripcion)
+        const inputText = HTML.inputTextArea3(this.id, this.parentId.id, 'Descripción programa', `Programa`, this.descripcion)
         inputText.addEventListener('input', () => {
             const refDescripPrograma = document.getElementById(`${this.parentId.id}${this.id}inputTextPrograma`)
             refDescripPrograma.addEventListener('input', () => this.descripcion = refDescripPrograma.value);
@@ -540,19 +519,19 @@ class Programa {
         hrGestion.textContent = "Proyectos"
 
         const btnGestion = document.createElement('a')
-        btnGestion.className='btn text-primary'
-        btnGestion.innerHTML=`<i class="bi bi-file-plus me-2"></i>Agregar proyecto`
-        
-        btnGestion.onclick= ()=>{
-            const gestion = new Gestion('Nueva proyección','Objetivo general','Administrador',this.clsGestion.length,this)
-            
+        btnGestion.className = 'btn text-primary'
+        btnGestion.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar proyecto`
+
+        btnGestion.onclick = () => {
+            const gestion = new Gestion('Nueva proyección', 'Objetivo general', 'Administrador', this.clsGestion.length, this)
+
             gestion.id = this.clsGestion.length
             gestion.makerHTMLProyeccion()
             divGestion.appendChild(gestion.component)
             this.addGestion(gestion)
             GuardarVigencia()
         }
-        
+
         component.appendChild(inputSpan)
         component.appendChild(inputText)
         component.appendChild(hrGestion)
@@ -561,18 +540,18 @@ class Programa {
 
         //Creamos un contededor de los proyectos
         const divGestion = document.createElement('div')
-        divGestion.className='ms-3'
-        divGestion.id=`${this.parentId.id}${this.id}contendedor-proyecciones`
+        divGestion.className = 'ms-3'
+        divGestion.id = `${this.parentId.id}${this.id}contendedor-proyecciones`
         component.appendChild(divGestion)
 
         //Cargar las proyecciones
-        let g=0;
-        this.clsGestion.forEach(gestion =>{
+        let g = 0;
+        this.clsGestion.forEach(gestion => {
             gestion.id = g++
             gestion.makerHTMLProyeccion()
             divGestion.appendChild(gestion.component)
 
-        })        
+        })
 
         this.component = component
     }
@@ -600,45 +579,41 @@ async function CrearProyecto() {
                 JSON.parse(Proyecto.convertToJSON()))
 
             mensajes("Proyecto creado", "green")
+            GuardarVigencia()
+            
 
         } catch (error) {
             mensajes("No ha iniciado sesión", "red")
             console.log(error)
         }
-
+        cargarProyectos()
     }
 
 }
 async function cargarProyectos() {
     try {
-        //Oculamos y mostramos los contendores principales
-        HiddenControl.hiddetoProyectos()
-        //Muestra el panel de vigencias
-        document.getElementById("paneListlVigencias").hidden = false
-        document.getElementById('divProyeciones').hidden = true
+
 
         const proyectos = GLOBAL.state.proyectos;
         if (proyectos.length === 0) {
             mensajes("No hay vigencias creadas", "orange")
         } else {
-            mensajes("Carga de vigencias completada", "green")
             //=========================================================================
             //=========Creador de listas de vigencias==================================
             //Identifica el contenedor en la pagina index-app, y lo limpia
-            const Contenedor = document.getElementById("paneListlVigencias");
+            const Contenedor = document.getElementById("panel-vigencias");
             Contenedor.innerHTML = ""
             proyectos.forEach(vigencia => {
-                const newItem = document.createElement("a")
-                newItem.innerHTML = `
-                <a href="#" class="nav-link rounded-2">
-                    <li class="list-group-item list-group bg-primary text-white">${vigencia.nombre} (${vigencia.vigencia})</li>
-                </a>
-                `
-                newItem.onclick = () => showVigencia(vigencia)
-                Contenedor.appendChild(newItem)
+
+                const component = document.createElement('button')
+                component.className = "btn btn-outline-secondary w-100 mt-1"
+                component.textContent = vigencia.vigencia
+                component.id = "btnVig" + vigencia.id
+                component.onclick = () => showVigencia(vigencia)
+                Contenedor.appendChild(component)
+               
+                
             });
-
-
 
         }
     } catch (error) {
@@ -646,27 +621,15 @@ async function cargarProyectos() {
     }
 
 
-    let filteredUsers = aUsers.filter(user => user.usuario == activeEmail);
-    if (filteredUsers.length == 0) {
-        mensajes("Usuario visitante", "orange")
-        readOnlyControls(true)
-    } else {
-        mensajes("Usuario administrador", "blue")
-        readOnlyControls(false)
-    }
 
 }
 
 async function showVigencia(vigencia) {
-    HiddenControl.hiddetoVigencias()
-    //Muestra el contenedor de vigencias y sus tarjetas
-    document.getElementById("contenedor-vigencia").hidden = false
-
-    mensajes("Vigencia abierta: " + vigencia.nombre, "green")
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
     ActiveProyect.makerHtml()
+    document.getElementById("conteneder-bar-proyectos").hidden=false
+    document.getElementById("panel-inicio").hidden=true
 
-    document.getElementById('divProyeciones').hidden=true
 }
 async function GuardarVigencia() {
     try {
@@ -679,7 +642,7 @@ async function GuardarVigencia() {
 
 
 function readOnlyControls(estado) {
-    document.getElementById("conteneder-bar-proyectos").hidden = estado
+    //document.getElementById("conteneder-bar-proyectos").hidden = estado
 }
 
 
@@ -693,14 +656,12 @@ async function BorrarVigencia() {
             () => {
                 //Esta función encrustada borra una vigencia
                 ActiveProyect.BorrarProyecto();
-                mensajes("La vigencia ha sido eliminada", "blue")
-                cargarProyectos()
-
-
+                mensajes("La vigencia ha sido eliminada", "blue")       
             }
         )
-
     }
+    GuardarVigencia()
+    cargarProyectos()
 }
 
 //Esta función cita la función interna de proyecto para crear una nueva área
@@ -771,5 +732,12 @@ async function AgregarLinea(parent) {
     })
     GuardarVigencia()
     mensajes("Se creó una nueva línea", "green")
+}
+
+function mostrar_escritorio(){
+    document.getElementById("conteneder-bar-proyectos").hidden=true
+    document.getElementById("panel-inicio").hidden=false
+    document.getElementById("panel-escritorio").innerHTML=""
+
 }
 
