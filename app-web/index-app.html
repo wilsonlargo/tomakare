@@ -37,7 +37,10 @@
 </head>
 
 <header class="sticky-top">
-    <div class="bg-success h-2 p-3 text-white fw.fw-medium">Sistema de Buen Gobierno</div>
+    <div class="bg-success fs-23 p-3 text-white fw.fw-medium">Sistema de Buen Gobierno
+
+    </div>
+
 </header>
 
 
@@ -65,8 +68,8 @@
                 </div>
 
                 <div class="row m-1">
-
                     <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                    onclick="cargarAreas()"
                         data-bs-target="#collapseAreas" aria-expanded="false" aria-controls="#collapseAreas">
                         <i class="bi bi-file-earmark-person me-1"></i>Consejerías
                     </button>
@@ -82,31 +85,36 @@
         <div class="col">
             <div>
                 <a href="#" class="nav-link p-1" id="conteneder-bar-proyectos" hidden="true">
-                    <form class="d-flex m-1">
-                        <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
-                            <i class="bi bi-calendar2-plus"></i> Agregar vigencia</button>
-                        <button class="btn btn-outline-secondary m-1" onclick="BorrarVigencia()">
-                            <i class="bi bi-calendar-x"></i> Borrar vigencia</button>
-                    </form>
+                    <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
+                        <i class="bi bi-calendar2-plus"></i> Agregar vigencia</button>
+                    <button class="btn btn-outline-secondary m-1" onclick="BorrarVigencia()">
+                        <i class="bi bi-calendar-x"></i> Borrar vigencia</button>
+                    <button class="btn btn-outline-secondary m-1" onclick="AgregarArea()">
+                        <i class="bi bi-person-fill-add"></i> Agregar consejería</button>
                 </a>
             </div>
-            <div id="panel-escritorio">
+            <div id="panel-escritorio" class="m-2">
+
+
 
             </div>
             <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
-                <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button" data-bs-toggle="collapse"
-                    onclick="cargarProyectos()" data-bs-target="#collapseVigencias" aria-expanded="false"
-                    aria-controls="#collapseVigencias">
+                <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button"
+                    data-bs-toggle="collapse" onclick="cargarProyectos()" data-bs-target="#collapseVigencias"
+                    aria-expanded="false" aria-controls="#collapseVigencias">
                     <i class="bi bi-calendar2-plus fs-1"></i> Módulo de Gestión
-                    <p class="border p-2">Sistema de gestión de actividades, programas y estartegias de la ONIC</p>
+                    <hr class="border border-4">
+                    <p class="">Sistema de gestión de actividades, programas y estartegias de la ONIC</p>
                 </button>
                 <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
                     <i class="bi bi-file-earmark-text fs-1"></i> Módulo Documental
-                    <p class="border p-2">Sistema de administración de documentos, certificados</p>
+                    <hr class="border border-4">
+                    <p class="">Sistema de administración de documentos, certificados</p>
                 </button>
                 <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
                     <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
-                    <p class="border p-2">Sistema de información geográfica para apoyo de las consejerías</p>
+                    <hr class="border border-4">
+                    <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
                 </button>
 
             </div>

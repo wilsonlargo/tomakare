@@ -90,13 +90,17 @@ async function getUsuarios() {
 // Función para agregar un objeto de proyecto a la base de datos
 async function addProyecto(objProyecto) {
     const docRef = await addDoc(coleccionProyectos, objProyecto);
+    cargarProyectos()
     return docRef.id;
+    
 }
 
 // Funcion para eliminar un proyecto por id
 async function borrarProyecto(id) {
     await deleteDoc(doc(db, "proyectos", id));
     mensajes("se eliminó esta vigencia", "orange")
+    mostrar_escritorio()
+    cargarProyectos()
 }
 
 // Función para obtener un proyecto por id

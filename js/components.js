@@ -109,6 +109,7 @@ class clsProyecto {
     }
     deleteArea(id) {
         this.clsAreas.splice(id, 1);
+        GuardarVigencia()
     }
 
     makerHtml() {
@@ -121,8 +122,7 @@ class clsProyecto {
         contenedor.appendChild(cNombre)
         //Configuramos el control de entrada para que se actualice, con un metodo onclick
         const intNombre = document.getElementById("inVigenciaNombre")
-        intNombre.addEventListener('input', () => 
-        {
+        intNombre.addEventListener('input', () => {
             this.nombre = intNombre.value
             GuardarVigencia()
         });
@@ -134,12 +134,12 @@ class clsProyecto {
         const intVigencia = document.getElementById("inVigenciaVigencia")
         intVigencia.addEventListener('input', () => {
             this.vigencia = intVigencia.value
-            document.getElementById("btnVig" + this.id).textContent=this.vigencia
+            document.getElementById("btnVig" + this.id).textContent = this.vigencia
             GuardarVigencia()
         });
         intVigencia.value = this.vigencia;
 
-        
+
 
         //Evidencia cuantas areas hay en el proyecto y las muestra
         const cAreas = document.getElementById("panel-areas")
@@ -191,75 +191,207 @@ class Area {
         const component = document.createElement('button')
         component.className = "btn btn-outline-secondary w-100 mt-1"
         component.textContent = this.nombre
+        component.id = "btnArea" + this.id
+        component.onclick = () => {
+            document.getElementById("conteneder-bar-proyectos").hidden = true
+            const cEscritorio = document.getElementById("panel-escritorio")
+            cEscritorio.innerHTML = ''
+
+            //Colocamos el t+itulo de la consejería
+            const Título = document.createElement('div');
+            Título.className = "mb-5 fs-2 fw-bold text-secondary border-bottom border-4 w-50 border-success"
+            Título.textContent = this.nombre
+
+            cEscritorio.appendChild(Título)
+
+
+
+
+
+            //Creamos ahora los input, información del área
+            const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
+            document.getElementById("panel-escritorio").appendChild(nombreArea)
+            //Configuramos el control de entrada para que se actualice, con un metodo oninput
+            const intNomArea = document.getElementById(this.id + "nombreArea")
+            intNomArea.addEventListener('input', () => {
+                this.nombre = intNomArea.value
+                component.textContent = intNomArea.value
+                Título.textContent = intNomArea.value
+                GuardarVigencia()
+            });
+            intNomArea.value = this.nombre;
+
+            //Input administrador de área
+            const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
+            document.getElementById("panel-escritorio").appendChild(adminArea)
+            //Configuramos el control de entrada para que se actualice, con un metodo oninput
+            const intAdminArea = document.getElementById(this.id + "adminArea")
+            intAdminArea.addEventListener('input', () => {
+                this.administrador = intAdminArea.value
+                GuardarVigencia()
+            });
+            intAdminArea.value = this.administrador;
+
+            //Creamos ahora los input, información del área
+            const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
+            document.getElementById("panel-escritorio").appendChild(detalleArea)
+            //Configuramos el control de entrada para que se actualice, con un metodo oninput
+            const intDetArea = document.getElementById(this.id + "detalleArea")
+            intDetArea.addEventListener('input', () => {
+                this.detalle = intDetArea.value
+                GuardarVigencia()
+            });
+            intDetArea.value = this.detalle;
+
+
+            //Input funciones
+            const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
+            document.getElementById("panel-escritorio").appendChild(funcionesArea)
+            //Configuramos el control de entrada para que se actualice, con un metodo oninput
+            const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
+            intFuntionsArea.addEventListener('input', () => {
+                this.funciones = intFuntionsArea.value
+                GuardarVigencia()
+            });
+            intFuntionsArea.value = this.funciones;
+
+
+
+
+            const collapseMandatos = document.createElement("div")
+            collapseMandatos.innerHTML = `
+            <a class="nav-link mb-3 fs-2 text-secondary border-bottom border-4 w-50" 
+            data-bs-toggle="collapse" href="#collapseMandatos" 
+            role="button" aria-expanded="false" 
+            aria-controls="collapseMandatos">
+                + Mandatos
+            </a>
+                <div class="collapse" id="collapseMandatos">
+                <div id="divmandatosbutton">
+                        
+                </div>
+                <div id="divmandatoscollapse">
+                        
+                </div>
+                </div>
+            `
+            cEscritorio.appendChild(collapseMandatos)
+
+            //Agrega un comando al boton que agrega mandatos
+            //con esto identifica en que área está y agrega un indice
+            const btnAgregarMandato = document.createElement("button")
+            btnAgregarMandato.className = "btn btn-outline-secondary m-1"
+            btnAgregarMandato.innerHTML = `<i class="bi bi-plus"></i> Agregar mandato`
+
+
+            btnAgregarMandato.onclick = () => {
+                AgregarMandato(this.id)
+            }
+
+
+            document.getElementById("divmandatosbutton").appendChild(btnAgregarMandato)
+            let i = 0;
+            this.cslMandatos.forEach(mandato => {
+                mandato.id = i++
+                mandato.parentId = this.id
+                mandato.makerHtmlMandato(document.getElementById("divmandatoscollapse"));
+                document.getElementById("divmandatoscollapse").appendChild(mandato.component);
+                mandato.makerComandos()
+            })
+
+
+            const collapseLineas = document.createElement("div")
+            collapseLineas.innerHTML = `
+            <a class="nav-link mb-2 fs-2 text-secondary border-bottom border-4 w-50" 
+            data-bs-toggle="collapse" href="#collapseLineas" 
+            role="button" aria-expanded="false" 
+            aria-controls="collapseLineas">
+                + Líneas de acción
+            </a>
+                <div class="collapse" id="collapseLineas">
+                <div id="divLineasbutton">
+                        
+                </div>
+                <div id="divLineascollapse" class="m-4">
+                        
+                </div>
+                </div>
+            `
+            cEscritorio.appendChild(collapseLineas)
+
+            //Agrega un comando al boton que agrega lineas
+            //con esto identifica en que área está y agrega un indice
+
+            const btAgregarLinea = document.createElement("button")
+            btAgregarLinea.className = "btn btn-outline-secondary m-1"
+            btAgregarLinea.innerHTML = `<i class="bi bi-plus"></i> Agregar línea`
+
+            btAgregarLinea.onclick = () => {
+                AgregarLinea(this)
+
+            }
+
+            document.getElementById("divLineasbutton").appendChild(btAgregarLinea)
+
+
+
+            //Identificamos en que área estamos pos su id
+            const AreaActiva = parent
+
+            const cLineas = document.getElementById("divLineascollapse")
+            cLineas.innerHTML = '';
+
+            let l = 0;
+            this.cslLineas.forEach(linea => {
+                linea.id = l++
+                const btLinea = document.createElement('a')
+                btLinea.className = "btn btn-secondary h4 m-1"
+                btLinea.textContent = linea.id + 1 + " " + linea.nombre
+
+                cLineas.appendChild(btLinea);
+
+                btLinea.onclick = () => {
+                    linea.makerHTMLLineaPanel(this)
+                }
+
+            })
+
+
+
+
+            //Agregamos un boton borrar consejería
+            const btnBorrarArea = document.createElement("button")
+            btnBorrarArea.className = "btn btn-outline-danger mt-5 m-1"
+
+            btnBorrarArea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar Área`
+
+
+            btnBorrarArea.onclick = () => {
+                ActiveProyect.deleteArea(this.id)
+                GuardarVigencia()
+                mostrar_escritorio()
+
+                //Evidencia cuantas areas hay en el proyecto y las muestra
+                const cAreas = document.getElementById("panel-areas")
+                cAreas.innerHTML = ''
+                ActiveProyect.clsAreas.forEach(area => {
+                    area.makerHtmlAreasItem()
+                    cAreas.appendChild(area.component);
+
+                });
+            }
+            cEscritorio.appendChild(btnBorrarArea)
+
+        }
+
 
         this.component = component;
     }
 
-    makerHtmlArea() {
-        document.getElementById("contenedor-area").innerHTML = ''
 
-        //Creamos ahora los input, información del área
-        const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
-        document.getElementById("contenedor-area").appendChild(nombreArea)
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intNomArea = document.getElementById(this.id + "nombreArea")
-        intNomArea.addEventListener('input', () => this.nombre = intNomArea.value);
-        intNomArea.value = this.nombre;
-
-        //Input administrador de área
-        const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
-        document.getElementById("contenedor-area").appendChild(adminArea)
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intAdminArea = document.getElementById(this.id + "adminArea")
-        intAdminArea.addEventListener('input', () => this.administrador = intAdminArea.value);
-        intAdminArea.value = this.administrador;
-
-        //Creamos ahora los input, información del área
-        const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
-        document.getElementById("contenedor-area").appendChild(detalleArea)
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intDetArea = document.getElementById(this.id + "detalleArea")
-        intDetArea.addEventListener('input', () => this.detalle = intDetArea.value);
-        intDetArea.value = this.detalle;
-
-        //Input funciones
-        const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
-        document.getElementById("contenedor-area").appendChild(funcionesArea)
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
-        intFuntionsArea.addEventListener('input', () => this.funciones = intFuntionsArea.value);
-        intFuntionsArea.value = this.funciones;
-
-        //Agrega un comando al boton que agrega mandatos
-        //con esto identifica en que área está y agrega un indice
-        const btnAgregarMandato = document.getElementById("btAgregarMandato")
-        btnAgregarMandato.onclick = () => {
-            AgregarMandato(this.id)
-        }
-
-        //Agrega un comando al boton que agrega lineas
-        //con esto identifica en que área está y agrega un indice
-        const btAgregarLinea = document.getElementById("btAgregarLinea")
-        btAgregarLinea.onclick = () => {
-            AgregarLinea(this)
-        }
-
-        this.reloadComandos()
-    }
 
     reloadComandos() {
 
-        const cMandatos = document.getElementById("contenedor-mandatos")
-        cMandatos.innerHTML = ''
-        let i = 0;
-
-        this.cslMandatos.forEach(mandato => {
-            mandato.id = i++
-            mandato.parentId = this.id
-            mandato.makerHtmlMandato(cMandatos);
-            cMandatos.appendChild(mandato.component);
-            mandato.makerComandos()
-        })
 
         const cLineas = document.getElementById("contenedor-lineas")
         cLineas.innerHTML = ''
@@ -301,7 +433,10 @@ class Mandato {
     makerComandos() {
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
         const refInputMandato = document.getElementById(this.id + "InputMandato")
-        refInputMandato.addEventListener('input', () => this.nombre = refInputMandato.value);
+        refInputMandato.addEventListener('input', () => {
+            this.nombre = refInputMandato.value
+            GuardarVigencia()
+        });
         refInputMandato.value = this.nombre;
 
         const refBtnBorrarMandato = document.getElementById(this.id + "btnBorrarMandato")
@@ -309,7 +444,7 @@ class Mandato {
             ActiveProyect.clsAreas[this.parentId].deleteMandato(this.id)
             //Recarga los mandatos
             const AreaActiva = ActiveProyect.clsAreas[this.parentId]
-            const cMandatos = document.getElementById("contenedor-mandatos")
+            const cMandatos = document.getElementById("divmandatoscollapse")
             cMandatos.innerHTML = ''
             let i = 0;
             AreaActiva.cslMandatos.forEach(mandato => {
@@ -342,35 +477,81 @@ class Linea {
     }
 
 
+    makerHTMLLineaPanel(parent) {
+        document.getElementById("conteneder-bar-proyectos").hidden = true
+        const cEscritorio = document.getElementById("panel-escritorio")
+        cEscritorio.innerHTML = ''
+
+        //Colocamos el t+itulo de la consejería
+        const Título = document.createElement('div');
+        Título.className = "fs-2 fw-bold text-secondary w-50"
+        Título.textContent = parent.nombre
+        cEscritorio.appendChild(Título)
+
+        //Colocamos el t+itulo de la línea
+        const Título2 = document.createElement('div');
+        Título2.className = "mb-5 fs-4 text-secondary border-bottom border-4 w-50 border-success"
+        Título2.textContent = this.nombre
+
+        cEscritorio.appendChild(Título2)
+
+        const inputLineaNombre = document.createElement("form")
+        inputLineaNombre.className = "form-floating mb-2"
+        inputLineaNombre.innerHTML = `
+            <input type="text" class="form-control" id="${this.id + "input-line-nombre"}" value="${this.nombre}">
+            <label for="${this.id + "input-line-nombre"}">Nombre línea</label>
+        `
+
+        cEscritorio.appendChild(inputLineaNombre)
+
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const refInputLinea = document.getElementById(this.id + "input-line-nombre")
+        refInputLinea.addEventListener('input', () => {
+            this.nombre = refInputLinea.value
+            Título2.textContent = this.nombre
+            GuardarVigencia()
+        });
+        refInputLinea.value = this.nombre;
+
+
+        const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
+        cEscritorio.appendChild(inputText)
+        
+        const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
+        refDescripLinea.addEventListener('input', () => {
+            this.descripcion = refDescripLinea.value
+        GuardarVigencia()});
+        refDescripLinea.value = this.descripcion;
+
+
+
+        const collapseProgramas = document.createElement("div")
+        collapseProgramas.innerHTML = `
+        <a class="nav-link mb-1 fs-2 text-secondary border-bottom border-4 w-50" 
+        data-bs-toggle="collapse" href="#collapseProgramas" 
+        role="button" aria-expanded="false" 
+        aria-controls="collapseProgramas">
+            + Programas
+        </a>
+            <div class="collapse" id="collapseProgramas">
+            <div id="divprogramasbutton">
+                    
+            </div>
+            <div id="divprogramascollapse">
+                    Programas
+            </div>
+            </div>
+        `
+        cEscritorio.appendChild(collapseProgramas)
+
+
+
+    }
+
     makerHtmlLinea() {
         //Creamso un contenedor de entrada texto para la info de la línea
 
-        const component = document.createElement('div')
-        component.className = "collapse mb-4"
-        component.id = this.id + 'collapseLine'
 
-        const inputSpan = HTML.inputSpan2(this.id, this.nombre, 'InputLinea')
-        const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
-
-        const btnAddPrograma = document.createElement('button');
-        btnAddPrograma.className = "btn text-primary"
-        btnAddPrograma.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar programa`
-
-        const contenedor_programas = document.createElement('div')
-        contenedor_programas.className = "ms-3"
-        contenedor_programas.id = this.id + 'contenedor-programas'
-        contenedor_programas.innerHTML = ""
-
-        //Creamos un boton para agregar gestiones
-        const hrProgramas = document.createElement('hr')
-        hrProgramas.className = 'fw-bold'
-        hrProgramas.textContent = "Programas"
-
-
-        component.appendChild(inputSpan)
-        component.appendChild(inputText)
-        component.appendChild(btnAddPrograma)
-        component.appendChild(hrProgramas)
 
 
         //Evocamos la clase programa y contamos cuantos hay
@@ -418,18 +599,9 @@ class Linea {
         this.component = component;
     }
     makerComandos() {
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const refInputLinea = document.getElementById(this.id + "InputLinea")
-        refInputLinea.addEventListener('input', () => {
 
-            this.nombre = refInputLinea.value
-            const controlOpen = document.getElementById(`${this.id}btnOpeLinea`)
-            controlOpen.textContent = `(${this.id + 1}) ${this.nombre}`
-        });
-        refInputLinea.value = this.nombre;
-        const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
-        refDescripLinea.addEventListener('input', () => this.descripcion = refDescripLinea.value);
-        refDescripLinea.value = this.descripcion;
+
+
 
 
         const refBtnBorrarLinea = document.getElementById(this.id + "btnBorrarLinea")
@@ -578,19 +750,24 @@ async function CrearProyecto() {
             const id = GLOBAL.firestore.addProyecto(
                 JSON.parse(Proyecto.convertToJSON()))
 
-            mensajes("Proyecto creado", "green")
+
+            cargarProyectos()
             GuardarVigencia()
-            
+            mensajes("Proyecto creado", "green")
+
+
 
         } catch (error) {
             mensajes("No ha iniciado sesión", "red")
             console.log(error)
         }
-        cargarProyectos()
+
     }
 
 }
 async function cargarProyectos() {
+    document.getElementById("conteneder-bar-proyectos").hidden = false
+    document.getElementById("panel-inicio").hidden = true
     try {
 
 
@@ -611,8 +788,7 @@ async function cargarProyectos() {
                 component.id = "btnVig" + vigencia.id
                 component.onclick = () => showVigencia(vigencia)
                 Contenedor.appendChild(component)
-               
-                
+
             });
 
         }
@@ -627,8 +803,8 @@ async function cargarProyectos() {
 async function showVigencia(vigencia) {
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
     ActiveProyect.makerHtml()
-    document.getElementById("conteneder-bar-proyectos").hidden=false
-    document.getElementById("panel-inicio").hidden=true
+    document.getElementById("conteneder-bar-proyectos").hidden = false
+    document.getElementById("panel-inicio").hidden = true
 
 }
 async function GuardarVigencia() {
@@ -656,12 +832,14 @@ async function BorrarVigencia() {
             () => {
                 //Esta función encrustada borra una vigencia
                 ActiveProyect.BorrarProyecto();
-                mensajes("La vigencia ha sido eliminada", "blue")       
+                mensajes("La vigencia ha sido eliminada", "blue")
             }
         )
     }
     GuardarVigencia()
-    cargarProyectos()
+
+
+
 }
 
 //Esta función cita la función interna de proyecto para crear una nueva área
@@ -670,15 +848,26 @@ async function AgregarArea() {
     GuardarVigencia()
 
     //Evidencia cuantas areas hay en el proyecto y las muestra
-    const cTarjetas = document.getElementById("contenedor-tarjetas")
-    cTarjetas.className = "d-flex flex-wrap m-3"
-    cTarjetas.innerHTML = ''
+    const cAreas = document.getElementById("panel-areas")
+    cAreas.innerHTML = ''
     ActiveProyect.clsAreas.forEach(area => {
-        area.makerHtmlCards()
-        cTarjetas.appendChild(area.component);
+        area.makerHtmlAreasItem()
+        cAreas.appendChild(area.component);
     });
     mensajes("Elemento creado", "Green")
 }
+async function cargarAreas() {
+    GuardarVigencia()
+
+
+
+
+
+
+
+}
+
+
 async function AgregarMandato(parentId) {
     const AreaActiva = ActiveProyect.clsAreas[parentId]
     //Se agrega uan neuva clase mandato, ojo- se marca indice del elemento y el indice del padre, apra mirar los
@@ -686,7 +875,7 @@ async function AgregarMandato(parentId) {
     const mandato = new Mandato('Nuevo mandato', 0, parentId);
     AreaActiva.addMandato(mandato)
 
-    const cMandatos = document.getElementById("contenedor-mandatos")
+    const cMandatos = document.getElementById("divmandatoscollapse")
     cMandatos.innerHTML = ''
     let i = 0;
     AreaActiva.cslMandatos.forEach(mandato => {
@@ -703,41 +892,36 @@ async function AgregarMandato(parentId) {
 async function AgregarLinea(parent) {
     //Identificamos en que área estamos pos su id
     const AreaActiva = parent
-    console.log(AreaActiva)
 
     //Creamos un anueva línea de acción dentro de la clase Area
     const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, parent);
     AreaActiva.addLinea(linea)
 
-    const cLineas = document.getElementById("contenedor-lineas")
+    const cLineas = document.getElementById("divLineascollapse")
     cLineas.innerHTML = '';
 
     let i = 0;
     AreaActiva.cslLineas.forEach(linea => {
-
-        const btOpen = document.createElement('a')
-        btOpen.innerHTML = `  
-        <a class="btn btn-primary h4" data-bs-toggle="collapse" 
-        href="#${i}collapseLine" 
-        role="button" 
-        aria-expanded="false" 
-        aria-controls="${i}collapseLine">(${i + 1}) ${linea.nombre}</a>`
-        cLineas.appendChild(btOpen);
-
         linea.id = i++
-        linea.makerHtmlLinea();
-        cLineas.appendChild(linea.component);
-        linea.makerComandos()
+
+        const btLinea = document.createElement('a')
+        btLinea.className = "btn btn-secondary h4 m-1"
+        btLinea.textContent = linea.id + 1 + " " + linea.nombre
+        cLineas.appendChild(btLinea);
+
+        btLinea.onclick = () => {
+            linea.makerHTMLLineaPanel(parent)
+        }
 
     })
     GuardarVigencia()
     mensajes("Se creó una nueva línea", "green")
 }
 
-function mostrar_escritorio(){
-    document.getElementById("conteneder-bar-proyectos").hidden=true
-    document.getElementById("panel-inicio").hidden=false
-    document.getElementById("panel-escritorio").innerHTML=""
+function mostrar_escritorio() {
+    document.getElementById("conteneder-bar-proyectos").hidden = true
+    document.getElementById("panel-inicio").hidden = false
+    document.getElementById("panel-escritorio").innerHTML = ""
 
 }
 
