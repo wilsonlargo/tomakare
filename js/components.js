@@ -194,6 +194,7 @@ class Area {
         component.id = "btnArea" + this.id
         component.onclick = () => {
             document.getElementById("conteneder-bar-proyectos").hidden = true
+            document.getElementById("panel-inicio").hidden = true
             const cEscritorio = document.getElementById("panel-escritorio")
             cEscritorio.innerHTML = ''
 
@@ -260,7 +261,7 @@ class Area {
 
             const collapseMandatos = document.createElement("div")
             collapseMandatos.innerHTML = `
-            <a class="nav-link mb-3 fs-2 text-secondary border-bottom border-4 w-50" 
+            <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4 w-50" 
             data-bs-toggle="collapse" href="#collapseMandatos" 
             role="button" aria-expanded="false" 
             aria-controls="collapseMandatos">
@@ -280,7 +281,7 @@ class Area {
             //Agrega un comando al boton que agrega mandatos
             //con esto identifica en que área está y agrega un indice
             const btnAgregarMandato = document.createElement("button")
-            btnAgregarMandato.className = "btn btn-outline-secondary m-1"
+            btnAgregarMandato.className = "btn btn-outline-secondary m-2"
             btnAgregarMandato.innerHTML = `<i class="bi bi-plus"></i> Agregar mandato`
 
 
@@ -302,7 +303,7 @@ class Area {
 
             const collapseLineas = document.createElement("div")
             collapseLineas.innerHTML = `
-            <a class="nav-link mb-2 fs-2 text-secondary border-bottom border-4 w-50" 
+            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4 w-50" 
             data-bs-toggle="collapse" href="#collapseLineas" 
             role="button" aria-expanded="false" 
             aria-controls="collapseLineas">
@@ -527,7 +528,7 @@ class Linea {
 
         const collapseProgramas = document.createElement("div")
         collapseProgramas.innerHTML = `
-        <a class="nav-link mb-1 fs-2 text-secondary border-bottom border-4 w-50" 
+        <a class="nav-link mb-1 fs-4 text-secondary border-bottom border-4 w-50" 
         data-bs-toggle="collapse" href="#collapseProgramas" 
         role="button" aria-expanded="false" 
         aria-controls="collapseProgramas">
@@ -543,6 +544,25 @@ class Linea {
             </div>
         `
         cEscritorio.appendChild(collapseProgramas)
+
+        //Agregamos un boton borrar consejería
+        const btnBorrarLinea = document.createElement("button")
+        btnBorrarLinea.className = "btn btn-outline-danger mt-5 m-1"
+
+        btnBorrarLinea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar línea`
+
+
+        btnBorrarLinea.onclick = () => {
+            console.log(parent)
+            parent.deleteLinea(this.id)
+            console.log(parent.cslLineas)
+            GuardarVigencia()
+            mostrar_escritorio()          
+
+
+
+        }
+        cEscritorio.appendChild(btnBorrarLinea)
 
 
 
@@ -856,16 +876,7 @@ async function AgregarArea() {
     });
     mensajes("Elemento creado", "Green")
 }
-async function cargarAreas() {
-    GuardarVigencia()
 
-
-
-
-
-
-
-}
 
 
 async function AgregarMandato(parentId) {
