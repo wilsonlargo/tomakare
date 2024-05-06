@@ -37,7 +37,7 @@
 </head>
 
 <header class="sticky-top">
-    <div class="bg-success fs-23 p-3 text-white fw.fw-medium">Sistema de Buen Gobierno
+    <div class="bg-success fs-2 p-3 text-white fw.fw-medium">Sistema de Buen Gobierno
 
     </div>
 
@@ -46,43 +46,33 @@
 
 <body>
     <div class="row justify-content-start">
-        <div class="col-2 text-white d-flex flex-wrap border-end border-2">
-            <div class="col">
-                <div class="row m-1">
-                    <button class="btn btn-secondary text-white" onclick="mostrar_escritorio()">
-                        <i class="bi bi-house-door-fill me-1"></i>Página principal
-                    </button>
+
+        <div class="col-2 border-end">
+            <button class="m-1 btn btn-secondary text-white w-100" onclick="mostrar_escritorio()">
+                <i class="bi bi-house-door-fill me-1"></i>Página principal
+            </button>
+
+            <button class="m-1 btn btn-secondary w-100" type="button" data-bs-toggle="collapse"
+                onclick="cargarProyectos()" data-bs-target="#collapseVigencias" aria-expanded="false"
+                aria-controls="#collapseVigencias">
+                <i class="bi bi-calendar4-range me-1"></i>Ver vigencias
+            </button>
+            <div class="ms-2 collapse" id="collapseVigencias">
+                <div class="text-secondary" id="panel-vigencias" onclick="cargarProyectos()">
                 </div>
+            </div>
 
-                <div class="row m-1">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                        onclick="cargarProyectos()" data-bs-target="#collapseVigencias" aria-expanded="false"
-                        aria-controls="#collapseVigencias">
-                        <i class="bi bi-calendar4-range me-1"></i>Ver vigencias
-                    </button>
-                    <div class="collapse" id="collapseVigencias">
-                        <div class="text-secondary" id="panel-vigencias" onclick="cargarProyectos()">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row m-1">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                   
-                        data-bs-target="#collapseAreas" aria-expanded="false" aria-controls="#collapseAreas">
-                        <i class="bi bi-file-earmark-person me-1"></i>Consejerías
-                    </button>
-                    <div class="collapse w-100" id="collapseAreas">
-                        <div class="text-secondary" id="panel-areas">
-
-                        </div>
-                    </div>
+            <button class="m-1 btn btn-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAreas"
+                aria-expanded="false" aria-controls="#collapseAreas">
+                <i class="bi bi-file-earmark-person me-1"></i>Consejerías
+            </button>
+            <div class="ms-2 collapse w-90" id="collapseAreas">
+                <div class="text-secondary" id="panel-areas">
 
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-8">
             <div>
                 <a href="#" class="nav-link p-1" id="conteneder-bar-proyectos" hidden="true">
                     <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
