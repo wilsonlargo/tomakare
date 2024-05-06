@@ -100,7 +100,6 @@ class clsProyecto {
     BorrarProyecto() {
         //Ejecuro la función global en dataconfig.js
         GLOBAL.firestore.borrarProyecto(this.id);
-        document.getElementById("contenedor-vigencia").hidden = true
     }
 
     //Funciones internas para crear áreas
@@ -188,11 +187,20 @@ class Area {
 
     makerHtmlAreasItem() {
         //Este es el contenedor general del área
-        const component = document.createElement('button')
-        component.className = "btn btn-outline-secondary w-100 mt-1"
-        component.textContent = this.nombre
-        component.id = "btnArea" + this.id
-        component.onclick = () => {
+        const component = document.createElement('li')
+        component.className = "w-100 border-bottom border-4"
+        component.innerHTML = `
+        <a href="#" class="nav-link px-0 text-white" id="${"btnArea" + this.id}">
+        ${this.id + 1}.
+            <span
+                class="d-none d-sm-inline text-white">${this.nombre}
+            </span>
+            
+        </a>  
+        `
+        document.getElementById("panel-areas").appendChild(component)
+
+        document.getElementById("btnArea" + this.id).onclick = () => {
             document.getElementById("conteneder-bar-proyectos").hidden = true
             document.getElementById("panel-inicio").hidden = true
             const cEscritorio = document.getElementById("panel-escritorio")
@@ -204,8 +212,6 @@ class Area {
             Título.textContent = this.nombre
 
             cEscritorio.appendChild(Título)
-
-
 
 
 
@@ -517,11 +523,12 @@ class Linea {
 
         const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
         cEscritorio.appendChild(inputText)
-        
+
         const refDescripLinea = document.getElementById(this.id + "InputTextLinea")
         refDescripLinea.addEventListener('input', () => {
             this.descripcion = refDescripLinea.value
-        GuardarVigencia()});
+            GuardarVigencia()
+        });
         refDescripLinea.value = this.descripcion;
 
 
@@ -557,7 +564,7 @@ class Linea {
             parent.deleteLinea(this.id)
             console.log(parent.cslLineas)
             GuardarVigencia()
-            mostrar_escritorio()          
+            mostrar_escritorio()
 
 
 
@@ -788,6 +795,7 @@ async function CrearProyecto() {
 async function cargarProyectos() {
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
+    document.getElementById("panel-escritorio").innerHTML=""
     try {
 
 
@@ -800,14 +808,25 @@ async function cargarProyectos() {
             //Identifica el contenedor en la pagina index-app, y lo limpia
             const Contenedor = document.getElementById("panel-vigencias");
             Contenedor.innerHTML = ""
+
+
+
+            let i = 1
             proyectos.forEach(vigencia => {
 
-                const component = document.createElement('button')
-                component.className = "btn btn-outline-secondary w-100 mt-1"
-                component.textContent = vigencia.vigencia
-                component.id = "btnVig" + vigencia.id
-                component.onclick = () => showVigencia(vigencia)
+                const component = document.createElement('li')
+                component.className = "w-100"
+                component.innerHTML = `
+                <a href="#" class="nav-link px-0 text-white" id="${"btnVig" + vigencia.id}"> 
+                    <span
+                        class="d-none d-sm-inline text-white">${vigencia.vigencia}
+                    </span> 
+                    (${i++})
+                </a>  
+                `
                 Contenedor.appendChild(component)
+
+                document.getElementById("btnVig" + vigencia.id).onclick = () => showVigencia(vigencia)
 
             });
 
@@ -825,6 +844,7 @@ async function showVigencia(vigencia) {
     ActiveProyect.makerHtml()
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
+
 
 }
 async function GuardarVigencia() {

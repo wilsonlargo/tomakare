@@ -45,70 +45,82 @@
 
 
 <body>
-    <div class="row justify-content-start">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-secondary">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="/"
+                        class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">Menu</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                        id="menu">
+                        <li class="nav-item" onclick="mostrar_escritorio()">
+                            <a href="#" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house text-white"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-white">Principal</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#panel-vigencias" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                onclick="cargarProyectos()">
+                                <i class="fs-4 bi-calendar4-range text-white"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-white">Vigencias</span> </a>
+                            <ul class="collapse hide nav flex-column ms-1" id="panel-vigencias" data-bs-parent="#menu">
+                            </ul>
+                        </li>
 
-        <div class="col-2 border-end">
-            <button class="m-1 btn btn-secondary text-white w-100" onclick="mostrar_escritorio()">
-                <i class="bi bi-house-door-fill me-1"></i>Página principal
-            </button>
+                        <li>
+                            <a href="#panel-areas" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                onclick="">
+                                <i class="fs-4 bi-file-earmark-person text-white"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-white">Consejerías</span> </a>
+                            <ul class="collapse hide nav flex-column ms-1" id="panel-areas" data-bs-parent="#menu">
+                            </ul>
+                        </li>
 
-            <button class="m-1 btn btn-secondary w-100" type="button" data-bs-toggle="collapse"
-                onclick="cargarProyectos()" data-bs-target="#collapseVigencias" aria-expanded="false"
-                aria-controls="#collapseVigencias">
-                <i class="bi bi-calendar4-range me-1"></i>Ver vigencias
-            </button>
-            <div class="ms-2 collapse" id="collapseVigencias">
-                <div class="text-secondary" id="panel-vigencias" onclick="cargarProyectos()">
+                    </ul>
+
+
                 </div>
             </div>
+            <div class="col py-3">
+                <div>
+                    <a href="#" class="nav-link p-1" id="conteneder-bar-proyectos" hidden="true">
+                        <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
+                            <i class="bi bi-calendar2-plus"></i> Agregar vigencia</button>
+                        <button class="btn btn-outline-secondary m-1" onclick="BorrarVigencia()">
+                            <i class="bi bi-calendar-x"></i> Borrar vigencia</button>
+                        <button class="btn btn-outline-secondary m-1" onclick="AgregarArea()">
+                            <i class="bi bi-person-fill-add"></i> Agregar consejería</button>
+                    </a>
+                </div>
+                <div id="panel-escritorio" class="m-2">
 
-            <button class="m-1 btn btn-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAreas"
-                aria-expanded="false" aria-controls="#collapseAreas">
-                <i class="bi bi-file-earmark-person me-1"></i>Consejerías
-            </button>
-            <div class="ms-2 collapse w-90" id="collapseAreas">
-                <div class="text-secondary" id="panel-areas">
+
+
+                </div>
+                <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button"
+                        data-bs-toggle="collapse" onclick="cargarProyectos()" data-bs-target="#collapseVigencias"
+                        aria-expanded="false" aria-controls="#collapseVigencias">
+                        <i class="bi bi-calendar2-plus fs-1"></i> Módulo de Gestión
+                        <hr class="border border-4">
+                        <p class="">Sistema de gestión de actividades, programas y estartegias de la ONIC</p>
+                    </button>
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
+                        <i class="bi bi-file-earmark-text fs-1"></i> Módulo Documental
+                        <hr class="border border-4">
+                        <p class="">Sistema de administración de documentos, certificados</p>
+                    </button>
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
+                        <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
+                        <hr class="border border-4">
+                        <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
+                    </button>
 
                 </div>
             </div>
-        </div>
-        <div class="col-8">
-            <div>
-                <a href="#" class="nav-link p-1" id="conteneder-bar-proyectos" hidden="true">
-                    <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
-                        <i class="bi bi-calendar2-plus"></i> Agregar vigencia</button>
-                    <button class="btn btn-outline-secondary m-1" onclick="BorrarVigencia()">
-                        <i class="bi bi-calendar-x"></i> Borrar vigencia</button>
-                    <button class="btn btn-outline-secondary m-1" onclick="AgregarArea()">
-                        <i class="bi bi-person-fill-add"></i> Agregar consejería</button>
-                </a>
-            </div>
-            <div id="panel-escritorio" class="m-2">
-
-
-
-            </div>
-            <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
-                <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button"
-                    data-bs-toggle="collapse" onclick="cargarProyectos()" data-bs-target="#collapseVigencias"
-                    aria-expanded="false" aria-controls="#collapseVigencias">
-                    <i class="bi bi-calendar2-plus fs-1"></i> Módulo de Gestión
-                    <hr class="border border-4">
-                    <p class="">Sistema de gestión de actividades, programas y estartegias de la ONIC</p>
-                </button>
-                <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
-                    <i class="bi bi-file-earmark-text fs-1"></i> Módulo Documental
-                    <hr class="border border-4">
-                    <p class="">Sistema de administración de documentos, certificados</p>
-                </button>
-                <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
-                    <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
-                    <hr class="border border-4">
-                    <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
-                </button>
-
-            </div>
-
         </div>
     </div>
 
