@@ -335,12 +335,9 @@ class Area {
 
             btAgregarLinea.onclick = () => {
                 AgregarLinea(this)
-
             }
 
             document.getElementById("divLineasbutton").appendChild(btAgregarLinea)
-
-
 
             //Identificamos en que área estamos pos su id
             const AreaActiva = parent
@@ -546,13 +543,53 @@ class Linea {
                     
             </div>
             <div id="divprogramascollapse">
-                    Programas
+                    aaaaa
             </div>
             </div>
         `
         cEscritorio.appendChild(collapseProgramas)
 
-        //Agregamos un boton borrar consejería
+        //Agregar botton añadir programas
+        const btAgregarPrograma = document.createElement("button")
+        btAgregarPrograma.className = "btn btn-outline-secondary m-1"
+        btAgregarPrograma.innerHTML = `<i class="bi bi-plus"></i> Agregar programa`
+
+        btAgregarPrograma.onclick = () => {
+            const numNew = this.clsPrograma.length
+            const programa = new Programa('Nuevo programa', 'Descripción del programa', numNew, this);
+            this.addPrograma(programa)
+            console.log(this.clsPrograma)
+            GuardarVigencia()
+        }
+
+        document.getElementById("divprogramasbutton").appendChild(btAgregarPrograma)
+
+
+        const cProgramas = document.getElementById("divprogramascollapse")
+        cProgramas.innerHTML = '';
+
+        let p = 0;
+        this.clsPrograma.forEach(programa => {
+            programa.id = p++
+            const btPrograma = document.createElement('a')
+            btPrograma.className = "btn btn-secondary h4 m-1"
+            btPrograma.textContent = programa.id + 1 + " " + programa.nombre
+
+            cProgramas.appendChild(btPrograma);
+
+            btPrograma.onclick = () => {
+                alert(this.id)
+                //programa.makerHTMLLineaPanel(this)
+            }
+
+        })
+
+
+
+
+
+
+        //Agregamos un boton borrar línea
         const btnBorrarLinea = document.createElement("button")
         btnBorrarLinea.className = "btn btn-outline-danger mt-5 m-1"
 
@@ -565,9 +602,6 @@ class Linea {
             console.log(parent.cslLineas)
             GuardarVigencia()
             mostrar_escritorio()
-
-
-
         }
         cEscritorio.appendChild(btnBorrarLinea)
 
@@ -577,9 +611,6 @@ class Linea {
 
     makerHtmlLinea() {
         //Creamso un contenedor de entrada texto para la info de la línea
-
-
-
 
         //Evocamos la clase programa y contamos cuantos hay
         let i = 0;
@@ -626,10 +657,6 @@ class Linea {
         this.component = component;
     }
     makerComandos() {
-
-
-
-
 
         const refBtnBorrarLinea = document.getElementById(this.id + "btnBorrarLinea")
         refBtnBorrarLinea.addEventListener('click', () => {
@@ -795,7 +822,7 @@ async function CrearProyecto() {
 async function cargarProyectos() {
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
-    document.getElementById("panel-escritorio").innerHTML=""
+    document.getElementById("panel-escritorio").innerHTML = ""
     try {
 
 
