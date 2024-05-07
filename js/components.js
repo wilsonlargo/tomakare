@@ -183,8 +183,6 @@ class Area {
         this.cslLineas.splice(id, 1);
     }
 
-
-
     makerHtmlAreasItem() {
         //Este es el contenedor general del área
         const component = document.createElement('li')
@@ -208,7 +206,7 @@ class Area {
 
             //Colocamos el t+itulo de la consejería
             const Título = document.createElement('div');
-            Título.className = "mb-5 fs-2 fw-bold text-secondary border-bottom border-4 w-50 border-success"
+            Título.className = "mb-5 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
             Título.textContent = this.nombre
 
             cEscritorio.appendChild(Título)
@@ -267,7 +265,7 @@ class Area {
 
             const collapseMandatos = document.createElement("div")
             collapseMandatos.innerHTML = `
-            <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4 w-50" 
+            <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4" 
             data-bs-toggle="collapse" href="#collapseMandatos" 
             role="button" aria-expanded="false" 
             aria-controls="collapseMandatos">
@@ -284,7 +282,7 @@ class Area {
             `
             cEscritorio.appendChild(collapseMandatos)
 
-            //Agrega un comando al boton que agrega mandatos
+
             //con esto identifica en que área está y agrega un indice
             const btnAgregarMandato = document.createElement("button")
             btnAgregarMandato.className = "btn btn-outline-secondary m-2"
@@ -306,10 +304,9 @@ class Area {
                 mandato.makerComandos()
             })
 
-
             const collapseLineas = document.createElement("div")
             collapseLineas.innerHTML = `
-            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4 w-50" 
+            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
             data-bs-toggle="collapse" href="#collapseLineas" 
             role="button" aria-expanded="false" 
             aria-controls="collapseLineas">
@@ -319,11 +316,12 @@ class Area {
                 <div id="divLineasbutton">
                         
                 </div>
-                <div id="divLineascollapse" class="m-4">
-                        
+                <div id="divLineascollapse" class="m-4 list-group m-3 w-50">
+                    
                 </div>
                 </div>
             `
+
             cEscritorio.appendChild(collapseLineas)
 
             //Agrega un comando al boton que agrega lineas
@@ -349,7 +347,7 @@ class Area {
             this.cslLineas.forEach(linea => {
                 linea.id = l++
                 const btLinea = document.createElement('a')
-                btLinea.className = "btn btn-secondary h4 m-1"
+                btLinea.className = "list-group-item list-group-item-action"
                 btLinea.textContent = linea.id + 1 + " " + linea.nombre
 
                 cLineas.appendChild(btLinea);
@@ -368,7 +366,6 @@ class Area {
             btnBorrarArea.className = "btn btn-outline-danger mt-5 m-1"
 
             btnBorrarArea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar Área`
-
 
             btnBorrarArea.onclick = () => {
                 ActiveProyect.deleteArea(this.id)
@@ -392,35 +389,6 @@ class Area {
         this.component = component;
     }
 
-
-
-    reloadComandos() {
-
-
-        const cLineas = document.getElementById("contenedor-lineas")
-        cLineas.innerHTML = ''
-        let l = 0;
-
-        this.cslLineas.forEach(linea => {
-            const btOpen = document.createElement('a')
-            btOpen.innerHTML = `  
-            <a class="btn btn-primary h4" data-bs-toggle="collapse"
-            id="${l}btnOpeLinea"  
-            href="#${l}collapseLine" 
-            role="button" 
-            aria-expanded="false" 
-            aria-controls="${l}collapseLine">(${l + 1}) ${linea.nombre}</a>`
-            cLineas.appendChild(btOpen);
-
-            linea.id = l++
-            linea.parentId = this.id
-            linea.makerHtmlLinea(cLineas);
-            cLineas.appendChild(linea.component);
-            linea.makerComandos()
-        })
-
-
-    }
 }
 
 class Mandato {
@@ -488,13 +456,13 @@ class Linea {
 
         //Colocamos el t+itulo de la consejería
         const Título = document.createElement('div');
-        Título.className = "fs-2 fw-bold text-secondary w-50"
+        Título.className = "fs-3 fw-bold text-secondary"
         Título.textContent = parent.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el t+itulo de la línea
         const Título2 = document.createElement('div');
-        Título2.className = "mb-5 fs-4 text-secondary border-bottom border-4 w-50 border-success"
+        Título2.className = "ms-2 mb-5 fs-4 text-secondary border-bottom border-4 border-success"
         Título2.textContent = this.nombre
 
         cEscritorio.appendChild(Título2)
@@ -529,25 +497,10 @@ class Linea {
         refDescripLinea.value = this.descripcion;
 
 
-
-        const collapseProgramas = document.createElement("div")
-        collapseProgramas.innerHTML = `
-        <a class="nav-link mb-1 fs-4 text-secondary border-bottom border-4 w-50" 
-        data-bs-toggle="collapse" href="#collapseProgramas" 
-        role="button" aria-expanded="false" 
-        aria-controls="collapseProgramas">
-            + Programas
-        </a>
-            <div class="collapse" id="collapseProgramas">
-            <div id="divprogramasbutton">
-                    
-            </div>
-            <div id="divprogramascollapse">
-                    aaaaa
-            </div>
-            </div>
-        `
-        cEscritorio.appendChild(collapseProgramas)
+        const Título4 = document.createElement('div');
+        Título4.className = "fs-4 text-secondary border-bottom border-4"
+        Título4.textContent = "Programas"
+        cEscritorio.appendChild(Título4)
 
         //Agregar botton añadir programas
         const btAgregarPrograma = document.createElement("button")
@@ -558,46 +511,66 @@ class Linea {
             const numNew = this.clsPrograma.length
             const programa = new Programa('Nuevo programa', 'Descripción del programa', numNew, this);
             this.addPrograma(programa)
-            console.log(this.clsPrograma)
             GuardarVigencia()
+
+            //Muestro de nuevo los programas
+            const cProgramas = document.getElementById("lstProyectos")
+            cProgramas.innerHTML = '';
+            let p = 0;
+            this.clsPrograma.forEach(programa => {
+                programa.id = p++
+                const btPrograma = document.createElement('a')
+                btPrograma.className = "list-group-item list-group-item-action"
+                btPrograma.textContent = programa.id + 1 + ". " + programa.nombre
+
+                cProgramas.appendChild(btPrograma);
+
+                btPrograma.onclick = () => {
+                    programa.makerHTMLProgramaPanel(parent, this)
+                }
+            })
         }
 
-        document.getElementById("divprogramasbutton").appendChild(btAgregarPrograma)
+        cEscritorio.appendChild(btAgregarPrograma)
 
 
-        const cProgramas = document.getElementById("divprogramascollapse")
+        //Agregar listador de proyectos
+        const listProyectos = document.createElement("div")
+        listProyectos.className = "list-group m-3 w-50"
+        listProyectos.id = "lstProyectos"
+        cEscritorio.appendChild(listProyectos)
+
+
+        document.getElementById("lstProyectos").innerHTML = ""
+
+
+
+
+        //Verifica todos los programas que hay por linea y los agrega
+        const cProgramas = document.getElementById("lstProyectos")
         cProgramas.innerHTML = '';
 
         let p = 0;
         this.clsPrograma.forEach(programa => {
             programa.id = p++
             const btPrograma = document.createElement('a')
-            btPrograma.className = "btn btn-secondary h4 m-1"
-            btPrograma.textContent = programa.id + 1 + " " + programa.nombre
+            btPrograma.className = "list-group-item list-group-item-action"
+            btPrograma.textContent = programa.id + 1 + ". " + programa.nombre
 
             cProgramas.appendChild(btPrograma);
 
             btPrograma.onclick = () => {
-                alert(this.id)
-                //programa.makerHTMLLineaPanel(this)
+                programa.makerHTMLProgramaPanel(parent, this)
             }
-
         })
-
-
-
-
 
 
         //Agregamos un boton borrar línea
         const btnBorrarLinea = document.createElement("button")
         btnBorrarLinea.className = "btn btn-outline-danger mt-5 m-1"
-
         btnBorrarLinea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar línea`
 
-
         btnBorrarLinea.onclick = () => {
-            console.log(parent)
             parent.deleteLinea(this.id)
             console.log(parent.cslLineas)
             GuardarVigencia()
@@ -605,93 +578,16 @@ class Linea {
         }
         cEscritorio.appendChild(btnBorrarLinea)
 
-
-
     }
 
-    makerHtmlLinea() {
-        //Creamso un contenedor de entrada texto para la info de la línea
 
-        //Evocamos la clase programa y contamos cuantos hay
-        let i = 0;
-        this.clsPrograma.forEach(programa => {
-            const btOpen = document.createElement('a')
-            btOpen.innerHTML = `  
-                <a class="btn btn-secondary h4" data-bs-toggle="collapse"
-                id="${this.id}${i}btnOpenProgram"  
-                href="#${this.id}${i}collapseProgram" 
-                role="button" 
-                aria-expanded="false" 
-                aria-controls="${this.id}${i}collapseProgram">${this.id + 1}.${i + 1}. ${programa.nombre}</a>`
-
-            contenedor_programas.appendChild(btOpen)
-
-            programa.id = i++
-            programa.makerHTMLPrograma()
-            contenedor_programas.appendChild(programa.component)
-        })
-        //Este botón crea un nuevo programa y lo agrega al contenedor tipo acordeón
-
-        btnAddPrograma.onclick = () => {
-            const numNew = this.clsPrograma.length
-            const programa = new Programa('Nuevo programa', 'Descripción del programa', numNew, this);
-            this.addPrograma(programa)
-            const btOpen = document.createElement('a')
-            btOpen.innerHTML = `  
-                <a class="btn btn-secondary h4" data-bs-toggle="collapse"
-                id="${this.id}${numNew}btnOpenProgram" 
-                href="#${this.id}${numNew}collapseProgram" 
-                role="button" 
-                aria-expanded="false" 
-                aria-controls="${this.id}${numNew}collapseProgram">${this.id + 1}.${numNew + 1}. ${programa.nombre}</a>`
-
-            contenedor_programas.appendChild(btOpen)
-
-            programa.id = numNew
-            programa.makerHTMLPrograma()
-            contenedor_programas.appendChild(programa.component)
-            GuardarVigencia()
-        }
-        component.appendChild(contenedor_programas)
-
-        this.component = component;
-    }
-    makerComandos() {
-
-        const refBtnBorrarLinea = document.getElementById(this.id + "btnBorrarLinea")
-        refBtnBorrarLinea.addEventListener('click', () => {
-            ActiveProyect.clsAreas[this.parentId].deleteLinea(this.id)
-            //Recarga los mandatos
-            const AreaActiva = ActiveProyect.clsAreas[this.parentId]
-            const cLineas = document.getElementById("contenedor-lineas")
-            cLineas.innerHTML = ''
-            let i = 0;
-            AreaActiva.cslLineas.forEach(linea => {
-                const btOpen = document.createElement('a')
-                btOpen.innerHTML = `  
-                <a class="btn btn-primary h4" data-bs-toggle="collapse" 
-                href="#${i}collapseLine" 
-                role="button" 
-                aria-expanded="false" 
-                aria-controls="${i}collapseLine">(${i + 1}) ${linea.nombre}</a>`
-                cLineas.appendChild(btOpen);
-
-                linea.id = i++
-                linea.makerHtmlLinea();
-                cLineas.appendChild(linea.component);
-                linea.makerComandos()
-            })
-            GuardarVigencia()
-        });
-
-    }
 }
 class Programa {
-    constructor(nombre, descripcion, id, parentId) {
+    constructor(nombre, descripcion, id, parent) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.id = id;
-        this.parentId = parentId;
+        this.parent = parent;
         this.clsGestion = [];
     }
 
@@ -702,85 +598,132 @@ class Programa {
         this.clsGestion.splice(id, 1);
     }
 
+    makerHTMLProgramaPanel(area, linea) {
+        document.getElementById("conteneder-bar-proyectos").hidden = true
+        const cEscritorio = document.getElementById("panel-escritorio")
+        cEscritorio.innerHTML = ''
 
-    makerHTMLPrograma() {
-        const component = document.createElement('div')
-        component.className = "collapse mb-4"
-        component.id = `${this.parentId.id}${this.id}collapseProgram`
+        //Colocamos el ttulo de la consejería
+        const Título = document.createElement('div');
+        Título.className = "fs-3 fw-bold text-secondary"
+        Título.textContent = area.nombre
+        cEscritorio.appendChild(Título)
 
-        const inputSpan = HTML.inputSpan3(this.id, this.parentId.id, this.nombre, `Programa`)
-        inputSpan.addEventListener('input', () => {
-            const control = document.getElementById(`${this.parentId.id}${this.id}InputPrograma`)
-            this.nombre = control.value
-            const controldel = document.getElementById(`${this.parentId.id}${this.id}btnOpenProgram`)
-            controldel.textContent = `${this.parentId.id + 1}.${this.id + 1}. ${this.nombre}`
-        })
+        //Colocamos el título de la línea
+        const Título2 = document.createElement('div');
+        Título2.className = "ms-2 fs-4 text-secondary"
+        Título2.textContent = linea.nombre
 
-        inputSpan.addEventListener('click', () => {
+        cEscritorio.appendChild(Título2)
 
-            const refBtnBorrarPrograma = document.getElementById(`${this.parentId.id}${this.id}btnBorrarPrograma`)
-            try {
-                refBtnBorrarPrograma.addEventListener('click', () => {
-                    //Recarga los controles
-                    this.parentId.deletePrograma(this.id)
-                    this.component.remove()
-                    const controldel = document.getElementById(`${this.parentId.id}${this.id}btnOpenProgram`)
-                    controldel.remove()
-                    GuardarVigencia()
-                });
-            } catch (error) {
+        //Colocamos el título del programa
+        const Título3 = document.createElement('div');
+        Título3.className = "ms-3 mb-5 fs-5 text-secondary border-bottom border-4 w-60 border-success"
+        Título3.textContent = this.nombre
 
-            }
+        cEscritorio.appendChild(Título3)
 
-        })
+        //Control de entrada editable nombre del programa
+        const inputProgramaNombre = document.createElement("form")
+        inputProgramaNombre.className = "form-floating mb-2"
+        inputProgramaNombre.innerHTML = `
+            <input type="text" class="form-control" id="${this.id + "input-programa-nombre"}" value="${this.nombre}">
+            <label for="${this.id + "input-programa-nombre"}">Nombre programa</label>
+        `
+        cEscritorio.appendChild(inputProgramaNombre)
 
-        const inputText = HTML.inputTextArea3(this.id, this.parentId.id, 'Descripción programa', `Programa`, this.descripcion)
-        inputText.addEventListener('input', () => {
-            const refDescripPrograma = document.getElementById(`${this.parentId.id}${this.id}inputTextPrograma`)
-            refDescripPrograma.addEventListener('input', () => this.descripcion = refDescripPrograma.value);
-        })
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const refInputPrograma = document.getElementById(this.id + "input-programa-nombre")
+        refInputPrograma.addEventListener('input', () => {
+            this.nombre = refInputPrograma.value
+            Título3.textContent = refInputPrograma.value
+            GuardarVigencia()
+        });
+        refInputPrograma.value = this.nombre;
 
-        //Creamos un boton para agregar gestiones
-        const hrGestion = document.createElement('hr')
-        hrGestion.textContent = "Proyectos"
+        const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
+        cEscritorio.appendChild(inputText)
 
-        const btnGestion = document.createElement('a')
-        btnGestion.className = 'btn text-primary'
-        btnGestion.innerHTML = `<i class="bi bi-file-plus me-2"></i>Agregar proyecto`
+        const refDescripPrograma = document.getElementById(this.id + "InputTextLinea")
+        refDescripPrograma.addEventListener('input', () => {
+            this.descripcion = refDescripPrograma.value
+            GuardarVigencia()
+        });
+        refDescripPrograma.value = this.descripcion;
 
-        btnGestion.onclick = () => {
+        const Título4 = document.createElement('div');
+        Título4.className = "fs-4 text-secondary border-bottom border-4"
+        Título4.textContent = "Proyectos"
+        cEscritorio.appendChild(Título4)
+
+        //Agregar botton añadir proyectos
+        const btAgregarGestion = document.createElement("button")
+        btAgregarGestion.className = "btn btn-outline-secondary m-1"
+        btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
+
+
+
+        btAgregarGestion.onclick = () => {
             const gestion = new Gestion('Nueva proyección', 'Objetivo general', 'Administrador', this.clsGestion.length, this)
-
-            gestion.id = this.clsGestion.length
-            gestion.makerHTMLProyeccion()
-            divGestion.appendChild(gestion.component)
             this.addGestion(gestion)
             GuardarVigencia()
+
+            document.getElementById("lstProyectos").innerHTML = ""
+
+            let g = 0;
+            this.clsGestion.forEach(gestion => {
+                gestion.id = g++
+                const btGestion = document.createElement('a')
+                btGestion.className = "list-group-item list-group-item-action"
+                btGestion.textContent = gestion.id + 1 + " " + gestion.nombre
+
+                document.getElementById("lstProyectos").appendChild(btGestion);
+
+                btGestion.onclick = () => {
+                    alert(gestion.id)
+                }
+            })
         }
+        cEscritorio.appendChild(btAgregarGestion)
+        //Agregar listador de proyectos
+        const listProyectos = document.createElement("div")
+        listProyectos.className = "list-group m-3"
+        listProyectos.id = "lstProyectos"
+        cEscritorio.appendChild(listProyectos)
 
-        component.appendChild(inputSpan)
-        component.appendChild(inputText)
-        component.appendChild(hrGestion)
-        component.appendChild(btnGestion)
-        component.appendChild(hrGestion)
 
-        //Creamos un contededor de los proyectos
-        const divGestion = document.createElement('div')
-        divGestion.className = 'ms-3'
-        divGestion.id = `${this.parentId.id}${this.id}contendedor-proyecciones`
-        component.appendChild(divGestion)
+        document.getElementById("lstProyectos").innerHTML = ""
 
-        //Cargar las proyecciones
+        //Cargar las gestiones
         let g = 0;
         this.clsGestion.forEach(gestion => {
             gestion.id = g++
-            gestion.makerHTMLProyeccion()
-            divGestion.appendChild(gestion.component)
+            const btGestion = document.createElement('a')
+            btGestion.className = "list-group-item list-group-item-action"
+            btGestion.textContent = gestion.id + 1 + ". " + gestion.nombre
 
+            document.getElementById("lstProyectos").appendChild(btGestion);
+
+            btGestion.onclick = () => {
+                alert(gestion.id)
+            }
         })
 
-        this.component = component
+
+        //Agregamos un boton borrar programa
+        const btnBorrarPrograma = document.createElement("button")
+        btnBorrarPrograma.className = "btn btn-outline-danger mt-5 m-1"
+        btnBorrarPrograma.innerHTML = `<i class="bi bi-trash3"></i> Eliminar programa`
+
+        btnBorrarPrograma.onclick = () => {
+            this.parent.deletePrograma(this.id)
+            GuardarVigencia()
+            mostrar_escritorio()
+        }
+        cEscritorio.appendChild(btnBorrarPrograma)
+
     }
+
 
 }
 
@@ -963,8 +906,8 @@ async function AgregarLinea(parent) {
         linea.id = i++
 
         const btLinea = document.createElement('a')
-        btLinea.className = "btn btn-secondary h4 m-1"
-        btLinea.textContent = linea.id + 1 + " " + linea.nombre
+        btLinea.className = "mb-1 list-group-item list-group-item-action"
+        btLinea.textContent = linea.id + 1 + ". " + linea.nombre
         cLineas.appendChild(btLinea);
 
         btLinea.onclick = () => {
