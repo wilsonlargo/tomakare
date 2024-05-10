@@ -3,6 +3,13 @@
 //crear, abrir, eliminar proyectos, así como permitir el ingreso a los datos
 
 //Importa las instanacias de firebase y administración de base de datos
+
+
+
+// Default export is a4 paper, portrait, using millimeters for units
+
+       
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 
 import {
@@ -38,12 +45,12 @@ import {
 
 // Utiliza las claves y credenciales de mi base de datos de Tomakare
 const firebaseConfig = {
-    apiKey: "AIzaSyD8S34_t3hy5rg6V1PlrRM836dZ4Yum5dU",
-    authDomain: "tomakare-app.firebaseapp.com",
-    projectId: "tomakare-app",
-    storageBucket: "tomakare-app.appspot.com",
-    messagingSenderId: "477848246801",
-    appId: "1:477848246801:web:a64a8baa95dfe72013afb0"
+    apiKey: "AIzaSyCRvHblehGJPuaROO1QMSadGKH3IYS0ioI",
+    authDomain: "tomakare2.firebaseapp.com",
+    projectId: "tomakare2",
+    storageBucket: "tomakare2.appspot.com",
+    messagingSenderId: "167881640556",
+    appId: "1:167881640556:web:22954314816fc450706649"
 };
 
 

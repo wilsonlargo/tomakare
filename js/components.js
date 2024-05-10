@@ -146,8 +146,28 @@ class clsProyecto {
         cAreas.innerHTML = ''
         this.clsAreas.forEach(area => {
             area.id = i++
-            area.makerHtmlAreasItem();
-            cAreas.appendChild(area.component);
+            //Este es el contenedor general del área
+            const component = document.createElement('li')
+            component.className = "w-100 border-bottom border-4"
+            component.innerHTML = `
+                <a href="#" class="nav-link px-0 text-white" id="${"btnArea" + area.id}">
+                     ${area.id + 1}.
+                    <span class="d-none d-sm-inline text-white" id="${"btnArealabel" + area.id}">
+                        ${area.nombre}
+                    </span>
+            
+                 </a>  
+                `
+            document.getElementById("panel-areas").appendChild(component)
+            
+
+            component.onclick = () => {
+
+                area.makerHtmlAreasItem();
+
+            }
+
+
         });
     }
 
@@ -183,88 +203,76 @@ class Area {
         this.cslLineas.splice(id, 1);
     }
 
+
     makerHtmlAreasItem() {
-        //Este es el contenedor general del área
-        const component = document.createElement('li')
-        component.className = "w-100 border-bottom border-4"
-        component.innerHTML = `
-        <a href="#" class="nav-link px-0 text-white" id="${"btnArea" + this.id}">
-        ${this.id + 1}.
-            <span
-                class="d-none d-sm-inline text-white">${this.nombre}
-            </span>
-            
-        </a>  
-        `
-        document.getElementById("panel-areas").appendChild(component)
 
-        document.getElementById("btnArea" + this.id).onclick = () => {
-            document.getElementById("conteneder-bar-proyectos").hidden = true
-            document.getElementById("panel-inicio").hidden = true
-            const cEscritorio = document.getElementById("panel-escritorio")
-            cEscritorio.innerHTML = ''
+        document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("panel-inicio").hidden = true
+        const cEscritorio = document.getElementById("panel-escritorio")
+        cEscritorio.innerHTML = ''
 
-            //Colocamos el t+itulo de la consejería
-            const Título = document.createElement('div');
-            Título.className = "mb-5 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
-            Título.textContent = this.nombre
+        //Colocamos el t+itulo de la consejería
+        const Título = document.createElement('div');
+        Título.className = "mb-5 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
+        Título.textContent = this.nombre
 
-            cEscritorio.appendChild(Título)
+        cEscritorio.appendChild(Título)
 
 
 
-            //Creamos ahora los input, información del área
-            const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
-            document.getElementById("panel-escritorio").appendChild(nombreArea)
-            //Configuramos el control de entrada para que se actualice, con un metodo oninput
-            const intNomArea = document.getElementById(this.id + "nombreArea")
-            intNomArea.addEventListener('input', () => {
-                this.nombre = intNomArea.value
-                component.textContent = intNomArea.value
-                Título.textContent = intNomArea.value
-                GuardarVigencia()
-            });
-            intNomArea.value = this.nombre;
+        //Creamos ahora los input, información del área
+        const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
+        document.getElementById("panel-escritorio").appendChild(nombreArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intNomArea = document.getElementById(this.id + "nombreArea")
+        intNomArea.addEventListener('input', () => {
+            this.nombre = intNomArea.value
+            const btAreaLabel = document.getElementById("btnArealabel" + this.id)
+            btAreaLabel.textContent = intNomArea.value
+            Título.textContent = intNomArea.value
+            GuardarVigencia()
+        });
+        intNomArea.value = this.nombre;
 
-            //Input administrador de área
-            const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
-            document.getElementById("panel-escritorio").appendChild(adminArea)
-            //Configuramos el control de entrada para que se actualice, con un metodo oninput
-            const intAdminArea = document.getElementById(this.id + "adminArea")
-            intAdminArea.addEventListener('input', () => {
-                this.administrador = intAdminArea.value
-                GuardarVigencia()
-            });
-            intAdminArea.value = this.administrador;
+        //Input administrador de área
+        const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
+        document.getElementById("panel-escritorio").appendChild(adminArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intAdminArea = document.getElementById(this.id + "adminArea")
+        intAdminArea.addEventListener('input', () => {
+            this.administrador = intAdminArea.value
+            GuardarVigencia()
+        });
+        intAdminArea.value = this.administrador;
 
-            //Creamos ahora los input, información del área
-            const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
-            document.getElementById("panel-escritorio").appendChild(detalleArea)
-            //Configuramos el control de entrada para que se actualice, con un metodo oninput
-            const intDetArea = document.getElementById(this.id + "detalleArea")
-            intDetArea.addEventListener('input', () => {
-                this.detalle = intDetArea.value
-                GuardarVigencia()
-            });
-            intDetArea.value = this.detalle;
+        //Creamos ahora los input, información del área
+        const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
+        document.getElementById("panel-escritorio").appendChild(detalleArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intDetArea = document.getElementById(this.id + "detalleArea")
+        intDetArea.addEventListener('input', () => {
+            this.detalle = intDetArea.value
+            GuardarVigencia()
+        });
+        intDetArea.value = this.detalle;
 
 
-            //Input funciones
-            const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
-            document.getElementById("panel-escritorio").appendChild(funcionesArea)
-            //Configuramos el control de entrada para que se actualice, con un metodo oninput
-            const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
-            intFuntionsArea.addEventListener('input', () => {
-                this.funciones = intFuntionsArea.value
-                GuardarVigencia()
-            });
-            intFuntionsArea.value = this.funciones;
+        //Input funciones
+        const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
+        document.getElementById("panel-escritorio").appendChild(funcionesArea)
+        //Configuramos el control de entrada para que se actualice, con un metodo oninput
+        const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
+        intFuntionsArea.addEventListener('input', () => {
+            this.funciones = intFuntionsArea.value
+            GuardarVigencia()
+        });
+        intFuntionsArea.value = this.funciones;
 
 
 
 
-            const collapseMandatos = document.createElement("div")
-            collapseMandatos.innerHTML = `
+        const collapseMandatos = document.createElement("div")
+        collapseMandatos.innerHTML = `
             <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4" 
             data-bs-toggle="collapse" href="#collapseMandatos" 
             role="button" aria-expanded="false" 
@@ -280,32 +288,32 @@ class Area {
                 </div>
                 </div>
             `
-            cEscritorio.appendChild(collapseMandatos)
+        cEscritorio.appendChild(collapseMandatos)
 
 
-            //con esto identifica en que área está y agrega un indice
-            const btnAgregarMandato = document.createElement("button")
-            btnAgregarMandato.className = "btn btn-outline-secondary m-2"
-            btnAgregarMandato.innerHTML = `<i class="bi bi-plus"></i> Agregar mandato`
+        //con esto identifica en que área está y agrega un indice
+        const btnAgregarMandato = document.createElement("button")
+        btnAgregarMandato.className = "btn btn-outline-secondary m-2"
+        btnAgregarMandato.innerHTML = `<i class="bi bi-plus"></i> Agregar mandato`
 
 
-            btnAgregarMandato.onclick = () => {
-                AgregarMandato(this.id)
-            }
+        btnAgregarMandato.onclick = () => {
+            AgregarMandato(this.id)
+        }
 
 
-            document.getElementById("divmandatosbutton").appendChild(btnAgregarMandato)
-            let i = 0;
-            this.cslMandatos.forEach(mandato => {
-                mandato.id = i++
-                mandato.parentId = this.id
-                mandato.makerHtmlMandato(document.getElementById("divmandatoscollapse"));
-                document.getElementById("divmandatoscollapse").appendChild(mandato.component);
-                mandato.makerComandos()
-            })
+        document.getElementById("divmandatosbutton").appendChild(btnAgregarMandato)
+        let i = 0;
+        this.cslMandatos.forEach(mandato => {
+            mandato.id = i++
+            mandato.parentId = this.id
+            mandato.makerHtmlMandato(document.getElementById("divmandatoscollapse"));
+            document.getElementById("divmandatoscollapse").appendChild(mandato.component);
+            mandato.makerComandos()
+        })
 
-            const collapseLineas = document.createElement("div")
-            collapseLineas.innerHTML = `
+        const collapseLineas = document.createElement("div")
+        collapseLineas.innerHTML = `
             <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
             data-bs-toggle="collapse" href="#collapseLineas" 
             role="button" aria-expanded="false" 
@@ -322,71 +330,69 @@ class Area {
                 </div>
             `
 
-            cEscritorio.appendChild(collapseLineas)
+        cEscritorio.appendChild(collapseLineas)
 
-            //Agrega un comando al boton que agrega lineas
-            //con esto identifica en que área está y agrega un indice
+        //Agrega un comando al boton que agrega lineas
+        //con esto identifica en que área está y agrega un indice
 
-            const btAgregarLinea = document.createElement("button")
-            btAgregarLinea.className = "btn btn-outline-secondary m-1"
-            btAgregarLinea.innerHTML = `<i class="bi bi-plus"></i> Agregar línea`
+        const btAgregarLinea = document.createElement("button")
+        btAgregarLinea.className = "btn btn-outline-secondary m-1"
+        btAgregarLinea.innerHTML = `<i class="bi bi-plus"></i> Agregar línea`
 
-            btAgregarLinea.onclick = () => {
-                AgregarLinea(this)
-            }
-
-            document.getElementById("divLineasbutton").appendChild(btAgregarLinea)
-
-            //Identificamos en que área estamos pos su id
-            const AreaActiva = parent
-
-            const cLineas = document.getElementById("divLineascollapse")
-            cLineas.innerHTML = '';
-
-            let l = 0;
-            this.cslLineas.forEach(linea => {
-                linea.id = l++
-                const btLinea = document.createElement('a')
-                btLinea.className = "list-group-item list-group-item-action"
-                btLinea.textContent = linea.id + 1 + " " + linea.nombre
-
-                cLineas.appendChild(btLinea);
-
-                btLinea.onclick = () => {
-                    linea.makerHTMLLineaPanel(this)
-                }
-
-            })
-
-
-
-
-            //Agregamos un boton borrar consejería
-            const btnBorrarArea = document.createElement("button")
-            btnBorrarArea.className = "btn btn-outline-danger mt-5 m-1"
-
-            btnBorrarArea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar Área`
-
-            btnBorrarArea.onclick = () => {
-                ActiveProyect.deleteArea(this.id)
-                GuardarVigencia()
-                mostrar_escritorio()
-
-                //Evidencia cuantas areas hay en el proyecto y las muestra
-                const cAreas = document.getElementById("panel-areas")
-                cAreas.innerHTML = ''
-                ActiveProyect.clsAreas.forEach(area => {
-                    area.makerHtmlAreasItem()
-                    cAreas.appendChild(area.component);
-
-                });
-            }
-            cEscritorio.appendChild(btnBorrarArea)
-
+        btAgregarLinea.onclick = () => {
+            AgregarLinea(this)
         }
 
+        document.getElementById("divLineasbutton").appendChild(btAgregarLinea)
 
-        this.component = component;
+        //Identificamos en que área estamos pos su id
+        const AreaActiva = parent
+
+        const cLineas = document.getElementById("divLineascollapse")
+        cLineas.innerHTML = '';
+
+        let l = 0;
+        this.cslLineas.forEach(linea => {
+            linea.id = l++
+            const btLinea = document.createElement('a')
+            btLinea.className = "list-group-item list-group-item-action"
+            btLinea.textContent = linea.id + 1 + " " + linea.nombre
+
+            cLineas.appendChild(btLinea);
+
+            btLinea.onclick = () => {
+                linea.makerHTMLLineaPanel(this)
+            }
+
+        })
+
+
+
+
+        //Agregamos un boton borrar consejería
+        const btnBorrarArea = document.createElement("button")
+        btnBorrarArea.className = "btn btn-outline-danger mt-5 m-1"
+
+        btnBorrarArea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar Área`
+
+        btnBorrarArea.onclick = () => {
+            ActiveProyect.deleteArea(this.id)
+            GuardarVigencia()
+            mostrar_escritorio()
+
+            //Evidencia cuantas areas hay en el proyecto y las muestra
+            const cAreas = document.getElementById("panel-areas")
+            cAreas.innerHTML = ''
+            ActiveProyect.clsAreas.forEach(area => {
+                area.makerHtmlAreasItem()
+                cAreas.appendChild(area.component);
+
+            });
+        }
+        cEscritorio.appendChild(btnBorrarArea)
+
+
+
     }
 
 }
@@ -578,6 +584,16 @@ class Linea {
         }
         cEscritorio.appendChild(btnBorrarLinea)
 
+        //Agregamos un boton retornar
+        const btnretroceder = document.createElement("button")
+        btnretroceder.className = "btn btn-outline-secondary mt-5 m-1"
+        btnretroceder.innerHTML = `<i class="bi bi-arrow-return-left"></i> Volver`
+
+        btnretroceder.onclick = () => {
+            parent.makerHtmlAreasItem()
+        }
+        cEscritorio.appendChild(btnretroceder)
+
     }
 
 
@@ -662,9 +678,8 @@ class Programa {
         btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
 
 
-
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', 'Objetivo general', 'Administrador', this.clsGestion.length, this)
+            const gestion = new Gestion('Nueva proyección', 'Objetivo general', 'Administrador', false, "", 0, 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 
@@ -680,7 +695,7 @@ class Programa {
                 document.getElementById("lstProyectos").appendChild(btGestion);
 
                 btGestion.onclick = () => {
-                    alert(gestion.id)
+                    gestion.makerHTMLProyeccion(area, linea, this.nombre)
                 }
             })
         }
@@ -705,7 +720,8 @@ class Programa {
             document.getElementById("lstProyectos").appendChild(btGestion);
 
             btGestion.onclick = () => {
-                alert(gestion.id)
+
+                gestion.makerHTMLProyeccion(area, linea, this.nombre, this)
             }
         })
 
@@ -721,6 +737,17 @@ class Programa {
             mostrar_escritorio()
         }
         cEscritorio.appendChild(btnBorrarPrograma)
+
+
+        //Agregamos un boton borrar gestion
+        const btnretroceder = document.createElement("button")
+        btnretroceder.className = "btn btn-outline-secondary mt-5 m-1"
+        btnretroceder.innerHTML = `<i class="bi bi-arrow-return-left"></i> Volver`
+
+        btnretroceder.onclick = () => {
+            linea.makerHTMLLineaPanel(area)
+        }
+        cEscritorio.appendChild(btnretroceder)
 
     }
 

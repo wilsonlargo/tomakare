@@ -34,6 +34,11 @@
     <!--Configuraciónes para inbterfas de usuario y adminsitración de DB-->
     <script src="../js/Proyecciones.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
+        integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/"
+        crossorigin="anonymous"></script>
+
+
 </head>
 
 <header class="sticky-top">
@@ -52,15 +57,11 @@
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-secondary">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/"
-                        class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline">Menu</span>
-                    </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item" onclick="mostrar_escritorio()">
                             <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house text-white"></i> <span
+                                <i class="fs-3 bi-house text-white"></i> <span
                                     class="ms-1 d-none d-sm-inline text-white">Principal</span>
                             </a>
                         </li>
@@ -73,8 +74,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#panel-areas" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                                onclick="">
+                            <a href="#panel-areas" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                 <i class="fs-3 fw-bold bi-file-earmark-person text-white"></i> <span
                                     class="ms-1 d-none d-sm-inline text-white">Consejerías</span> </a>
                             <ul class="collapse hide nav flex-column ms-2" id="panel-areas" data-bs-parent="#menu">
@@ -104,7 +104,7 @@
                 </div>
                 <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
                     <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button"
-                        data-bs-toggle="collapse" onclick="cargarProyectos()" data-bs-target="#collapseVigencias"
+                        data-bs-toggle="collapse" onclick="start()" data-bs-target="#collapseVigencias"
                         aria-expanded="false" aria-controls="#collapseVigencias">
                         <i class="bi bi-calendar2-plus fs-1"></i> Módulo de Gestión
                         <hr class="border border-4">
@@ -125,6 +125,26 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <script>
+        function start() {
+
+            var doc = new jsPDF()
+            //var img = new Image()
+            //img.src = '../scr/logo.png'
+            //doc.addImage(img, 'png', 10, 78, 12, 15)
+
+            doc.setFontSize(12)
+
+               doc.splitTextToSize("esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes  esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes",1)
+
+            doc.save('a4.pdf')
+
+        }
+    </script>
 
 </body>
 
