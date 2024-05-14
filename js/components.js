@@ -140,11 +140,18 @@ class clsProyecto {
 
 
 
+
+
+
+
+
         //Evidencia cuantas areas hay en el proyecto y las muestra
         const cAreas = document.getElementById("panel-areas")
+
         let i = 0;
         cAreas.innerHTML = ''
         this.clsAreas.forEach(area => {
+
             area.id = i++
             //Este es el contenedor general del área
             const component = document.createElement('li')
@@ -159,7 +166,7 @@ class clsProyecto {
                  </a>  
                 `
             document.getElementById("panel-areas").appendChild(component)
-            
+
 
             component.onclick = () => {
 
@@ -167,8 +174,63 @@ class clsProyecto {
 
             }
 
-
         });
+
+        //Lector de elementos para contadores
+        let contadorLineas = 0
+        let contadorPrograma = 0
+        this.clsAreas.forEach(area => {
+            contadorLineas = contadorLineas + area.cslLineas.length
+            area.cslLineas.forEach(linea =>{
+                contadorPrograma= contadorPrograma + linea.clsPrograma.length
+
+
+            })
+        });
+
+
+
+
+        const ContContadores = document.createElement("div")
+        ContContadores.className = "row"
+
+        //Agregar contadores por vigencia
+        const ContConsejerias = document.createElement("div")
+        ContConsejerias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContConsejerias.innerHTML = `
+                 <p class="text-secondary tex-org-big-gris">${this.clsAreas.length}</p>
+                    <p class="bg-success text-white p-2 text-center text-foot-foto">CONSEJERÍAS
+                </p>
+                `
+        ContContadores.appendChild(ContConsejerias)
+
+        //Agregar contadores por vigencia
+        const ContLineas = document.createElement("div")
+        ContLineas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContLineas.innerHTML = `
+                         <p class="text-secondary tex-org-big-gris">${contadorLineas}</p>
+                            <p class="bg-success text-white p-2 text-center text-foot-foto">LÍNEAS
+                        </p>
+                        `
+        ContContadores.appendChild(ContLineas)
+
+        //Agregar contadores por vigencia
+        const ContProgramas = document.createElement("div")
+        ContProgramas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContProgramas.innerHTML = `
+                                 <p class="text-secondary tex-org-big-gris">${contadorPrograma}</p>
+                                    <p class="bg-success text-white p-2 text-center text-foot-foto">PROGRAMAS
+                                </p>
+                                `
+        ContContadores.appendChild(ContProgramas)
+
+
+
+
+
+        contenedor.appendChild(ContContadores)
+
+
     }
 
 }

@@ -15,11 +15,24 @@
     color: white;
 }
 
-.dialog-org{
-background-color: blue;
-border-radius: 5px;
-border-color:whitesmoke;
+.dialog-org {
+    background-color: blue;
+    border-radius: 5px;
+    border-color: whitesmoke;
 
+
+}
+
+.par-org {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.tex-org-big-gris{
+
+    font-size: 80pt;
+    text-align: center;
+    font-weight: bold;
 
 }
 
@@ -27,7 +40,7 @@ border-color:whitesmoke;
 
 
 .btn-org:hover {
-    background-color:#A42F6A;
+    background-color: #A42F6A;
     color: white;
 }
 
@@ -36,16 +49,17 @@ border-color:whitesmoke;
     background-color: #840A54;
     color: white;
 }
+
 .list-group-org:hover {
-    background-color:#A42F6A;
+    background-color: #A42F6A;
     color: white;
 }
 
-.bg-gradiente-org{
+.bg-gradiente-org {
     background: linear-gradient(#840A54, #A42F6A);
 }
 
-.bg-gradiente-org-2{
+.bg-gradiente-org-2 {
     background: linear-gradient(#CD6155, #D98880);
 }
 
@@ -54,5 +68,3 @@ border-color:whitesmoke;
     background-color: #F2F3F4;
 
 }
-
-

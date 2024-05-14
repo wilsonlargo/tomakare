@@ -45,12 +45,12 @@ import {
 
 // Utiliza las claves y credenciales de mi base de datos de Tomakare
 const firebaseConfig = {
-    apiKey: "AIzaSyCRvHblehGJPuaROO1QMSadGKH3IYS0ioI",
-    authDomain: "tomakare2.firebaseapp.com",
-    projectId: "tomakare2",
-    storageBucket: "tomakare2.appspot.com",
-    messagingSenderId: "167881640556",
-    appId: "1:167881640556:web:22954314816fc450706649"
+    apiKey: "AIzaSyBPNmdQLcTdPyXxpqdFdJ5cMrbFezE19iE",
+    authDomain: "plansbgonic.firebaseapp.com",
+    projectId: "plansbgonic",
+    storageBucket: "plansbgonic.appspot.com",
+    messagingSenderId: "991534041439",
+    appId: "1:991534041439:web:e248010abd4185e9118eea"
 };
 
 
