@@ -232,6 +232,7 @@ class clsProyecto {
                                 </p>
                                 `
         ContContadores.appendChild(ContProgramas)
+        
 
         //Agregar contadores por vigencia
         const Contvigencias = document.createElement("div")
