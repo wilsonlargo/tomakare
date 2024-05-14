@@ -176,15 +176,24 @@ class clsProyecto {
 
         });
 
+        //Colocamos el t+itulo de la consejería
+        const Título = document.createElement('div');
+        Título.className = "mt-5 fs-5 fw-bold text-secondary border-bottom border-4 border-secondary"
+        Título.textContent = "Elementos proyectados en esta gestión"
+
+        contenedor.appendChild(Título)
+
         //Lector de elementos para contadores
         let contadorLineas = 0
         let contadorPrograma = 0
+        let contadorProyectos = 0
         this.clsAreas.forEach(area => {
             contadorLineas = contadorLineas + area.cslLineas.length
-            area.cslLineas.forEach(linea =>{
-                contadorPrograma= contadorPrograma + linea.clsPrograma.length
-
-
+            area.cslLineas.forEach(linea => {
+                contadorPrograma = contadorPrograma + linea.clsPrograma.length
+                linea.clsPrograma.forEach(programa => {
+                    contadorProyectos = contadorProyectos + programa.clsGestion.length
+                })
             })
         });
 
@@ -223,6 +232,16 @@ class clsProyecto {
                                 </p>
                                 `
         ContContadores.appendChild(ContProgramas)
+
+        //Agregar contadores por vigencia
+        const Contvigencias = document.createElement("div")
+        Contvigencias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        Contvigencias.innerHTML = `
+                                         <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
+                                            <p class="bg-success text-white p-2 text-center text-foot-foto">PROYECTOS
+                                        </p>
+                                        `
+        ContContadores.appendChild(Contvigencias)
 
 
 
