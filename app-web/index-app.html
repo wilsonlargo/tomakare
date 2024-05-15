@@ -80,6 +80,23 @@
                             <ul class="collapse hide nav flex-column ms-2" id="panel-areas" data-bs-parent="#menu">
                             </ul>
                         </li>
+                        <li>
+                            <a href="#panel-config" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-3 fw-bold bi bi-gear-fill text-white"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-white">Configuración</span> </a>
+                            <ul class="collapse hide nav flex-column ms-2" id="panel-config" data-bs-parent="#menu">
+                                <li class="w-100" onclick="backupData()">
+                                    <a href="#" class="nav-link px-0 text-white">
+                                        <i class="bi-cloud-download text-white"></i>
+                                        <span class="d-none d-sm-inline text-white">
+                                            Backup data
+                                        </span>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
 
                     </ul>
 
@@ -98,8 +115,7 @@
                     </a>
                 </div>
                 <div id="panel-escritorio" class="m-2">
-
-
+                    
 
                 </div>
 
@@ -140,7 +156,7 @@
 
             doc.setFontSize(12)
 
-               doc.splitTextToSize("esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes  esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes",1)
+            doc.splitTextToSize("esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes  esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes", 1)
 
             doc.save('a4.pdf')
 
@@ -172,7 +188,7 @@
             <div class="modal-footer">
                 <button id="btnBorrarConfirm" type="button" class="btn btn-danger"
                     data-bs-dismiss="modal">borrar</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
 
         </div>

@@ -53,8 +53,16 @@ class clsProyecto {
 
         const loadProgramas = (fromClsProgramas, lineaNew) => {
             return fromClsProgramas.map(programa => {
-                const ProgramaNew = new Programa(programa.nombre, programa.descripcion, programa.id, lineaNew);
-                ProgramaNew.clsGestion = loadGestion(programa.clsGestion, ProgramaNew)
+                const ProgramaNew = new Programa(
+                    programa.nombre,
+                    programa.descripcion,
+                    programa.avance,
+                    programa.id,
+                    lineaNew);
+
+                ProgramaNew.clsGestion = loadGestion(
+                    programa.clsGestion,
+                    ProgramaNew)
                 return ProgramaNew;
             });
         }
@@ -68,6 +76,8 @@ class clsProyecto {
                     gestion.financiado,
                     gestion.fuente,
                     gestion.valor,
+                    gestion.indicador,
+                    gestion.cumplimiento,
 
                     gestion.id,
                     ProgramaNew);
@@ -138,13 +148,6 @@ class clsProyecto {
         });
         intVigencia.value = this.vigencia;
 
-
-
-
-
-
-
-
         //Evidencia cuantas areas hay en el proyecto y las muestra
         const cAreas = document.getElementById("panel-areas")
 
@@ -208,7 +211,9 @@ class clsProyecto {
         ContConsejerias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
         ContConsejerias.innerHTML = `
                  <p class="text-secondary tex-org-big-gris">${this.clsAreas.length}</p>
-                    <p class="bg-success text-white p-2 text-center text-foot-foto">CONSEJERÍAS
+                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                 CONSEJERÍAS
+             </a>
                 </p>
                 `
         ContContadores.appendChild(ContConsejerias)
@@ -218,7 +223,9 @@ class clsProyecto {
         ContLineas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
         ContLineas.innerHTML = `
                          <p class="text-secondary tex-org-big-gris">${contadorLineas}</p>
-                            <p class="bg-success text-white p-2 text-center text-foot-foto">LÍNEAS
+                         <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                         LÍNEAS
+                        </a>
                         </p>
                         `
         ContContadores.appendChild(ContLineas)
@@ -228,27 +235,34 @@ class clsProyecto {
         ContProgramas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
         ContProgramas.innerHTML = `
                                  <p class="text-secondary tex-org-big-gris">${contadorPrograma}</p>
-                                    <p class="bg-success text-white p-2 text-center text-foot-foto">PROGRAMAS
+                                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                                     PROGRAMAS
+                                    </a>
                                 </p>
                                 `
         ContContadores.appendChild(ContProgramas)
-        
+
 
         //Agregar contadores por vigencia
         const Contvigencias = document.createElement("div")
         Contvigencias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
         Contvigencias.innerHTML = `
-                                         <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
-                                            <p class="bg-success text-white p-2 text-center text-foot-foto">PROYECTOS
+                                        <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
+                                            <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2" id="contador-gestiones">
+                                                PROYECTOS
+                                            </a>
                                         </p>
                                         `
         ContContadores.appendChild(Contvigencias)
-
-
-
-
-
         contenedor.appendChild(ContContadores)
+
+
+        const btncontar_gestiones = document.getElementById("contador-gestiones")
+
+        btncontar_gestiones.onclick = () => {
+
+            listarGestiones()
+        }
 
 
     }
@@ -458,18 +472,23 @@ class Area {
         btnBorrarArea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar Área`
 
         btnBorrarArea.onclick = () => {
-            ActiveProyect.deleteArea(this.id)
-            GuardarVigencia()
-            mostrar_escritorio()
+            modal.modalDelete(
+                () => {
+                    ActiveProyect.deleteArea(this.id)
+                    GuardarVigencia()
+                    mostrar_escritorio()
 
-            //Evidencia cuantas areas hay en el proyecto y las muestra
-            const cAreas = document.getElementById("panel-areas")
-            cAreas.innerHTML = ''
-            ActiveProyect.clsAreas.forEach(area => {
-                area.makerHtmlAreasItem()
-                cAreas.appendChild(area.component);
+                    //Evidencia cuantas areas hay en el proyecto y las muestra
+                    const cAreas = document.getElementById("panel-areas")
+                    cAreas.innerHTML = ''
+                    ActiveProyect.clsAreas.forEach(area => {
+                        area.makerHtmlAreasItem()
+                        mostrar_escritorio()
+                    });
+                    mensajes("El área fue eliminada", "blue")
+                }
+            )
 
-            });
         }
         cEscritorio.appendChild(btnBorrarArea)
 
@@ -597,7 +616,7 @@ class Linea {
 
         btAgregarPrograma.onclick = () => {
             const numNew = this.clsPrograma.length
-            const programa = new Programa('Nuevo programa', 'Descripción del programa', numNew, this);
+            const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, numNew, this);
             this.addPrograma(programa)
             GuardarVigencia()
 
@@ -659,10 +678,15 @@ class Linea {
         btnBorrarLinea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar línea`
 
         btnBorrarLinea.onclick = () => {
-            parent.deleteLinea(this.id)
-            console.log(parent.cslLineas)
-            GuardarVigencia()
-            mostrar_escritorio()
+            modal.modalDelete(
+                () => {
+                    parent.deleteLinea(this.id)
+                    console.log(parent.cslLineas)
+                    GuardarVigencia()
+                    parent.makerHtmlAreasItem()
+                }
+            )
+
         }
         cEscritorio.appendChild(btnBorrarLinea)
 
@@ -681,9 +705,10 @@ class Linea {
 
 }
 class Programa {
-    constructor(nombre, descripcion, id, parent) {
+    constructor(nombre, descripcion, avance, id, parent) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.avance = avance;
         this.id = id;
         this.parent = parent;
         this.clsGestion = [];
@@ -749,6 +774,50 @@ class Programa {
         });
         refDescripPrograma.value = this.descripcion;
 
+
+
+        //Sección medidor de avance
+        //Identificamos cuantos proyectos hay y sumamos esos valores
+
+        let avancePrograma = 0;
+        this.clsGestion.forEach(gestion => {
+            avancePrograma = avancePrograma + parseInt(gestion.cumplimiento)
+        })
+
+        let colorAvance;
+        let colorAvanceTexto;
+
+        if (avancePrograma <= 25) {
+            colorAvance="bg-danger"
+            colorAvanceTexto="text-white"
+        }else if(avancePrograma <= 50){
+            colorAvance="bg-warning-subtle"
+            colorAvanceTexto="text-dark"
+        }
+        else if(avancePrograma <= 75){
+            colorAvance="bg-warning"
+            colorAvanceTexto="text-white"
+
+        }
+        else if(avancePrograma <= 100){
+            colorAvance="bg-success"
+            colorAvanceTexto="text-white"
+        }
+
+        this.avance = avancePrograma
+        GuardarVigencia()
+
+        const indicadorAvance = document.createElement("div")
+        indicadorAvance.className = "border border-2 p-2 ms-1"
+        indicadorAvance.style.width = "100px"
+        indicadorAvance.innerHTML = `
+                <p class="text-center fs-3">${avancePrograma}%</p>
+                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+        `
+
+        cEscritorio.appendChild(indicadorAvance)
+
+
         const Título4 = document.createElement('div');
         Título4.className = "fs-4 text-secondary border-bottom border-4"
         Título4.textContent = "Proyectos"
@@ -761,7 +830,7 @@ class Programa {
 
 
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', 'Objetivo general', 'Administrador', false, "", 0, 0, this)
+            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Administrador", false, "", 0, 0, 0, 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 
@@ -775,6 +844,7 @@ class Programa {
                 btGestion.textContent = gestion.id + 1 + " " + gestion.nombre
 
                 document.getElementById("lstProyectos").appendChild(btGestion);
+
 
                 btGestion.onclick = () => {
                     gestion.makerHTMLProyeccion(area, linea, this.nombre)
@@ -793,7 +863,9 @@ class Programa {
 
         //Cargar las gestiones
         let g = 0;
+
         this.clsGestion.forEach(gestion => {
+
             gestion.id = g++
             const btGestion = document.createElement('a')
             btGestion.className = "list-group-item list-group-item-action"
@@ -814,9 +886,14 @@ class Programa {
         btnBorrarPrograma.innerHTML = `<i class="bi bi-trash3"></i> Eliminar programa`
 
         btnBorrarPrograma.onclick = () => {
-            this.parent.deletePrograma(this.id)
-            GuardarVigencia()
-            mostrar_escritorio()
+            modal.modalDelete(
+                () => {
+                    this.parent.deletePrograma(this.id)
+                    GuardarVigencia()
+                    linea.makerHTMLLineaPanel(area)
+                }
+            )
+
         }
         cEscritorio.appendChild(btnBorrarPrograma)
 
@@ -971,7 +1048,6 @@ async function AgregarArea() {
     cAreas.innerHTML = ''
     ActiveProyect.clsAreas.forEach(area => {
         area.makerHtmlAreasItem()
-        cAreas.appendChild(area.component);
     });
     mensajes("Elemento creado", "Green")
 }
@@ -1035,3 +1111,16 @@ function mostrar_escritorio() {
 
 }
 
+function backupData() {
+    const a = document.createElement("a");
+    const archivo = new Blob([ActiveProyect.convertToJSON()], { type: 'text/plain' });
+    const url = URL.createObjectURL(archivo);
+    a.href = url;
+
+    const date = new Date();
+
+    let day = date.getDate()
+    a.download = 'Vigencia' + ActiveProyect.vigencia + date.getDate() + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+}

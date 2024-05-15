@@ -4,15 +4,18 @@
 //const { doc } = require("firebase/firestore");
 
 class Gestion {
-    constructor(nombre, ogeneral, manager, financiado, fuente, valor, id, partenid) {
+    constructor(nombre, ogeneral, manager, financiado, fuente, valor, indicador, cumplimiento, id, partenid) {
         this.nombre = nombre;
         this.ogeneral = ogeneral;
         this.manager = manager;
         this.financiado = financiado;
         this.fuente = fuente;
         this.valor = valor;
+        this.indicador = indicador;
+        this.cumplimiento = cumplimiento;
         this.id = id;
         this.partenid = partenid;
+
         this.clsEspecificos = [];
     }
 
@@ -25,6 +28,7 @@ class Gestion {
 
     makerHTMLProyeccion(area, linea, programa, parentid) {
         //Iniciamos colocando los titulos de esta sección y limpiando el escritorio
+
 
         document.getElementById("conteneder-bar-proyectos").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
@@ -120,16 +124,16 @@ class Gestion {
 
         valFinanciador.onchange = () => {
             this.financiado = valFinanciador.checked
-            if(this.financiado==false){
-                inputvalorProy.hidden=true
-                inputfuenteProy.hidden=true
-            }else{
-                inputvalorProy.hidden=false
-                this.valor=""
-                refinputvalorProy.value=""
-                inputfuenteProy.hidden=false
-                this.fuente=""
-                refinputfuenteProy.value=""
+            if (this.financiado == false) {
+                inputvalorProy.hidden = true
+                inputfuenteProy.hidden = true
+            } else {
+                inputvalorProy.hidden = false
+                this.valor = ""
+                refinputvalorProy.value = ""
+                inputfuenteProy.hidden = false
+                this.fuente = ""
+                refinputfuenteProy.value = ""
             }
             GuardarVigencia()
         }
@@ -155,7 +159,7 @@ class Gestion {
         inputvalorProy.className = "form-floating mb-2"
         inputvalorProy.innerHTML = `
                 <input type="text" class="form-control" id="input-gestion-valor" value="${this.valor}">
-                <label for="input-gestion-administrador">Fuente financiación</label>
+                <label for="input-gestion-administrador">Valor</label>
                 `
         cEscritorio.appendChild(inputvalorProy)
 
@@ -166,13 +170,57 @@ class Gestion {
         }
         refinputvalorProy.value = this.valor
 
-        if(this.financiado==false){
-            inputvalorProy.hidden=true
-            inputfuenteProy.hidden=true
-        }else{
-            inputvalorProy.hidden=false
-            inputfuenteProy.hidden=false
+        if (this.financiado == false) {
+            inputvalorProy.hidden = true
+            inputfuenteProy.hidden = true
+        } else {
+            inputvalorProy.hidden = false
+            inputfuenteProy.hidden = false
         }
+
+
+
+        //Porcentaje en el proyecto
+        const inputIndicadorProy = document.createElement("form")
+        inputIndicadorProy.className = "form-floating mb-2"
+        inputIndicadorProy.innerHTML = `
+            <input type="text" class="form-control" id="input-indicador" value="${this.indicador}">
+            <label for="input-indicador">Porcentaje en el programa</label>
+        `
+        cEscritorio.appendChild(inputIndicadorProy)
+
+        const refinputIndicadorProy = document.getElementById("input-indicador")
+        refinputIndicadorProy.oninput = () => {
+            this.indicador = refinputIndicadorProy.value;
+            GuardarVigencia()
+        }
+        refinputIndicadorProy.value = this.indicador
+
+
+        //Porcentaje en el proyecto
+        const inputCumplimientoProy = document.createElement("form")
+        inputCumplimientoProy.className = "form-floating mb-2"
+        inputCumplimientoProy.innerHTML = `
+                    <input type="text" class="form-control" id="input-cumplimiento" value="${this.cumplimiento}">
+                    <label for="input-cumplimiento">Porcentaje de cumplimiento</label>
+                `
+        cEscritorio.appendChild(inputCumplimientoProy)
+
+        const refinputCumplimientoProy = document.getElementById("input-cumplimiento")
+        refinputCumplimientoProy.oninput = () => {
+            this.cumplimiento = refinputCumplimientoProy.value;
+            GuardarVigencia()
+        }
+        refinputCumplimientoProy.value = this.cumplimiento
+
+
+        //Colocamos el título del programa
+        const Título5 = document.createElement('div');
+        Título5.className = "ms-1 mt-4 mb-2 fs-6 text-secondary border-bottom border-2 border-secondary"
+        Título5.textContent = "Objetivos específicos"
+        cEscritorio.appendChild(Título5)
+
+
 
 
 
@@ -182,8 +230,13 @@ class Gestion {
         btnBorrarGestion.innerHTML = `<i class="bi bi-trash3"></i> Eliminar proyecto`
 
         btnBorrarGestion.onclick = () => {
-            parentid.deleteGestion(this.id)
-            mostrar_escritorio()
+            modal.modalDelete(
+                () => {
+                    parentid.deleteGestion(this.id)
+                    parentid.makerHTMLProgramaPanel(area, linea)
+                }
+            )
+
 
         }
         cEscritorio.appendChild(btnBorrarGestion)
@@ -205,5 +258,74 @@ class Gestion {
 
 
 
+
+}
+function listarGestiones() {
+
+    document.getElementById("conteneder-bar-proyectos").hidden = true
+    document.getElementById("panel-escritorio").innerHTML = ""
+
+    //Colocamos el título del programa
+    const Título5 = document.createElement('div');
+    Título5.className = "ms-1 mt-4 mb-2 fs-5 text-secondary border-bottom border-1 border-secondary"
+    Título5.textContent = "Lista de proyectos de esta vigencia"
+    document.getElementById("panel-escritorio").appendChild(Título5)
+
+    const contenedor_listas = document.createElement("ol")
+    contenedor_listas.className = "list-group list-group-numbered"
+    document.getElementById("panel-escritorio").appendChild(contenedor_listas)
+
+
+
+    let i = 0
+    ActiveProyect.clsAreas.forEach(area => {
+        area.cslLineas.forEach(linea => {
+            linea.clsPrograma.forEach(programa => {
+                programa.clsGestion.forEach(gestion => {
+
+                    const item = document.createElement("li")
+                    item.className = "list-group-item d-flex justify-content-between align-items-start"
+
+                    const porcentajeReal= (gestion.cumplimiento * 100) / gestion.indicador
+                    let color;
+                    if (porcentajeReal <=30){
+                        color="text-bg-danger"
+                    }else if(porcentajeReal >=90){
+                        color="text-bg-success"
+                    }else if(porcentajeReal <=80){
+                        color="text-bg-warning"
+                    }
+                    else if(porcentajeReal <=50){
+                        color="text-bg-warning-subtle"
+                    }
+
+
+                    item.innerHTML = `
+                    <a href="#" class="list-group-item list-group-item-action ms-3">
+                        <div class="ms-2 me-auto">
+                        <div class="fw-bold">${area.nombre}</div>
+                        ${gestion.nombre}
+                        </div>
+                        
+                    </a>
+                    <span class="badge text-bg-secondary rounded-pill ms-2 p-2"> meta ${gestion.indicador} %</span>
+                    <span class="badge text-bg-secondary rounded-pill ms-2 p-2"> avance ${gestion.cumplimiento} %</span>
+                    <span class="badge ${color} rounded-pill ms-2 p-3 fs-6"> general ${Math.trunc(porcentajeReal)} %</span>  
+
+                    `
+                    contenedor_listas.appendChild(item)
+
+                    item.onclick = () => {
+                        const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
+                        //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
+                        elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
+
+                    }
+
+
+                })
+            })
+        })
+    });
 
 }
