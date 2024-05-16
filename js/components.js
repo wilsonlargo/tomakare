@@ -28,7 +28,13 @@ class clsProyecto {
         //un objeto que llena la lista de areas
         const loadAreas = (fromClsAreas) => {
             return fromClsAreas.map(Areas => {
-                const areaNew = new Area(Areas.nombre, Areas.detalle, Areas.administrador, Areas.funciones);
+                const areaNew = new Area(
+                    Areas.nombre,
+                    Areas.detalle,
+                    Areas.administrador,
+                    Areas.funciones,
+                    Areas.avance
+                );
                 areaNew.cslMandatos = loadMandatos(Areas.cslMandatos);
                 areaNew.cslLineas = loadLineas(Areas.cslLineas);
 
@@ -45,7 +51,13 @@ class clsProyecto {
 
         const loadLineas = (fromClsLineas) => {
             return fromClsLineas.map(linea => {
-                const lineaNew = new Linea(linea.nombre, linea.descripcion, linea.id, linea.parent);
+                const lineaNew = new Linea(
+                    linea.nombre,
+                    linea.descripcion,
+                    linea.meta,
+                    linea.avance,
+                    linea.id,
+                    linea.parent);
                 lineaNew.clsPrograma = loadProgramas(linea.clsPrograma, lineaNew);
                 return lineaNew;
             });
@@ -57,6 +69,7 @@ class clsProyecto {
                     programa.nombre,
                     programa.descripcion,
                     programa.avance,
+                    programa.meta,
                     programa.id,
                     lineaNew);
 
@@ -179,7 +192,7 @@ class clsProyecto {
 
         });
 
-        //Colocamos el t+itulo de la consejería
+        //Colocamos el título de la consejería
         const Título = document.createElement('div');
         Título.className = "mt-5 fs-5 fw-bold text-secondary border-bottom border-4 border-secondary"
         Título.textContent = "Elementos proyectados en esta gestión"
@@ -211,12 +224,15 @@ class clsProyecto {
         ContConsejerias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
         ContConsejerias.innerHTML = `
                  <p class="text-secondary tex-org-big-gris">${this.clsAreas.length}</p>
-                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2" id="contador-areas">
                  CONSEJERÍAS
              </a>
                 </p>
                 `
         ContContadores.appendChild(ContConsejerias)
+
+
+        
 
         //Agregar contadores por vigencia
         const ContLineas = document.createElement("div")
@@ -264,6 +280,12 @@ class clsProyecto {
             listarGestiones()
         }
 
+        const btncontar_areas = document.getElementById("contador-areas")
+
+        btncontar_areas.onclick = () => {
+            visorAreas()
+        }
+
 
     }
 
@@ -273,11 +295,12 @@ class clsProyecto {
 class Area {
     //constructor(nombre, detalle, administrador, parent) // aquí una version previa con parent, para ahcer las consultas
     //en restropectiva con el objeto parent
-    constructor(nombre, detalle, administrador, funciones, id) {
+    constructor(nombre, detalle, administrador, funciones, avance, id) {
         this.nombre = nombre;
         this.detalle = detalle;
         this.administrador = administrador;
         this.funciones = funciones;
+        this.avance = avance;
         this.id = id
         this.cslMandatos = [];
         this.cslLineas = [];
@@ -364,6 +387,51 @@ class Area {
         });
         intFuntionsArea.value = this.funciones;
 
+        //Sección medidor de avance
+        //Identificamos cuantos lineas hay y sumamos esos valores
+        //*********************************************************/
+
+        let avance= 0;
+        this.cslLineas.forEach(linea => {
+            avance = avance + Math.trunc((linea.meta * linea.avance) / 100);
+        })
+
+        let colorAvance;
+        let colorAvanceTexto;
+
+        if (avance <= 25) {
+            colorAvance = "bg-danger"
+            colorAvanceTexto = "text-white"
+        } else if (avance <= 50) {
+            colorAvance = "bg-warning-subtle"
+            colorAvanceTexto = "text-dark"
+        }
+        else if (avance <= 75) {
+            colorAvance = "bg-warning"
+            colorAvanceTexto = "text-white"
+
+        }
+        else if (avance <= 100) {
+            colorAvance = "bg-success"
+            colorAvanceTexto = "text-white"
+        }
+
+        this.avance = avance
+        GuardarVigencia()
+
+        const indicadorAvance = document.createElement("div")
+        indicadorAvance.className = "border border-2 p-2 ms-1"
+        indicadorAvance.style.width = "100px"
+        indicadorAvance.innerHTML = `
+                <p class="text-center fs-3">${avance}%</p>
+                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+        `
+
+        cEscritorio.appendChild(indicadorAvance)
+        //*********************************************************/
+        //*********************************************************/
+
+
 
 
 
@@ -430,7 +498,6 @@ class Area {
 
         //Agrega un comando al boton que agrega lineas
         //con esto identifica en que área está y agrega un indice
-
         const btAgregarLinea = document.createElement("button")
         btAgregarLinea.className = "btn btn-outline-secondary m-1"
         btAgregarLinea.innerHTML = `<i class="bi bi-plus"></i> Agregar línea`
@@ -452,7 +519,19 @@ class Area {
             linea.id = l++
             const btLinea = document.createElement('a')
             btLinea.className = "list-group-item list-group-item-action"
-            btLinea.textContent = linea.id + 1 + " " + linea.nombre
+            btLinea.innerHTML = `
+            <div class="row justify-content-around">
+                <div class="col-6">
+                <i class="bi bi-file-earmark-text-fill"></i> 
+                ${linea.id + 1 + ". " + linea.nombre} 
+              </div>
+              <div class="col-6">
+                <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + linea.meta + "%"}</span>
+                <span class="badge bg-secondary text-white rounded-pill">${"(A) " + linea.avance + "%"}</span>
+              </div>
+            </div>
+            `
+            document.getElementById("divLineascollapse").appendChild(btLinea);
 
             cLineas.appendChild(btLinea);
 
@@ -461,7 +540,6 @@ class Area {
             }
 
         })
-
 
 
 
@@ -540,9 +618,11 @@ class Mandato {
 }
 
 class Linea {
-    constructor(nombre, descripcion, id, parent) {
+    constructor(nombre, descripcion, meta, avance, id, parent) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.meta = meta;
+        this.avance = avance;
         this.id = id;
         this.parent = parent;
         this.clsPrograma = []
@@ -604,6 +684,73 @@ class Linea {
         refDescripLinea.value = this.descripcion;
 
 
+        //Porcentaje en el área
+        const inputMetaEnLArea = document.createElement("form")
+        inputMetaEnLArea.className = "form-floating mb-2"
+        inputMetaEnLArea.innerHTML = `
+                            <input type="text" class="form-control" id="input-meta" value="${this.meta}">
+                            <label for="input-meta">Porcentaje meta en la consejería</label>
+                        `
+        cEscritorio.appendChild(inputMetaEnLArea)
+
+        const refinputMeta = document.getElementById("input-meta")
+        refinputMeta.oninput = () => {
+            this.meta = refinputMeta.value;
+            GuardarVigencia()
+        }
+        refinputMeta.value = this.meta
+
+
+        //Sección medidor de avance
+        //Identificamos cuantos programas hay y sumamos esos valores
+        //*********************************************************/
+
+        let avanceLinea = 0;
+        this.clsPrograma.forEach(programa => {
+
+            avanceLinea = avanceLinea + Math.trunc((programa.meta * programa.avance) / 100);
+
+
+
+        })
+
+        let colorAvance;
+        let colorAvanceTexto;
+
+        if (avanceLinea <= 25) {
+            colorAvance = "bg-danger"
+            colorAvanceTexto = "text-white"
+        } else if (avanceLinea <= 50) {
+            colorAvance = "bg-warning-subtle"
+            colorAvanceTexto = "text-dark"
+        }
+        else if (avanceLinea <= 75) {
+            colorAvance = "bg-warning"
+            colorAvanceTexto = "text-white"
+
+        }
+        else if (avanceLinea <= 100) {
+            colorAvance = "bg-success"
+            colorAvanceTexto = "text-white"
+        }
+
+        this.avance = avanceLinea
+        GuardarVigencia()
+
+        const indicadorAvance = document.createElement("div")
+        indicadorAvance.className = "border border-2 p-2 ms-1"
+        indicadorAvance.style.width = "100px"
+        indicadorAvance.innerHTML = `
+                <p class="text-center fs-3">${avanceLinea}%</p>
+                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+        `
+
+        cEscritorio.appendChild(indicadorAvance)
+        //*********************************************************/
+        //*********************************************************/
+
+
+
         const Título4 = document.createElement('div');
         Título4.className = "fs-4 text-secondary border-bottom border-4"
         Título4.textContent = "Programas"
@@ -616,7 +763,7 @@ class Linea {
 
         btAgregarPrograma.onclick = () => {
             const numNew = this.clsPrograma.length
-            const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, numNew, this);
+            const programa = new Programa('Nuevo programa', 'Descripción del programa', 0, 0, numNew, this);
             this.addPrograma(programa)
             GuardarVigencia()
 
@@ -628,7 +775,18 @@ class Linea {
                 programa.id = p++
                 const btPrograma = document.createElement('a')
                 btPrograma.className = "list-group-item list-group-item-action"
-                btPrograma.textContent = programa.id + 1 + ". " + programa.nombre
+                btPrograma.innerHTML = `
+                <div class="row justify-content-around">
+                    <div class="col-6">
+                    <i class="bi bi-file-earmark-text-fill"></i> 
+                    ${programa.id + 1 + ". " + programa.nombre} 
+                  </div>
+                  <div class="col-6">
+                  <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + programa.meta + "%"}</span>
+                  <span class="badge bg-secondary text-white rounded-pill">${"(A) " + programa.avance + "%"}</span>
+                  </div>
+                </div>
+                `
 
                 cProgramas.appendChild(btPrograma);
 
@@ -643,7 +801,7 @@ class Linea {
 
         //Agregar listador de proyectos
         const listProyectos = document.createElement("div")
-        listProyectos.className = "list-group m-3 w-50"
+        listProyectos.className = "list-group m-3"
         listProyectos.id = "lstProyectos"
         cEscritorio.appendChild(listProyectos)
 
@@ -662,14 +820,26 @@ class Linea {
             programa.id = p++
             const btPrograma = document.createElement('a')
             btPrograma.className = "list-group-item list-group-item-action"
-            btPrograma.textContent = programa.id + 1 + ". " + programa.nombre
-
+            btPrograma.innerHTML = `
+                <div class="row justify-content-around">
+                    <div class="col-6">
+                    <i class="bi bi-file-earmark-text-fill"></i> 
+                    ${programa.id + 1 + ". " + programa.nombre} 
+                  </div>
+                  <div class="col-6">
+                  <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + programa.meta + "%"}</span>
+                  <span class="badge bg-secondary text-white rounded-pill">${"(A) " + programa.avance + "%"}</span>
+                  </div>
+                </div>
+                `
             cProgramas.appendChild(btPrograma);
 
             btPrograma.onclick = () => {
                 programa.makerHTMLProgramaPanel(parent, this)
             }
         })
+
+
 
 
         //Agregamos un boton borrar línea
@@ -705,10 +875,11 @@ class Linea {
 
 }
 class Programa {
-    constructor(nombre, descripcion, avance, id, parent) {
+    constructor(nombre, descripcion, avance, meta, id, parent) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.avance = avance;
+        this.meta = meta;
         this.id = id;
         this.parent = parent;
         this.clsGestion = [];
@@ -776,8 +947,25 @@ class Programa {
 
 
 
+        //Porcentaje en la línea
+        const inputMetaEnLinea = document.createElement("form")
+        inputMetaEnLinea.className = "form-floating mb-2"
+        inputMetaEnLinea.innerHTML = `
+                    <input type="text" class="form-control" id="input-meta" value="${this.meta}">
+                    <label for="input-meta">Porcentaje meta en la línea</label>
+                `
+        cEscritorio.appendChild(inputMetaEnLinea)
+
+        const refinputMeta = document.getElementById("input-meta")
+        refinputMeta.oninput = () => {
+            this.meta = refinputMeta.value;
+            GuardarVigencia()
+        }
+        refinputMeta.value = this.meta
+
         //Sección medidor de avance
         //Identificamos cuantos proyectos hay y sumamos esos valores
+        //*********************************************************/
 
         let avancePrograma = 0;
         this.clsGestion.forEach(gestion => {
@@ -788,20 +976,20 @@ class Programa {
         let colorAvanceTexto;
 
         if (avancePrograma <= 25) {
-            colorAvance="bg-danger"
-            colorAvanceTexto="text-white"
-        }else if(avancePrograma <= 50){
-            colorAvance="bg-warning-subtle"
-            colorAvanceTexto="text-dark"
+            colorAvance = "bg-danger"
+            colorAvanceTexto = "text-white"
+        } else if (avancePrograma <= 50) {
+            colorAvance = "bg-warning-subtle"
+            colorAvanceTexto = "text-dark"
         }
-        else if(avancePrograma <= 75){
-            colorAvance="bg-warning"
-            colorAvanceTexto="text-white"
+        else if (avancePrograma <= 75) {
+            colorAvance = "bg-warning"
+            colorAvanceTexto = "text-white"
 
         }
-        else if(avancePrograma <= 100){
-            colorAvance="bg-success"
-            colorAvanceTexto="text-white"
+        else if (avancePrograma <= 100) {
+            colorAvance = "bg-success"
+            colorAvanceTexto = "text-white"
         }
 
         this.avance = avancePrograma
@@ -816,6 +1004,9 @@ class Programa {
         `
 
         cEscritorio.appendChild(indicadorAvance)
+        //*********************************************************/
+        //*********************************************************/
+
 
 
         const Título4 = document.createElement('div');
@@ -829,6 +1020,7 @@ class Programa {
         btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
 
 
+
         btAgregarGestion.onclick = () => {
             const gestion = new Gestion('Nueva proyección', "Objetivo general", "Administrador", false, "", 0, 0, 0, 0, this)
             this.addGestion(gestion)
@@ -837,12 +1029,23 @@ class Programa {
             document.getElementById("lstProyectos").innerHTML = ""
 
             let g = 0;
+
             this.clsGestion.forEach(gestion => {
                 gestion.id = g++
                 const btGestion = document.createElement('a')
                 btGestion.className = "list-group-item list-group-item-action"
-                btGestion.textContent = gestion.id + 1 + " " + gestion.nombre
-
+                btGestion.innerHTML = `
+                <div class="row justify-content-around">
+                    <div class="col-6">
+                    <i class="bi bi-file-earmark-text-fill"></i> 
+                    ${gestion.id + 1 + ". " + gestion.nombre} 
+                  </div>
+                  <div class="col-6">
+                    <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + gestion.indicador + "%"}</span>
+                    <span class="badge bg-secondary text-white rounded-pill">${"(A) " + (gestion.cumplimiento / gestion.indicador) * 100 + "%"}</span>
+                  </div>
+                </div>
+                `
                 document.getElementById("lstProyectos").appendChild(btGestion);
 
 
@@ -864,14 +1067,28 @@ class Programa {
         //Cargar las gestiones
         let g = 0;
 
+        //Contadores para calculos de porcenctajes de avance
+
         this.clsGestion.forEach(gestion => {
 
             gestion.id = g++
             const btGestion = document.createElement('a')
             btGestion.className = "list-group-item list-group-item-action"
-            btGestion.textContent = gestion.id + 1 + ". " + gestion.nombre
-
+            btGestion.innerHTML = `
+                <div class="row justify-content-around">
+                    <div class="col-6">
+                    <i class="bi bi-file-earmark-text-fill"></i> 
+                    ${gestion.id + 1 + ". " + gestion.nombre} 
+                  </div>
+                  <div class="col-6">
+                  <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + gestion.indicador + "%"}</span>
+                  <span class="badge bg-secondary text-white rounded-pill">${"(A) " + Math.trunc((gestion.cumplimiento / gestion.indicador) * 100) + "%"}</span>
+                  </div>
+                </div>
+                `
             document.getElementById("lstProyectos").appendChild(btGestion);
+
+
 
             btGestion.onclick = () => {
 
@@ -1040,7 +1257,7 @@ async function BorrarVigencia() {
 
 //Esta función cita la función interna de proyecto para crear una nueva área
 async function AgregarArea() {
-    ActiveProyect.addArea(new Area("Nombre área", "Descripción del área", "Administrador", "Funciones"))
+    ActiveProyect.addArea(new Area("Nombre área", "Descripción del área", "Administrador", "Funciones", 0))
     GuardarVigencia()
 
     //Evidencia cuantas areas hay en el proyecto y las muestra
@@ -1080,7 +1297,7 @@ async function AgregarLinea(parent) {
     const AreaActiva = parent
 
     //Creamos un anueva línea de acción dentro de la clase Area
-    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, parent);
+    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, 0, 0, parent);
     AreaActiva.addLinea(linea)
 
     const cLineas = document.getElementById("divLineascollapse")
@@ -1092,7 +1309,18 @@ async function AgregarLinea(parent) {
 
         const btLinea = document.createElement('a')
         btLinea.className = "mb-1 list-group-item list-group-item-action"
-        btLinea.textContent = linea.id + 1 + ". " + linea.nombre
+        btLinea.innerHTML = `
+        <div class="row justify-content-around">
+            <div class="col-6">
+            <i class="bi bi-file-earmark-text-fill"></i> 
+            ${linea.id + 1 + ". " + linea.nombre} 
+          </div>
+          <div class="col-6">
+            <span class="badge bg-dark-subtle text-dark rounded-pill">${"(M) " + linea.meta + "%"}</span>
+            <span class="badge bg-secondary text-white rounded-pill">${"(A) " + linea.avance + "%"}</span>
+          </div>
+        </div>
+        `
         cLineas.appendChild(btLinea);
 
         btLinea.onclick = () => {

@@ -214,7 +214,6 @@ class Gestion {
         refinputCumplimientoProy.value = this.cumplimiento
 
 
-        //Colocamos el título del programa
         const Título5 = document.createElement('div');
         Título5.className = "ms-1 mt-4 mb-2 fs-6 text-secondary border-bottom border-2 border-secondary"
         Título5.textContent = "Objetivos específicos"
@@ -301,16 +300,15 @@ function listarGestiones() {
 
 
                     item.innerHTML = `
+                    
                     <a href="#" class="list-group-item list-group-item-action ms-3">
                         <div class="ms-2 me-auto">
-                        <div class="fw-bold">${area.nombre}</div>
-                        ${gestion.nombre}
+                        <div class=""> <b>${area.nombre}</b> / ${linea.nombre} / ${programa.nombre}</div>
+                        <i class="bi bi-file-earmark-text-fill"></i> ${gestion.nombre}
                         </div>
-                        
+     
                     </a>
-                    <span class="badge text-bg-secondary rounded-pill ms-2 p-2"> meta ${gestion.indicador} %</span>
-                    <span class="badge text-bg-secondary rounded-pill ms-2 p-2"> avance ${gestion.cumplimiento} %</span>
-                    <span class="badge ${color} rounded-pill ms-2 p-3 fs-6"> general ${Math.trunc(porcentajeReal)} %</span>  
+                    <span class="badge ${color} rounded-pill ms-2 p-2"> (A) ${Math.trunc(porcentajeReal)} %</span>  
 
                     `
                     contenedor_listas.appendChild(item)
