@@ -18,66 +18,140 @@ function visorAreas() {
 
 
 
-    let contProgramas=0
-    ActiveProyect.clsAreas.forEach(area => {
-        area.cslLineas.forEach(linea => {
-            contProgramas= contProgramas + linea.clsPrograma.length
-            linea.clsPrograma.forEach(programa => {
-                programa.clsGestion.forEach(gestion => {
+    let avcAreas = 0
+    let avcLineas = 0
+    let contProgramas = 0
+    let avcProgramas = 0
+    let contProyectos = 0
+    let avcProyectos = 0
 
+    ActiveProyect.clsAreas.forEach(area => {
+        avcAreas=area.avance
+
+        area.cslLineas.forEach(linea => {
+            avcLineas= avcLineas + linea.avance
+            contProgramas = contProgramas + linea.clsPrograma.length
+
+
+            linea.clsPrograma.forEach(programa => {
+                contProyectos = contProyectos + programa.clsGestion.length
+                avcProgramas=avcProgramas + (parseInt(programa.avance))
+                
+
+                programa.clsGestion.forEach(gestion => {
+                    avcProyectos=avcProyectos + parseInt((gestion.cumplimiento/gestion.indicador)*100)
                 })
             })
         })
     });
 
+    const colors = {
+        "aAreacolor": (item) => {
+            let color ;
+            if (item <=25){
+                color="text-bg-danger"
+            }else if(item<=50){
+                color="text-bg-secondary"
+            }else if(item <=75){
+                color="text-bg-warning"
+            }
+            else if(item <=100){
+                color="text-bg-success"
+            }
+            return color
+        },
+        "aLineacolor": (item) => {
+            
+            let color ;
+            if (item <=25){
+                color="text-bg-danger"
+            }else if(item<=50){
+                color="text-bg-secondary"
+            }else if(item <=75){
+                color="text-bg-warning"
+            }
+            else if(item <=100){
+                color="text-bg-success"
+            }
+            return color
+        },
+        "aProgramacolor": (item) => {
+            let color ;
+            if (item <=25){
+                color="text-bg-danger"
+            }else if(item<=50){
+                color="text-bg-secondary"
+            }else if(item <=75){
+                color="text-bg-warning"
+            }
+            else if(item <=100){
+                color="text-bg-success"
+            }
+            return color
+        },
+        "aProyectocolor": (item) => {   
+            let color ;
+            if (item <=25){
+                color="text-bg-danger"
+            }else if(item<=50){
+                color="text-bg-secondary"
+            }else if(item <=75){
+                color="text-bg-warning"
+            }
+            else if(item <=100){
+                color="text-bg-success"
+            }
+            return color
+        }
+    }
 
 
 
-
-    let i = 0
     ActiveProyect.clsAreas.forEach(area => {
 
         const item = document.createElement("li")
-        item.className = "list-group-item d-flex justify-content-between align-items-start"
+        item.className = "list-group-item d-flex justify-content-between"
         item.innerHTML = `
         <i class="bi bi-person-lines-fill fs-1"></i>
         <div class="container">
         
         <div class="row mb-1 p-1">
-            <div class="col fw-bold">
+            <div class="col fw-bold col align-self-center">
                 NOMBRE CONSEJERÍA DE DERECHOS HUMANOS ONIC
             </div>
-            <div class="col">Avance 
-                <span class="badge bg-primary rounded-pill p-3">${area.avance}%</span>
+            <div class="col align-self-center" >Avance 
+                <span class="badge ${colors.aAreacolor(avcAreas)} rounded-pill p-3">${area.avance}%</span>
             </div>
         </div>
-        <div class="row mb-1 border border-1 p-1">
-            <div class="col text-end">
-            <b class="fs-3">${area.cslLineas.length}</b> Líneas proyectadas
+        <div class="row mb-1 p-1">
+            <div class="col list-group-item list-group-item-action">
+                <b class="fs-3">${area.cslLineas.length}</b> Líneas proyectadas
             </div>
-            <div class="col">Avance 
-                <span class="badge bg-primary rounded-pill p-3">14%</span>
-            </div>
-        </div>
-        <div class="row mb-1 border border-1 p-1">
-            <div class="col text-end">
-            <b class="fs-3">${contProgramas}</b> Programas proyectados
-            </div>
-            <div class="col">Avance 
-                <span class="badge bg-primary rounded-pill p-3">14%</span>
+            <div class="col align-self-center">Avance 
+                <span class="badge ${colors.aLineacolor(Math.trunc(avcLineas / area.cslLineas.length))} rounded-pill p-3">${Math.trunc(avcLineas / area.cslLineas.length)}%</span>
             </div>
         </div>
-        <div class="row mb-1 border border-1 p-1">
-            <div class="col text-end">
-                # PROYECTOS
+        <div class="row p-1">
+            <div class="col list-group-item list-group-item-action">
+                <b class="fs-3">${contProgramas}</b> Programas proyectados
             </div>
-            <div class="col">Avance 
-                <span class="badge bg-primary rounded-pill p-3">14%</span>
+            <div class="col align-self-center">Avance 
+                <span class="badge ${colors.aProgramacolor(Math.trunc(avcProgramas / contProgramas))} rounded-pill p-3">${Math.trunc(avcProgramas / contProgramas)}%</span>
             </div>
         </div>
-        </div>
+        <div class="row p-1" onclick="listarGestiones()">
 
-                `
+            <div class="col list-group-item list-group-item-action">
+                <b class="fs-3">${contProyectos}</b> Proyectos diseñados
+            </div>
+            <div class="col align-self-center">Avance 
+                <span class="badge ${colors.aProyectocolor(Math.trunc(avcProyectos / contProyectos))} rounded-pill p-3">${Math.trunc(avcProyectos / contProyectos)}%</span>
+            </div>
+        </div>
+        </div>
+        `
+
+
         contenedor_listas.appendChild(item)
 
     });
