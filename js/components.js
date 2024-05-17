@@ -847,6 +847,10 @@ class Libro {
             "imagen": () => {
                 const icono = "bi bi-file-image-fill fs-4 me-2"
                 return icono
+            },
+            "pdf": () => {
+                const icono = "bi bi-file-earmark-pdf-fill fs-4 me-2"
+                return icono
             }
 
 
@@ -904,6 +908,7 @@ class Libro {
                           <li id="btnPresentacion${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-easel-fill me-2 fs-4"></i>Presentación</a></li>
                           <li id="btnImagen${libro.id}"><a class="dropdown-item"><i class="bi bi-file-image-fill me-2 fs-4"></i>Imagen</a></li>
                           <li id="btnWeb${libro.id}"><a class="dropdown-item"><i class="bi bi-filetype-html me-2 fs-4"></i>Página web</a></li>
+                          <li id="btnPdf${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-pdf-fill me-2 fs-4"></i>Documento pdf</a></li>
                         </ul>
                         <button type="button" class="btn btn-outline-danger" id="btnEliminarLink${libro.id}">Eliminar vínculo</button>
                     </div>
@@ -994,6 +999,11 @@ class Libro {
         document.getElementById(`btnWeb${libro.id}`).onclick = () => {
             document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.web()
             libro.tipo = "web"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnPdf${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.pdf()
+            libro.tipo = "pdf"
             document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
 
