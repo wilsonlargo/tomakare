@@ -16,35 +16,6 @@ function visorAreas() {
     contEscritorio.appendChild(contenedor_listas)
 
 
-
-
-    let avcAreas = 0
-    let avcLineas = 0
-    let contProgramas = 0
-    let avcProgramas = 0
-    let contProyectos = 0
-    let avcProyectos = 0
-
-    ActiveProyect.clsAreas.forEach(area => {
-        avcAreas=area.avance
-
-        area.cslLineas.forEach(linea => {
-            avcLineas= avcLineas + linea.avance
-            contProgramas = contProgramas + linea.clsPrograma.length
-
-
-            linea.clsPrograma.forEach(programa => {
-                contProyectos = contProyectos + programa.clsGestion.length
-                avcProgramas=avcProgramas + (parseInt(programa.avance))
-                
-
-                programa.clsGestion.forEach(gestion => {
-                    avcProyectos=avcProyectos + parseInt((gestion.cumplimiento/gestion.indicador)*100)
-                })
-            })
-        })
-    });
-
     const colors = {
         "aAreacolor": (item) => {
             let color ;
@@ -106,8 +77,30 @@ function visorAreas() {
     }
 
 
+    
 
     ActiveProyect.clsAreas.forEach(area => {
+        let avcProyectos = 0
+        let avcAreas = 0
+        let avcLineas = 0
+        let contProgramas = 0
+        let avcProgramas = 0
+        let contProyectos = 0
+        avcAreas=area.avance
+        area.cslLineas.forEach(linea => {
+            avcLineas= avcLineas + linea.avance
+            contProgramas = contProgramas + linea.clsPrograma.length
+
+
+            linea.clsPrograma.forEach(programa => {
+                contProyectos = contProyectos + programa.clsGestion.length
+                avcProgramas=avcProgramas + (parseInt(programa.avance))
+             
+                programa.clsGestion.forEach(gestion => {
+                    avcProyectos=avcProyectos + parseInt((gestion.cumplimiento/gestion.indicador)*100)
+                })
+            })
+        })
 
         const item = document.createElement("li")
         item.className = "list-group-item d-flex justify-content-between"
@@ -117,7 +110,7 @@ function visorAreas() {
         
         <div class="row mb-1 p-1">
             <div class="col fw-bold col align-self-center">
-                NOMBRE CONSEJERÍA DE DERECHOS HUMANOS ONIC
+                ${area.nombre}
             </div>
             <div class="col align-self-center" >Avance 
                 <span class="badge ${colors.aAreacolor(avcAreas)} rounded-pill p-3">${area.avance}%</span>
@@ -150,9 +143,21 @@ function visorAreas() {
         </div>
         </div>
         `
-
-
         contenedor_listas.appendChild(item)
+
+
+
+
+
+    });
+
+
+
+
+
+    ActiveProyect.clsAreas.forEach(area => {
+
+       
 
     });
 

@@ -121,55 +121,31 @@ const HTML = {
         `
         return controlHTML
     },
-
-    cardAreas(nombre, texto, comandDel, comandShow) {
-        const controlHTML = document.createElement("div")
-        controlHTML.style.width = "300px"
-        controlHTML.className = "card shadow-sm m-2"
-        controlHTML.innerHTML = `
-
-        <div class="card-header bg-primary-subtle fw-medium">
-            ${nombre}
-        </div>
-        <div class="card-body bg-org-gray">
-            <div class="text-success">${texto}</div>
-        </div>
-    `
-        controlHTML.appendChild(addFotter())
-
-        function addFotter() {
-            const cFooter = document.createElement('footer')
-            cFooter.className = "card-footer bg-org-gray p-1"
-            cFooter.innerHTML = `
-             <button type="button" class="btn bg-primary text-white rounded-circle shadow-sm"
-             
-                    onclick="a()">
+    collapseControl1(titulo,id,contexto){
+        const collapse = document.createElement("div")
+        collapse.innerHTML = `
+            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
+                        data-bs-toggle="collapse" 
+                        href="#${id}" 
+                        role="button" aria-expanded="true" 
+                        aria-controls="${id}">
+                + ${titulo}
+            </a>
+                <div class="collapse" id="${id}">
+                    <div id="div${contexto}button">
+                        
+                    </div>
+                    <div id="div${contexto}collapse" class="m-4 list-group m-3">
                     
-                    <i class="bi bi-eye"></i>
-            </button>
+                    </div>
+                </div>
             `
-            const btnCircleMostrar = document.createElement("button")
-            btnCircleMostrar.className = "btn bg-primary text-white rounded-circle shadow-sm m-1"
-            btnCircleMostrar.type = "button"
-            btnCircleMostrar.innerHTML = `<i class="bi bi-pencil"></i>`
-            btnCircleMostrar.onclick = comandShow
-            cFooter.appendChild(btnCircleMostrar)
-
-            const btnCircleBorrar = document.createElement("button")
-            btnCircleBorrar.className = "btn bg-primary text-white rounded-circle shadow-sm m-1"
-            btnCircleBorrar.type = "button"
-            btnCircleBorrar.innerHTML = `<i class="bi bi-trash3"></i>`
-            btnCircleBorrar.onclick = comandDel
-            cFooter.appendChild(btnCircleBorrar)
-
-            return cFooter
-
-        }
+            return collapse
+    }
 
 
-        return controlHTML
-    },
 }
+
 
 
 

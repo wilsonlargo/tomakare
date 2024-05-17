@@ -117,7 +117,55 @@
                 </div>
                 <div id="panel-escritorio" class="m-2">
 
+                    <ol class="list-group list-group-numbered">
+                        <div class="container">
+                            <div class="row justify-content-between">
+                                <div class="col-10 fw-bold" data-bs-toggle="collapse" href="#collapseLibro"
+                                    role="button" aria-controls="collapseLibro">
+                                    <i class="bi bi-link-45deg"></i> Nombre del documento
+                                </div>
+                                <div class="col-2 text-end">
+                                    <a id="linkLibro" class="nav-link active fs-3 text-primary" aria-current="page"
+                                        href="#"><i class="bi bi-link-45deg"></i></a>
+                                </div>
+                            </div>
+                            <div class="collapse" id="collapseLibro">
+                                <div class="card card-body">
+                                    <div class="form-floating mb-2">
+                                        <textarea class="form-control" id="int-Nombre-Documento"
+                                            style="height: 50px"></textarea>
+                                        <label for="int-Nombre-Documento">Título del documento</label>
+                                    </div>
+                                    <div class="form-floating mb-2">
+                                        <textarea class="form-control" id="int-keys-Documento"
+                                            style="height: 50px"></textarea>
+                                        <label for="int-keys-Documento">Palabras claves / categorias</label>
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <textarea class="form-control" aria-label="With textarea" id="int-link-Documento" placeholder="Vínculo o enlace del documento"></textarea>
+                                        <span class="input-group-text">
+                                            <a id="linkLibroIn" class="nav-link active fs-5" aria-current="page"
+                                            href="#"><i class="bi bi-link-45deg"></i>
+                                        </a>
+                                    </span>
+                                      </div>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Tipo de archivo</button>
 
+                                        <ul class="dropdown-menu">
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-text-fill me-2 fs-4"></i>Documento texto</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet-fill me-2 fs-4"></i>Hoja cálculo</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-play-fill me-2 fs-4"></i>Video</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-music-fill me-2 fs-4"></i>Audio</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-easel-fill me-2 fs-4"></i>Presentación</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-file-image-fill me-2 fs-4"></i>Imagen</a></li>
+                                          <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-html me-2 fs-4"></i>Página web</a></li>
+                                        </ul>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ol>
 
                 </div>
 
