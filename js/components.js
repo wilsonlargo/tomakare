@@ -721,9 +721,9 @@ class Libro {
         const item = document.createElement("ol")
         item.className = "list-group list-group-numbered"
         item.innerHTML = `
-        <div class="container">
+        <div class="">
             <div class="row justify-content-between">
-                <div class="col-10 fw-bold" data-bs-toggle="collapse" href="#collapseLibro${libro.id}"
+                <div class="col-10 fw-bold text-start" data-bs-toggle="collapse" href="#collapseLibro${libro.id}"
                     role="button" aria-controls="collapseLibro${libro.id}">
                     <div id="tituloLibro${libro.id}"><i class="bi bi-file-earmark-text-fill fs-4 me-2" id="icoPrincipal${libro.id}"></i>${libro.id + 1}. ${libro.nombre}</div>
                 </div>
