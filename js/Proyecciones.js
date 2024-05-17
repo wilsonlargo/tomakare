@@ -4,9 +4,10 @@
 //const { doc } = require("firebase/firestore");
 
 class Gestion {
-    constructor(nombre, ogeneral, manager, financiado, fuente, valor, indicador, cumplimiento, id, partenid) {
+    constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, id, partenid) {
         this.nombre = nombre;
         this.ogeneral = ogeneral;
+        this.mandato = mandato;
         this.manager = manager;
         this.financiado = financiado;
         this.fuente = fuente;
@@ -95,8 +96,8 @@ class Gestion {
         }
         refinputAdminProy.value = this.manager
 
-
-        const inputTextObjetivo = HTML.inputTextArea2(this.id, "ObjetivoGeneral", 'InputTextObjetivo')
+        //Input para inforamción del proyecto en relación al objetivo
+        const inputTextObjetivo = HTML.inputTextArea2(this.id, "Objetivo General", 'InputTextObjetivo')
         cEscritorio.appendChild(inputTextObjetivo)
 
         const refObjetivoGe = document.getElementById(this.id + "InputTextObjetivo")
@@ -106,6 +107,16 @@ class Gestion {
         });
         refObjetivoGe.value = this.ogeneral;
 
+        //Input para inforamción del proyecto en relación al mandato
+        const inputTextMandato = HTML.inputTextArea2(this.id, "Mandato", 'InputTextMandato')
+        cEscritorio.appendChild(inputTextMandato)
+
+        const refMandato = document.getElementById(this.id + "InputTextMandato")
+        refMandato.addEventListener('input', () => {
+            this.mandato = refMandato.value
+            GuardarVigencia()
+        });
+        refMandato.value = this.mandato;
 
         //Selector financiador
         const inputFinanciadoProy = document.createElement("div")
@@ -274,8 +285,6 @@ function listarGestiones() {
     contenedor_listas.className = "list-group list-group-numbered"
     document.getElementById("panel-escritorio").appendChild(contenedor_listas)
 
-
-
     let i = 0
     ActiveProyect.clsAreas.forEach(area => {
         area.cslLineas.forEach(linea => {
@@ -285,17 +294,17 @@ function listarGestiones() {
                     const item = document.createElement("li")
                     item.className = "list-group-item d-flex justify-content-between align-items-start"
 
-                    const porcentajeReal= (gestion.cumplimiento * 100) / gestion.indicador
+                    const porcentajeReal = (gestion.cumplimiento * 100) / gestion.indicador
                     let color;
-                    if (porcentajeReal <=30){
-                        color="text-bg-danger"
-                    }else if(porcentajeReal >=90){
-                        color="text-bg-success"
-                    }else if(porcentajeReal <=80){
-                        color="text-bg-warning"
+                    if (porcentajeReal <= 30) {
+                        color = "text-bg-danger"
+                    } else if (porcentajeReal >= 90) {
+                        color = "text-bg-success"
+                    } else if (porcentajeReal <= 80) {
+                        color = "text-bg-warning"
                     }
-                    else if(porcentajeReal <=50){
-                        color="text-bg-warning-subtle"
+                    else if (porcentajeReal <= 50) {
+                        color = "text-bg-warning-subtle"
                     }
 
 

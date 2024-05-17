@@ -43,6 +43,7 @@ class clsProyecto {
                 areaNew.cslMandatos = loadMandatos(Areas.cslMandatos);
                 areaNew.cslLineas = loadLineas(Areas.cslLineas);
                 areaNew.cslLibrerias = loadLibrerias(Areas.cslLibrerias);
+                areaNew.cslArticulacion = loadArticulacion(Areas.cslArticulacion);
                 return areaNew;
             })
         }
@@ -67,13 +68,33 @@ class clsProyecto {
                 return lineaNew;
             });
         }
+
+
+
+
+        //Carga de la base de datos la clase articulación con todos sus campos
+        const loadArticulacion = (fromcslArticulacion) => {
+            return fromcslArticulacion.map(articulacion => {
+                const ArticulacionNew = new Articulacion(
+                    articulacion.consejeria,
+                    articulacion.mandatos,
+                    articulacion.id,
+                    articulacion.parentId
+                );
+                return ArticulacionNew;
+            });
+        }
+
         const loadLibrerias = (fromClsLibrerias) => {
             return fromClsLibrerias.map(libro => {
                 const LibreriaNew = new Libro(
                     libro.nombre,
                     libro.tipo,
                     libro.keys,
-                    libro.link
+                    libro.link,
+                    libro.descripcion,
+                    libro.id,
+                    libro.parentId
                 );
                 return LibreriaNew;
             });
@@ -101,6 +122,7 @@ class clsProyecto {
                 const GestionNew = new Gestion(
                     gestion.nombre,
                     gestion.ogeneral,
+                    gestion.mandato,
                     gestion.manager,
                     gestion.financiado,
                     gestion.fuente,
@@ -312,6 +334,7 @@ class Area {
         this.id = id
         this.cslMandatos = [];
         this.cslLineas = [];
+        this.cslArticulacion = [];
         this.cslLibrerias = [];
 
         //this.parent=parent
@@ -330,6 +353,14 @@ class Area {
     }
     deleteLibreria(id) {
         this.cslLibrerias.splice(id, 1);
+    }
+
+    //Añadir módulo de articulación
+    addArticulacion(Articulacion) {
+        this.cslArticulacion.push(Articulacion);
+    }
+    deleteArticulacion(id) {
+        this.cslArticulacion.splice(id, 1);
     }
 
 
@@ -523,8 +554,30 @@ class Area {
                 </div>
                 </div>
             `
-
         cEscritorio.appendChild(collapseLineas)
+
+        //Collapse para articulacion / versión simplificada
+        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion")
+        cEscritorio.appendChild(collapseArticulacion)
+        //Agregar un boton para agregar un documento
+        const btAgregarArticulacion = document.createElement("button")
+        btAgregarArticulacion.className = "btn btn-outline-secondary m-1"
+        btAgregarArticulacion.innerHTML = `<i class="bi bi-plus"></i> Agregar consejeria`
+        btAgregarArticulacion.onclick = () => {
+            AgregarArticulación(this)
+        }
+        document.getElementById("divarticulacionbutton").appendChild(btAgregarArticulacion)
+
+        const cArticulacion = document.getElementById("divarticulacioncollapse")
+        cArticulacion.innerHTML = ''
+        let art = 0;
+        this.cslArticulacion.forEach(articulacion => {
+            console.log(articulacion)
+            articulacion.id = art++
+            articulacion.parentId = this
+            articulacion.makerHtmlArticulacion(articulacion);
+        })
+
 
 
         //Collapse para libreria / versión simplificada
@@ -536,7 +589,6 @@ class Area {
         btAgregarLibro.innerHTML = `<i class="bi bi-plus"></i> Agregar documento`
         btAgregarLibro.onclick = () => {
             AgregarLibreria(this)
-
         }
         document.getElementById("divlibreriabutton").appendChild(btAgregarLibro)
 
@@ -544,8 +596,9 @@ class Area {
         cLibros.innerHTML = ''
         let doc = 0;
         this.cslLibrerias.forEach(libro => {
+            console.log(libro)
             libro.id = doc++
-            libro.parentId=this
+            libro.parentId = this
             libro.makerHtmlLibro(libro);
         })
 
@@ -673,12 +726,94 @@ class Mandato {
 
     }
 }
+
+class Articulacion {
+    constructor(consejeria, mandatos, id, parentId) {
+        this.consejeria = consejeria;
+        this.mandatos = mandatos;
+        this.id = id
+        this.parentId = parentId
+    }
+    makerHtmlArticulacion(Articulacion) {
+        const collapseArticulacion = document.getElementById("divarticulacioncollapse")
+        const item = document.createElement("ol")
+        item.className = "list-group list-group-numbered"
+        item.innerHTML = `
+        <div class="">
+            <div class="row justify-content-between">
+                <div class="col-10 fw-bold text-start" data-bs-toggle="collapse" href="#collapseArticulacion${Articulacion.id}"
+                    role="button" aria-controls="collapseLibro${Articulacion.id}">
+                    <div id="tituloArticulacion${Articulacion.id}"><i class="bi bi-people-fill fs-4 me-2"></i>${Articulacion.id + 1}. ${Articulacion.consejeria}</div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseArticulacion${Articulacion.id}">
+                <div class="card card-body">
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Consejeria-Articulacion${Articulacion.id}"
+                            style="height: 50px"></textarea>
+                        <label for="int-Consejeria-Articulacion${Articulacion.id}">Consejeria</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Mandatos-Articulacion${Articulacion.id}"
+                            style="height: 100px"></textarea>
+                        <label for="int-Mandatos-Documento${Articulacion.id}">Mandatos</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger" id="btnEliminarArticulacion${Articulacion.id}" style="width: 200px;">
+                    <i class="bi bi-file-earmark-x me-2"></i>
+                    Eliminar mandato</button>                 
+                </div>
+            </div>
+        </div>`
+
+        collapseArticulacion.appendChild(item)
+
+        //Configuración nombre de la consejeria en articulación
+        const ref_nombre_consejeria = document.getElementById(`int-Consejeria-Articulacion${Articulacion.id}`)
+        //Se vincula y actualiza el nombre de la consejeria, junto al título del control y en la DB
+        ref_nombre_consejeria.oninput = () => {
+            Articulacion.consejeria = ref_nombre_consejeria.value
+            //Actualiza el título sin perder el numerador y el ícono
+            document.getElementById(`tituloArticulacion${Articulacion.id}`).innerHTML = `<i class="bi bi-people-fill fs-4 me-2"></i>${Articulacion.id + 1}. ${ref_nombre_consejeria.value}`
+            GuardarVigencia()
+        }
+        ref_nombre_consejeria.value = Articulacion.consejeria
+
+        //Configuración nombre del mandato en articulación
+        const ref_mandato_consejeria = document.getElementById(`int-Mandatos-Articulacion${Articulacion.id}`)
+        //Se vincula y actualiza el nombre de la consejeria, junto al título del control y en la DB
+        ref_mandato_consejeria.oninput = () => {
+            Articulacion.mandatos = ref_mandato_consejeria.value
+            GuardarVigencia()
+        }
+        ref_mandato_consejeria.value = Articulacion.mandatos
+
+
+
+
+        //Agrega evento al boton borrar link
+        document.getElementById(`btnEliminarArticulacion${Articulacion.id}`).onclick = () => {
+            this.parentId.deleteArticulacion(Articulacion.id)
+            GuardarVigencia()
+            const cArticulacion = document.getElementById("divarticulacioncollapse")
+            cArticulacion.innerHTML = ''
+            let i = 0;
+            this.parentId.cslArticulacion.forEach(articulacion => {
+                articulacion.id = i++
+                articulacion.parentId = this.parentId
+                articulacion.makerHtmlArticulacion(articulacion);
+            })
+        }
+
+    }
+}
+
 class Libro {
-    constructor(nombre, tipo, keys, link, id, parentId) {
+    constructor(nombre, tipo, keys, link, descripcion, id, parentId) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.keys = keys;
         this.link = link;
+        this.descripcion = descripcion;
         this.id = id
         this.parentId = parentId
     }
@@ -686,31 +821,31 @@ class Libro {
 
         const tiposDoc = {
             "texto": () => {
-                const icono="bi bi-file-earmark-text-fill fs-4 me-2"
+                const icono = "bi bi-file-earmark-text-fill fs-4 me-2"
                 return icono
             },
             "calculo": () => {
-                const icono="bi-file-earmark-spreadsheet-fill fs-4 me-2"
+                const icono = "bi-file-earmark-spreadsheet-fill fs-4 me-2"
                 return icono
             },
             "video": () => {
-                const icono="bi-file-earmark-play-fill fs-4 me-2"
+                const icono = "bi-file-earmark-play-fill fs-4 me-2"
                 return icono
             },
             "presentacion": () => {
-                const icono="bi bi-file-earmark-easel-fill fs-4 me-2"
+                const icono = "bi bi-file-earmark-easel-fill fs-4 me-2"
                 return icono
             },
             "audio": () => {
-                const icono="bi bi-file-earmark-music-fill fs-4 me-2"
+                const icono = "bi bi-file-earmark-music-fill fs-4 me-2"
                 return icono
             },
             "web": () => {
-                const icono="bi bi-filetype-html fs-4 me-2"
+                const icono = "bi bi-filetype-html fs-4 me-2"
                 return icono
             },
             "imagen": () => {
-                const icono="bi bi-file-image-fill fs-4 me-2"
+                const icono = "bi bi-file-image-fill fs-4 me-2"
                 return icono
             }
 
@@ -743,6 +878,11 @@ class Libro {
                         <textarea class="form-control" id="int-keys-Documento${libro.id}"
                             style="height: 50px"></textarea>
                         <label for="int-keys-Documento${libro.id}">Palabras claves / categorias</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                    <textarea class="form-control" id="int-descripcion-Documento${libro.id}"
+                        style="height: 50px"></textarea>
+                    <label for="int-descripcion-Documento${libro.id}">Descripción / Tema del documento</label>
                     </div>
                     <div class="input-group mb-2">
                         <textarea class="form-control" aria-label="With textarea" id="int-link-Documento${libro.id}" placeholder="Vínculo o enlace del documento"></textarea>
@@ -794,6 +934,15 @@ class Libro {
         }
         ref_keys_libro.value = libro.keys
 
+
+        //Configuración descripcion del libro
+        const ref_descripcion_libro = document.getElementById(`int-descripcion-Documento${libro.id}`)
+        ref_descripcion_libro.oninput = () => {
+            libro.descripcion = ref_descripcion_libro.value
+            GuardarVigencia()
+        }
+        ref_descripcion_libro.value = libro.descripcion
+
         //Configuración enlace del libro
         const ref_link_libro = document.getElementById(`int-link-Documento${libro.id}`)
         ref_link_libro.oninput = () => {
@@ -810,56 +959,56 @@ class Libro {
 
         //Según sea la selección en el menú tipo, así msimo le asigna un valor a cada evento
         //El cambio de tipo actualiza en la BD y cambia el icono de cada archivo
-        
-        document.getElementById(`btnTexto${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.texto()
-            libro.tipo="texto"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+
+        document.getElementById(`btnTexto${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.texto()
+            libro.tipo = "texto"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
-        document.getElementById(`btnCalculo${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.calculo()
-            libro.tipo="calculo"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnCalculo${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.calculo()
+            libro.tipo = "calculo"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
-        document.getElementById(`btnVideo${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.video()
-            libro.tipo="video"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnVideo${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.video()
+            libro.tipo = "video"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
 
-        document.getElementById(`btnAudio${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.audio()
-            libro.tipo="audio"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnAudio${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.audio()
+            libro.tipo = "audio"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
-        document.getElementById(`btnPresentacion${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.presentacion()
-            libro.tipo="presentacion"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnPresentacion${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.presentacion()
+            libro.tipo = "presentacion"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
-        document.getElementById(`btnImagen${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.imagen()
-            libro.tipo="imagen"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnImagen${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.imagen()
+            libro.tipo = "imagen"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
-        document.getElementById(`btnWeb${libro.id}`).onclick=()=>{
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.web()
-            libro.tipo="web"
-            document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btnWeb${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.web()
+            libro.tipo = "web"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         }
 
         //Actualzia el texto del boton tipo en relación a la BD
-        document.getElementById(`btntipo${libro.id}`).textContent= "Documento tipo " + libro.tipo
+        document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
         //Si al mirar la BD hay un error en el tipo de documento, deja por defecto texto
         try {
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc[libro.tipo]()
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc[libro.tipo]()
         } catch (error) {
-            document.getElementById(`icoPrincipal${libro.id}`).className=tiposDoc.texto()
-            libro.tipo="texto"
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.texto()
+            libro.tipo = "texto"
         }
 
         //Agrega evento al boton borrar link
-        document.getElementById(`btnEliminarLink${libro.id}`).onclick= ()=>{
+        document.getElementById(`btnEliminarLink${libro.id}`).onclick = () => {
             this.parentId.deleteLibreria(libro.id)
             GuardarVigencia()
             const cLibros = document.getElementById("divlibreriacollapse")
@@ -867,14 +1016,15 @@ class Libro {
             let i = 0;
             this.parentId.cslLibrerias.forEach(libro => {
                 libro.id = i++
-                libro.parentId=this.parentId
+                libro.parentId = this.parentId
                 libro.makerHtmlLibro(libro);
             })
-            //GuardarVigencia()
         }
 
     }
 }
+
+
 
 class Linea {
     constructor(nombre, descripcion, meta, avance, id, parent) {
@@ -1281,7 +1431,7 @@ class Programa {
 
 
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Administrador", false, "", 0, 0, 0, 0, this)
+            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "", 0, 0, 0, 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 
@@ -1542,11 +1692,33 @@ async function AgregarMandato(parentId) {
     //GuardarVigencia()
     mensajes("Se creó un mandato", "green")
 }
+
+
+
+async function AgregarArticulación(dominio) {
+    const AreaActiva = ActiveProyect.clsAreas[dominio.id]
+
+    const articulacion = new Articulacion('Consejeria', "Mandato", 0, dominio);
+    AreaActiva.addArticulacion(articulacion)
+
+    const cArticulacion = document.getElementById("divarticulacioncollapse")
+    cArticulacion.innerHTML = ''
+    let i = 0;
+    AreaActiva.cslArticulacion.forEach(articulacion => {
+        articulacion.id = i++
+        articulacion.parentId = AreaActiva
+        articulacion.makerHtmlArticulacion(articulacion);
+    })
+    GuardarVigencia()
+    mensajes("Se anexó un mandato en articulación", "green")
+}
+
+
 async function AgregarLibreria(dominio) {
     const AreaActiva = ActiveProyect.clsAreas[dominio.id]
     //Se agrega uan nueva clase libreria, ojo- se marca indice del elemento y el indice del padre, para mirar los
     //elementos anidados
-    const libro = new Libro('Nuevo documento', "Documento tipo texto", "Palabras clave", "#", 0, dominio);
+    const libro = new Libro('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion", 0, dominio);
     AreaActiva.addLibreria(libro)
 
     const cLibros = document.getElementById("divlibreriacollapse")
@@ -1554,10 +1726,10 @@ async function AgregarLibreria(dominio) {
     let i = 0;
     AreaActiva.cslLibrerias.forEach(libro => {
         libro.id = i++
-        libro.parentId=AreaActiva
+        libro.parentId = AreaActiva
         libro.makerHtmlLibro(libro);
     })
-    //GuardarVigencia()
+    GuardarVigencia()
     mensajes("Se creó un documento", "green")
 }
 
