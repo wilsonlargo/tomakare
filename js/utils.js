@@ -121,7 +121,7 @@ const HTML = {
         `
         return controlHTML
     },
-    collapseControl1(titulo,id,contexto){
+    collapseControl1(titulo,id,contexto,icon){
         const collapse = document.createElement("div")
         collapse.innerHTML = `
             <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
@@ -129,7 +129,7 @@ const HTML = {
                         href="#${id}" 
                         role="button" aria-expanded="true" 
                         aria-controls="${id}">
-                + ${titulo}
+                        <i class="bi ${icon}"></i> ${titulo}
             </a>
                 <div class="collapse" id="${id}">
                     <div id="div${contexto}button">

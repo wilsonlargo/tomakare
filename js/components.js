@@ -492,17 +492,13 @@ class Area {
         //*********************************************************/
         //*********************************************************/
 
-
-
-
-
         const collapseMandatos = document.createElement("div")
         collapseMandatos.innerHTML = `
             <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4" 
             data-bs-toggle="collapse" href="#collapseMandatos" 
             role="button" aria-expanded="true" 
             aria-controls="collapseMandatos">
-                + Mandatos
+            <i class="bi bi-brightness-high-fill"></i> Mandatos
             </a>
                 <div class="collapse" id="collapseMandatos">
                 <div id="divmandatosbutton">
@@ -532,9 +528,7 @@ class Area {
         this.cslMandatos.forEach(mandato => {
             mandato.id = i++
             mandato.parentId = this.id
-            mandato.makerHtmlMandato(document.getElementById("divmandatoscollapse"));
-            document.getElementById("divmandatoscollapse").appendChild(mandato.component);
-            mandato.makerComandos()
+            mandato.makerHtmlMandato();
         })
 
         const collapseLineas = document.createElement("div")
@@ -543,7 +537,7 @@ class Area {
             data-bs-toggle="collapse" href="#collapseLineas" 
             role="button" aria-expanded="true" 
             aria-controls="collapseLineas">
-                + Líneas de acción
+            <i class="bi bi-bar-chart-steps"></i> Líneas de acción
             </a>
                 <div class="collapse" id="collapseLineas">
                 <div id="divLineasbutton">
@@ -557,7 +551,7 @@ class Area {
         cEscritorio.appendChild(collapseLineas)
 
         //Collapse para articulacion / versión simplificada
-        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion")
+        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion",'bi-arrow-left-right')
         cEscritorio.appendChild(collapseArticulacion)
         //Agregar un boton para agregar un documento
         const btAgregarArticulacion = document.createElement("button")
@@ -581,7 +575,7 @@ class Area {
 
 
         //Collapse para libreria / versión simplificada
-        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria")
+        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria","bi-journals")
         cEscritorio.appendChild(collapseLibros)
         //Agregar un boton para agregar un documento
         const btAgregarLibro = document.createElement("button")
@@ -694,10 +688,24 @@ class Mandato {
     }
     makerHtmlMandato() {
         //document.getElementById("contenedor-area").innerHTML = ''
-        const component = HTML.inputSpan(this.id, this.nombre)
-        this.component = component;
-    }
-    makerComandos() {
+        //Creamos el control de entrada para mandatos
+        const  cMandato = document.createElement("div")
+        cMandato.className="input-group mb-2"
+        cMandato.innerHTML=`
+        <span class="input-group-text">
+        ${this.id + 1}.
+        </span>
+        <textarea class="form-control" aria-label="With textarea" id="${this.id + "InputMandato"}"></textarea>
+        <span class="input-group-text">
+            <button class="btn text-danger fw-medium" id="${this.id}btnBorrarMandato">
+                <i class="bi bi-trash3 fw-medium"></i>
+            </button>
+        </span>
+        
+        `
+        document.getElementById("divmandatoscollapse").appendChild(cMandato)
+
+        console.log(this.id + "InputMandato")
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
         const refInputMandato = document.getElementById(this.id + "InputMandato")
         refInputMandato.addEventListener('input', () => {
@@ -717,14 +725,11 @@ class Mandato {
             AreaActiva.cslMandatos.forEach(mandato => {
                 mandato.id = i++
                 mandato.makerHtmlMandato();
-                cMandatos.appendChild(mandato.component);
-
             })
             GuardarVigencia()
         });
-
-
     }
+
 }
 
 class Articulacion {
@@ -1695,8 +1700,6 @@ async function AgregarMandato(parentId) {
     AreaActiva.cslMandatos.forEach(mandato => {
         mandato.id = i++
         mandato.makerHtmlMandato();
-        cMandatos.appendChild(mandato.component);
-        mandato.makerComandos()
 
     })
     //GuardarVigencia()
