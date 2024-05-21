@@ -1365,6 +1365,7 @@ class Programa {
         barraNavegar.className="navbar navbar-expand-lg bg-body-tertiary ms-3"
         barraNavegar.innerHTML=`
         <div class="navbar-nav">
+            <a class="nav-link" href="#" id="lnkArea" hiden="true">Area / </a>
             <a class="nav-link" href="#" id="lnkLinea">Linea / </a>
             <a class="nav-link" href="#" id="lnkVisor">Visor</a>
         </div>
@@ -1372,7 +1373,7 @@ class Programa {
         cEscritorio.appendChild(barraNavegar)
         const linkArea= document.getElementById("lnkArea")
         linkArea.onclick=()=>{
-            console.log(this.parent)
+            area.makerHtmlAreasItem()
             
         }
 
