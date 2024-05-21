@@ -251,10 +251,10 @@ class clsProyecto {
 
         //Agregar contadores por vigencia
         const ContConsejerias = document.createElement("div")
-        ContConsejerias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContConsejerias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2 shadow rounded mt-2"
         ContConsejerias.innerHTML = `
                  <p class="text-secondary tex-org-big-gris">${this.clsAreas.length}</p>
-                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2" id="contador-areas">
+                 <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2" id="contador-areas">
                  CONSEJERÍAS
              </a>
                 </p>
@@ -265,10 +265,10 @@ class clsProyecto {
 
         //Agregar contadores por vigencia
         const ContLineas = document.createElement("div")
-        ContLineas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContLineas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2 shadow rounded mt-2"
         ContLineas.innerHTML = `
                          <p class="text-secondary tex-org-big-gris">${contadorLineas}</p>
-                         <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                         <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2">
                          LÍNEAS
                         </a>
                         </p>
@@ -277,10 +277,10 @@ class clsProyecto {
 
         //Agregar contadores por vigencia
         const ContProgramas = document.createElement("div")
-        ContProgramas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        ContProgramas.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2 shadow rounded mt-2"
         ContProgramas.innerHTML = `
                                  <p class="text-secondary tex-org-big-gris">${contadorPrograma}</p>
-                                 <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2">
+                                 <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2">
                                      PROGRAMAS
                                     </a>
                                 </p>
@@ -290,10 +290,10 @@ class clsProyecto {
 
         //Agregar contadores por vigencia
         const Contvigencias = document.createElement("div")
-        Contvigencias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2"
+        Contvigencias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2 shadow rounded mt-2"
         Contvigencias.innerHTML = `
                                         <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
-                                            <a href="#" class="nav-link text-center text-foot-foto bg-success text-white p-2" id="contador-gestiones">
+                                            <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2" id="contador-gestiones">
                                                 PROYECTOS
                                             </a>
                                         </p>
@@ -387,6 +387,9 @@ class Area {
         cEscritorio.appendChild(Título)
 
 
+
+
+
         //Creamos ahora los input, información del área
         const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
         document.getElementById("panel-escritorio").appendChild(nombreArea)
@@ -450,6 +453,7 @@ class Area {
 
         //Sección medidor de avance
         //Identificamos cuantos lineas hay y sumamos esos valores
+        //Se agrega un enlace para ver el parametrizador
         //*********************************************************/
 
         let avance = 0;
@@ -485,10 +489,17 @@ class Area {
         indicadorAvance.style.width = "100px"
         indicadorAvance.innerHTML = `
                 <p class="text-center fs-3">${avance}%</p>
-                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+                <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
+
         `
+        //<a class="nav-link active" aria-current="page" href="#">Home</a>
 
         cEscritorio.appendChild(indicadorAvance)
+
+        //Llama a la función para parametrizar
+        document.getElementById("lbParametrizador").onclick = () => {
+            parametrizador(this)
+        }
         //*********************************************************/
         //*********************************************************/
 
@@ -551,7 +562,7 @@ class Area {
         cEscritorio.appendChild(collapseLineas)
 
         //Collapse para articulacion / versión simplificada
-        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion",'bi-arrow-left-right')
+        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion", 'bi-arrow-left-right')
         cEscritorio.appendChild(collapseArticulacion)
         //Agregar un boton para agregar un documento
         const btAgregarArticulacion = document.createElement("button")
@@ -575,7 +586,7 @@ class Area {
 
 
         //Collapse para libreria / versión simplificada
-        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria","bi-journals")
+        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria", "bi-journals")
         cEscritorio.appendChild(collapseLibros)
         //Agregar un boton para agregar un documento
         const btAgregarLibro = document.createElement("button")
@@ -621,6 +632,7 @@ class Area {
         let l = 0;
         this.cslLineas.forEach(linea => {
             linea.id = l++
+            linea.parent= this
             const btLinea = document.createElement('a')
             btLinea.className = "list-group-item list-group-item-action"
             btLinea.innerHTML = `
@@ -689,9 +701,9 @@ class Mandato {
     makerHtmlMandato() {
         //document.getElementById("contenedor-area").innerHTML = ''
         //Creamos el control de entrada para mandatos
-        const  cMandato = document.createElement("div")
-        cMandato.className="input-group mb-2"
-        cMandato.innerHTML=`
+        const cMandato = document.createElement("div")
+        cMandato.className = "input-group mb-2"
+        cMandato.innerHTML = `
         <span class="input-group-text">
         ${this.id + 1}.
         </span>
@@ -1061,6 +1073,7 @@ class Linea {
 
 
     makerHTMLLineaPanel(parent) {
+        console.log(this.parent)
         document.getElementById("conteneder-bar-proyectos").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
@@ -1166,10 +1179,15 @@ class Linea {
         indicadorAvance.style.width = "100px"
         indicadorAvance.innerHTML = `
                 <p class="text-center fs-3">${avanceLinea}%</p>
-                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+                <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
         `
 
         cEscritorio.appendChild(indicadorAvance)
+
+        //Llama a la función para parametrizar
+        document.getElementById("lbParametrizador").onclick = () => {
+            parametrizador(parent)
+        }
         //*********************************************************/
         //*********************************************************/
 
@@ -1242,6 +1260,7 @@ class Linea {
         let p = 0;
         this.clsPrograma.forEach(programa => {
             programa.id = p++
+            programa.parent=this.parent
             const btPrograma = document.createElement('a')
             btPrograma.className = "list-group-item list-group-item-action"
             btPrograma.innerHTML = `
@@ -1336,10 +1355,38 @@ class Programa {
 
         //Colocamos el título del programa
         const Título3 = document.createElement('div');
-        Título3.className = "ms-3 mb-5 fs-5 text-secondary border-bottom border-4 w-60 border-success"
+        Título3.className = "ms-3 mb-2 fs-5 text-secondary border-bottom border-4 w-60 border-success"
         Título3.textContent = this.nombre
 
         cEscritorio.appendChild(Título3)
+
+
+        const barraNavegar = document.createElement("nav")
+        barraNavegar.className="navbar navbar-expand-lg bg-body-tertiary ms-3"
+        barraNavegar.innerHTML=`
+        <div class="navbar-nav">
+            <a class="nav-link" href="#" id="lnkLinea">Linea / </a>
+            <a class="nav-link" href="#" id="lnkVisor">Visor</a>
+        </div>
+        `
+        cEscritorio.appendChild(barraNavegar)
+        const linkArea= document.getElementById("lnkArea")
+        linkArea.onclick=()=>{
+            console.log(this.parent)
+            
+        }
+
+        const linkLinea= document.getElementById("lnkLinea")
+        linkLinea.onclick=()=>{
+            linea.makerHTMLLineaPanel(linea)
+        }
+        const linkVisor= document.getElementById("lnkVisor")
+        linkVisor.onclick=()=>{
+            parametrizador(area)
+        }
+
+        cEscritorio.appendChild(barraNavegar)
+
 
         //Control de entrada editable nombre del programa
         const inputProgramaNombre = document.createElement("form")
@@ -1424,10 +1471,16 @@ class Programa {
         indicadorAvance.style.width = "100px"
         indicadorAvance.innerHTML = `
                 <p class="text-center fs-3">${avancePrograma}%</p>
-                <p class="text-center ${colorAvance} ${colorAvanceTexto} p-2">Avance</p>
+                 <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
+
         `
 
         cEscritorio.appendChild(indicadorAvance)
+
+        //Llama a la función para parametrizar
+        document.getElementById("lbParametrizador").onclick = () => {
+            parametrizador(area)
+        }
         //*********************************************************/
         //*********************************************************/
 
@@ -1790,6 +1843,170 @@ function mostrar_escritorio() {
     document.getElementById("conteneder-bar-proyectos").hidden = true
     document.getElementById("panel-inicio").hidden = false
     document.getElementById("panel-escritorio").innerHTML = ""
+
+}
+
+function parametrizador(area) {
+    const cEscritorio = document.getElementById("panel-escritorio")
+    cEscritorio.innerHTML = ""
+    //Colocamos el ttulo de la consejería
+    const Título = document.createElement('div');
+    Título.className = "fs-3 fw-bold text-secondary"
+    Título.textContent = area.nombre
+    cEscritorio.appendChild(Título)
+
+    const Título4 = document.createElement('div');
+    Título4.className = "ms-4 fs-6 text-success border-bottom border-4 w-60 border-success"
+    Título4.textContent = "Esquema general de la consejería, indicadores y avances"
+    cEscritorio.appendChild(Título4)
+
+    area.cslLineas.forEach(linea => {
+        //Creamos un contenedor de líneas, es decir, pro cada línea una fila
+        const rowLinea = document.createElement("div")
+        rowLinea.className = "row p-2 align-items-center"
+
+        const colNombreLinea = document.createElement("div")
+        colNombreLinea.className = "col-2 border-ini-org rounded border-warning shadow p-2 m-2 bg-warning-subtle"
+        colNombreLinea.innerHTML=`
+        <a class="nav-link active" aria-current="page" href="#" id="cOpenLinea${linea.id}">L${linea.id + 1}. ${linea.nombre}</a>
+        `
+
+
+
+
+        rowLinea.appendChild(colNombreLinea)
+
+        const colAvanceLinea = document.createElement("div")
+        colAvanceLinea.className = "col-2"
+        colAvanceLinea.innerHTML = `
+
+        <div class="form-floating">
+            <input type="text" class="form-control" id="inAvanceLinea${linea.id}" value="${linea.meta}">
+            <label for="inAvanceLinea${linea.id}">Meta / Área</label>
+        </div>
+        <label class="rounded border mt-1 p-1 w-100 bg-warning-subtle text-end pe-2 border-warning">Avance: ${linea.avance}</label>
+        `
+        rowLinea.appendChild(colAvanceLinea)
+
+
+        //Creamos la columna para colocar los programas
+        const colProgramasLinea = document.createElement("div")
+        colProgramasLinea.className = "col"
+        rowLinea.appendChild(colProgramasLinea)
+
+
+        linea.clsPrograma.forEach(programa => {
+            //Creamos una fila por programa
+            const rowPrograma = document.createElement("div")
+            rowPrograma.className = "row align-items-center"
+            colProgramasLinea.appendChild(rowPrograma)
+            rowPrograma.innerHTML = `
+            <div class="col-2 border-ini-org rounded border-info bg-info-subtle shadow p-2 m-2">
+            
+            <a class="nav-link active" aria-current="page" href="#" id="cOpenPrograma${linea.id}${programa.id}">P${programa.id + 1}. ${programa.nombre}</a>
+            </div>
+            <div class="col-2">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="inMetaPrograma${linea.id}${programa.id}" value="${programa.meta}">
+                     <label class="" for="inMetaPrograma${linea.id}${programa.id}">Meta / Linea</label>
+                </div>
+                <label class="rounded border mt-1 p-1 w-100 text-end bg-info-subtle pe-2 border-info">Avance: ${programa.avance}</label>
+            </div>
+             `
+            const colProyectos = document.createElement("div")
+            colProyectos.className = "col"
+            rowPrograma.appendChild(colProyectos)
+            programa.clsGestion.forEach(gestion => {
+                const rowProyectos = document.createElement("div")
+                rowProyectos.className = "row mb-1 border-ini-org rounded border-secondary bg-light p-2 m-2 align-items-center shadow"
+                rowProyectos.innerHTML = `
+                <div class="col">
+                    <a class="nav-link active" aria-current="page" href="#" id="cOpenGestion${linea.id}${programa.id}${gestion.id}">G${gestion.id + 1}. ${gestion.nombre}</a>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="inMetaGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.indicador}">
+                        <label class="" for="inMetaGestion${linea.id}${programa.id}${gestion.id}">Meta / Gestión</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="inAvanceGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.cumplimiento}">
+                    <label class="" for="inAvanceGestion${linea.id}${programa.id}${gestion.id}">Avance</label>
+                </div>
+                </div>
+                `
+                colProyectos.appendChild(rowProyectos)
+
+            })
+
+        })
+
+        cEscritorio.appendChild(rowLinea)
+
+    })
+
+    //Asignador de funciones no se peude colocar directo en el for
+
+    area.cslLineas.forEach(linea => {
+        //Configuramos para que se actualize la línea y su meta
+        const refAvanceLinea = document.getElementById("inAvanceLinea" + linea.id)
+        refAvanceLinea.oninput = () => {
+            linea.meta = refAvanceLinea.value
+            GuardarVigencia()
+
+        }
+        refAvanceLinea.value = linea.meta
+        const cOpenLiena = document.getElementById("cOpenLinea" + linea.id)
+        cOpenLiena.onclick = () => {
+            const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id]
+            elemento.makerHTMLLineaPanel(area)
+        }
+        linea.clsPrograma.forEach(programa => {
+            //Configuramos para que se actualize el programa y su meta
+            const refAvancePrograma = document.getElementById("inMetaPrograma" + linea.id + programa.id)
+            refAvancePrograma.oninput = () => {
+                programa.meta = refAvancePrograma.value
+                GuardarVigencia()
+            }
+            refAvancePrograma.value = programa.meta
+
+            const cOpenPrograma = document.getElementById("cOpenPrograma" + linea.id + programa.id)
+            cOpenPrograma.onclick = () => {
+                const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id]
+                elemento.makerHTMLProgramaPanel(area, linea)
+            }
+            programa.clsGestion.forEach(gestion => {
+                //Configuramos para que se actualize la gestion y su meta
+                const refMetaGestion = document.getElementById("inMetaGestion" + linea.id + programa.id + gestion.id)
+                refMetaGestion.oninput = () => {
+                    gestion.indicador = refMetaGestion.value
+                    GuardarVigencia()
+                }
+                refMetaGestion.value = gestion.indicador
+
+                const refAvanceGestion = document.getElementById("inAvanceGestion" + linea.id + programa.id + gestion.id)
+                refAvanceGestion.oninput = () => {
+                    gestion.cumplimiento = refAvanceGestion.value
+                    GuardarVigencia()
+                }
+                refAvanceGestion.value = gestion.cumplimiento
+
+                const cOpenProyecto = document.getElementById("cOpenGestion" + linea.id + programa.id + gestion.id)
+                cOpenProyecto.onclick = () => {
+                    const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
+                    //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
+                    elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
+                }
+
+
+            })
+
+
+        })
+
+
+    })
+
+
 
 }
 

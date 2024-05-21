@@ -54,11 +54,53 @@ class Gestion {
         Título3.textContent = programa
         cEscritorio.appendChild(Título3)
 
-        //Colocamos el título del programa
+        //Colocamos el título del proyecto
         const Título4 = document.createElement('div');
-        Título4.className = "ms-4 mb-5 fs-6 text-success border-bottom border-4 w-60 border-success"
+        Título4.className = "ms-4 mb-1 fs-6 text-success border-bottom border-4 w-60 border-success"
         Título4.textContent = this.nombre
         cEscritorio.appendChild(Título4)
+
+        const barraNavegar = document.createElement("nav")
+        barraNavegar.className="navbar navbar-expand-lg bg-body-tertiary ms-3"
+        barraNavegar.innerHTML=`
+        <div class="navbar-nav">
+            <a class="nav-link" href="#" id="lnkArea">Area / </a>
+            <a class="nav-link" href="#" id="lnkLinea">Linea / </a>
+            <a class="nav-link" href="#" id="lnkPrograma">Programa / </a>
+            <a class="nav-link" href="#" id="lnkVisor">Visor</a>
+        </div>
+        `
+        cEscritorio.appendChild(barraNavegar)
+        const linkArea= document.getElementById("lnkArea")
+        linkArea.onclick=()=>{
+            area.makerHtmlAreasItem()
+        }
+
+        const linkLinea= document.getElementById("lnkLinea")
+        linkLinea.onclick=()=>{
+            linea.makerHTMLLineaPanel(linea)
+        }
+        cEscritorio.appendChild(barraNavegar)
+        const linkPrograma= document.getElementById("lnkPrograma")
+        linkPrograma.onclick=()=>{
+            this.partenid.makerHTMLProgramaPanel(area,linea)
+        }
+        const linkVisor= document.getElementById("lnkVisor")
+        linkVisor.onclick=()=>{
+            parametrizador(area)
+        }
+
+        cEscritorio.appendChild(barraNavegar)
+
+
+
+
+
+
+
+
+
+
 
 
         //Ahora los input de cada dato
@@ -282,13 +324,15 @@ function listarGestiones() {
     document.getElementById("panel-escritorio").appendChild(Título5)
 
     const contenedor_listas = document.createElement("ol")
-    contenedor_listas.className = "list-group list-group-numbered"
+    contenedor_listas.className = "list-group"
     document.getElementById("panel-escritorio").appendChild(contenedor_listas)
 
     let i = 0
+    let g=1
     ActiveProyect.clsAreas.forEach(area => {
         area.cslLineas.forEach(linea => {
             linea.clsPrograma.forEach(programa => {
+                
                 programa.clsGestion.forEach(gestion => {
 
                     const item = document.createElement("li")
@@ -309,14 +353,11 @@ function listarGestiones() {
 
 
                     item.innerHTML = `
-                    
-                    <a href="#" class="list-group-item list-group-item-action ms-3">
-                        <div class="ms-2 me-auto">
+                    <span class="input-group-text bg-warning"><i class="bi bi-file-earmark-text-fill"></i></span>
+                    <div class="ms-2 me-auto">
                         <div class=""> <b>${area.nombre}</b> / ${linea.nombre} / ${programa.nombre}</div>
-                        <i class="bi bi-file-earmark-text-fill"></i> ${gestion.nombre}
-                        </div>
-     
-                    </a>
+                        ${g++}. ${gestion.nombre}
+                    </div>
                     <span class="badge ${color} rounded-pill ms-2 p-2"> (A) ${Math.trunc(porcentajeReal)} %</span>  
 
                     `

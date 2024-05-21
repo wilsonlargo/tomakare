@@ -1,7 +1,22 @@
+.border-ini-org {
+    border-inline-start: 1rem solid;
+    border-inline-end: 0.1rem solid;
+    border-top: solid;
+    border-top-width: 0.1rem;
+    border-bottom: solid;
+    border-bottom-width:0.1rem ;
+    writing-mode: horizontal-tb;
+}
+
+.vl {
+    border-left: 6px solid green;
+    height: 500px;
+  }
+
+
+
 .bg-org {
     background-color: #840A54;
-
-
 }
 
 .text-org {
@@ -28,7 +43,7 @@
     text-justify: inter-word;
 }
 
-.tex-org-big-gris{
+.tex-org-big-gris {
 
     font-size: 80pt;
     text-align: center;
