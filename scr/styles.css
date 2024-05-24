@@ -8,9 +8,9 @@
     writing-mode: horizontal-tb;
 }
 
-.vl {
-    border-left: 6px solid green;
-    height: 500px;
+.rf-labels {
+    font-size:1vw;
+    text-wrap: wrap;
   }
 
 

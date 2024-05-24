@@ -1864,12 +1864,12 @@ function parametrizador(area) {
     area.cslLineas.forEach(linea => {
         //Creamos un contenedor de líneas, es decir, pro cada línea una fila
         const rowLinea = document.createElement("div")
-        rowLinea.className = "row p-2 align-items-center"
+        rowLinea.className = "row p-2 align-items-center border-3 border-bottom border-warning"
 
         const colNombreLinea = document.createElement("div")
         colNombreLinea.className = "col-2 border-ini-org rounded border-warning shadow p-2 m-2 bg-warning-subtle"
         colNombreLinea.innerHTML=`
-        <a class="nav-link active" aria-current="page" href="#" id="cOpenLinea${linea.id}">L${linea.id + 1}. ${linea.nombre}</a>
+        <a class="nav-link active rf-labels" aria-current="page" href="#" id="cOpenLinea${linea.id}">L${linea.id + 1}. ${linea.nombre}</a>
         `
 
 
@@ -1902,16 +1902,16 @@ function parametrizador(area) {
             rowPrograma.className = "row align-items-center"
             colProgramasLinea.appendChild(rowPrograma)
             rowPrograma.innerHTML = `
-            <div class="col-2 border-ini-org rounded border-info bg-info-subtle shadow p-2 m-2">
+            <div class="col-2 col-sm-12 col-sm-4 col-lg-4 rf-labels border-ini-org rounded border-info bg-info-subtle shadow p-2 m-2">
             
-            <a class="nav-link active" aria-current="page" href="#" id="cOpenPrograma${linea.id}${programa.id}">P${programa.id + 1}. ${programa.nombre}</a>
+            <a class="nav-link active rf-labels p-2" aria-current="page" href="#" id="cOpenPrograma${linea.id}${programa.id}">P${programa.id + 1}. ${programa.nombre}</a>
             </div>
-            <div class="col-2">
+            <div class="col-2 rf-labels">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="inMetaPrograma${linea.id}${programa.id}" value="${programa.meta}">
                      <label class="" for="inMetaPrograma${linea.id}${programa.id}">Meta / Linea</label>
                 </div>
-                <label class="rounded border mt-1 p-1 w-100 text-end bg-info-subtle pe-2 border-info">Avance: ${programa.avance}</label>
+                <label class="rounded border mt-1 w-100 text-end bg-info-subtle pe-2 border-info">Avance: ${programa.avance}</label>
             </div>
              `
             const colProyectos = document.createElement("div")
@@ -1922,7 +1922,7 @@ function parametrizador(area) {
                 rowProyectos.className = "row mb-1 border-ini-org rounded border-secondary bg-light p-2 m-2 align-items-center shadow"
                 rowProyectos.innerHTML = `
                 <div class="col">
-                    <a class="nav-link active" aria-current="page" href="#" id="cOpenGestion${linea.id}${programa.id}${gestion.id}">G${gestion.id + 1}. ${gestion.nombre}</a>
+                    <a class="nav-link active rf-labels" aria-current="page" href="#" id="cOpenGestion${linea.id}${programa.id}${gestion.id}">G${gestion.id + 1}. ${gestion.nombre}</a>
                 </div>
                 <div class="col">
                     <div class="form-floating">
@@ -1942,6 +1942,7 @@ function parametrizador(area) {
         })
 
         cEscritorio.appendChild(rowLinea)
+
 
     })
 
