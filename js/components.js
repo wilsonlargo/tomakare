@@ -44,8 +44,28 @@ class clsProyecto {
                 areaNew.cslLineas = loadLineas(Areas.cslLineas);
                 areaNew.cslLibrerias = loadLibrerias(Areas.cslLibrerias);
                 areaNew.cslArticulacion = loadArticulacion(Areas.cslArticulacion);
+                areaNew.cslNotas = loadNotas(Areas.cslNotas);
                 return areaNew;
             })
+        }
+
+        const loadNotas = (fromClsNotas) => {
+            return fromClsNotas.map(nota => {
+                const notaNew = new Notas(
+                    nota.tema,
+                    nota.comentario,
+                    nota.estado,
+                    nota.referencia,
+                    nota.fecha,
+                    nota.modificado,
+                    nota.autor,
+                    nota.respuesta,
+                    nota.modificadopor,
+                    nota.id,
+                    nota.parent
+                );
+                return notaNew;
+            });
         }
 
         const loadMandatos = (fromClsMandatos) => {
@@ -129,12 +149,30 @@ class clsProyecto {
                     gestion.valor,
                     gestion.indicador,
                     gestion.cumplimiento,
+                    gestion.aclaraciones,
 
                     gestion.id,
                     ProgramaNew);
+                GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
                 return GestionNew;
             });
         }
+
+        const loadEspecificos = (fromClsEspecificos) => {
+
+            return fromClsEspecificos.map(especifico => {
+                const newEspecifico = new oespecificos(
+                    especifico.nombre,
+                    especifico.meta,
+                    especifico.avance,
+                    especifico.meta,
+                    especifico.id,
+                    especifico.parent);
+                return newEspecifico;
+            })
+
+        }
+
 
         //Crea una nueva clase proyecto
         const proyecto = new clsProyecto(objProyecto.nombre, objProyecto.vigencia);
@@ -336,6 +374,7 @@ class Area {
         this.cslLineas = [];
         this.cslArticulacion = [];
         this.cslLibrerias = [];
+        this.cslNotas = [];
 
         //this.parent=parent
     }
@@ -371,9 +410,17 @@ class Area {
         this.cslLineas.splice(id, 1);
     }
 
+    addNota(Nota) {
+        this.cslNotas.push(Nota);
+        //Ver en la función independiente como se agregan las notas
+        // function agregar_nota_consultor()
+    }
+    deleteNota(id) {
+        this.cslNotas.splice(id, 1);
+    }
+
 
     makerHtmlAreasItem() {
-
         document.getElementById("conteneder-bar-proyectos").hidden = true
         document.getElementById("panel-inicio").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
@@ -381,14 +428,41 @@ class Area {
 
         //Colocamos el t+itulo de la consejería
         const Título = document.createElement('div');
-        Título.className = "mb-5 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
+        Título.className = "mb-1 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
         Título.textContent = this.nombre
-
         cEscritorio.appendChild(Título)
 
+        //Barra de navegación que me lleva al parametrizador
+        const barraNavegar = document.createElement("nav")
+        barraNavegar.className = "navbar navbar-expand-lg mb-3 bg-secondary"
+        barraNavegar.innerHTML = `
+        <div class="navbar-nav">
+            <a class="navbar-brand text-white ms-3" href="#">PANEL CONSEJERÍA</a>
+            <a class="nav-link text-white" href="#" id="lnkVisor">Visor</a>
+            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+                aria-controls="offcanvasExample" id="linkNotas">
+                Notas
+            </a>
+        </div>
+        `
+        cEscritorio.appendChild(barraNavegar)
+        const linkVisor = document.getElementById("lnkVisor")
+        linkVisor.onclick = () => {
+            parametrizador(this)
+        }
+        const linkNotas = document.getElementById("linkNotas")
+        linkNotas.onclick = () => {
+            //Asigna la función onclick al botón para relacionarlo con el área actual
+            document.getElementById("btnAgregarNotaConsultor").onclick = () => {
+                agregar_nota_consultor(this, `${this.id}`)
+            }
+            //Carga las notas del área activa
+            cargar_notas_consultor(this)
+        }
 
 
 
+        //========================================================
 
         //Creamos ahora los input, información del área
         const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
@@ -484,6 +558,7 @@ class Area {
         this.avance = avance
         GuardarVigencia()
 
+        //Muestra un indicador de avance
         const indicadorAvance = document.createElement("div")
         indicadorAvance.className = "border border-2 p-2 ms-1"
         indicadorAvance.style.width = "100px"
@@ -492,17 +567,16 @@ class Area {
                 <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
 
         `
-        //<a class="nav-link active" aria-current="page" href="#">Home</a>
-
         cEscritorio.appendChild(indicadorAvance)
 
-        //Llama a la función para parametrizar
+        //Llama a la función para parametrizar con acceder a la palabra avance
         document.getElementById("lbParametrizador").onclick = () => {
             parametrizador(this)
         }
         //*********************************************************/
         //*********************************************************/
 
+        //Aquí se crea uan pestaña collapse para mostrar lso mandatos
         const collapseMandatos = document.createElement("div")
         collapseMandatos.innerHTML = `
             <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4" 
@@ -521,6 +595,7 @@ class Area {
                 </div>
             `
         cEscritorio.appendChild(collapseMandatos)
+        //=========================================================
 
 
         //con esto identifica en que área está y agrega un indice
@@ -577,7 +652,7 @@ class Area {
         cArticulacion.innerHTML = ''
         let art = 0;
         this.cslArticulacion.forEach(articulacion => {
-            console.log(articulacion)
+
             articulacion.id = art++
             articulacion.parentId = this
             articulacion.makerHtmlArticulacion(articulacion);
@@ -601,16 +676,15 @@ class Area {
         cLibros.innerHTML = ''
         let doc = 0;
         this.cslLibrerias.forEach(libro => {
-            console.log(libro)
+
             libro.id = doc++
             libro.parentId = this
             libro.makerHtmlLibro(libro);
         })
 
 
-
-
-
+        //=============================================================
+        //=====ESTA ES LA SECCIÓN PARA CREAR LÍNEAS DE ACCIÓN
         //Agrega un comando al boton que agrega lineas
         //con esto identifica en que área está y agrega un indice
         const btAgregarLinea = document.createElement("button")
@@ -618,6 +692,7 @@ class Area {
         btAgregarLinea.innerHTML = `<i class="bi bi-plus"></i> Agregar línea`
 
         btAgregarLinea.onclick = () => {
+            //Activa la función independiente de agregar línea, y la vincula con el área actual
             AgregarLinea(this)
         }
 
@@ -626,13 +701,14 @@ class Area {
         //Identificamos en que área estamos pos su id
         const AreaActiva = parent
 
+        //buscamos y Limpiamos el contenedor collapse de las líneas
         const cLineas = document.getElementById("divLineascollapse")
         cLineas.innerHTML = '';
 
         let l = 0;
         this.cslLineas.forEach(linea => {
             linea.id = l++
-            linea.parent= this
+            linea.parent = this
             const btLinea = document.createElement('a')
             btLinea.className = "list-group-item list-group-item-action"
             btLinea.innerHTML = `
@@ -654,7 +730,6 @@ class Area {
             btLinea.onclick = () => {
                 linea.makerHTMLLineaPanel(this)
             }
-
         })
 
 
@@ -692,6 +767,271 @@ class Area {
 
 }
 
+class Notas {
+    constructor(tema, comentario, estado, referencia, fecha, modificado, autor, respuesta, modificadopor, id, dominio) {
+        this.tema = tema;
+        this.comentario = comentario;
+        this.estado = estado;
+        this.referencia = referencia;
+        this.fecha = fecha;
+        this.modificado = modificado;
+        this.autor = autor;
+        this.respuesta = respuesta;
+        this.modificadopor = modificadopor;
+        this.id = id
+        this.parent = dominio
+    }
+    makerHtmlNotas(dominio) {
+        //Establecemos una variable fecha para actualzar la fecha de la nota
+        let now = new Date().toLocaleString()
+        const colorNota = [
+            {
+                "estado": "Sin resolver",
+                "color": "gray"
+            },
+            {
+                "estado": "Sin resolver",
+                "color": "orange"
+            },
+            {
+                "estado": "Con respuesta",
+                "color": "purple"
+            },
+            {
+                "estado": "Resuelto",
+                "color": "green"
+            },
+        ]
+
+        //Creamos un elemento li que contendrá toda la info de la nota
+        const itemli = document.createElement("li")
+        itemli.className = "list-group-item d-flex justify-content-between align-items-start bg-warning-subtle mb-2"
+        //Lo agregamos al contenedor de notas
+        const lstNotas = document.getElementById("lstNotasConsultor")
+        lstNotas.appendChild(itemli)
+        //Creamos un contenedor base
+        const divAux = document.createElement("div")
+        divAux.className = "me-auto"
+        //Lo agregamos al contenedor li
+        itemli.appendChild(divAux)
+        //Creamos el div título de la nota
+        //Se actualzia dinamicamente y permite abrir el collapse nota
+        const divtitulo = document.createElement("div")
+        divtitulo.className = "fw-bold"
+        divtitulo.innerHTML = `
+        <a class="nav-link" data-bs-toggle="collapse" href="#collapseNota${this.id}" role="button"
+            aria-expanded="false" aria-controls="collapseNota${this.id}"
+            id="lbTituloNota${this.id}">
+            ${this.tema}
+        </a>
+        `
+        //Lo agregamos al contenedor div auxiliar
+        divAux.appendChild(divtitulo)
+
+        //Creamos un collapse contenedor de elementos de la nota
+        const divCollapse = document.createElement("div")
+        divCollapse.className = "collapse"
+        divCollapse.style.width = "300px"
+        divCollapse.id = "collapseNota" + this.id
+        //Lo agregamos al contenedor div auxiliar
+        divAux.appendChild(divCollapse)
+
+        //Iniciamos a crear la info de la nota
+        //Entrada de tema de la nota
+        const sm1 = document.createElement("small")
+        sm1.className = "fw-bold text-secondary"
+        sm1.textContent = "Tema de la nota"
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(sm1)
+
+        const intTemaNota = document.createElement("input")
+        intTemaNota.className = "form-control bg-warning-subtle mb-2"
+        intTemaNota.type = "text"
+        intTemaNota.placeholder = "Tema"
+        intTemaNota.id = "intTema" + this.id
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(intTemaNota)
+        //Configuramos sus acciones
+        intTemaNota.oninput = () => {
+            this.tema = intTemaNota.value
+            //Actualzia también el título d ela nota
+            document.getElementById("lbTituloNota" + this.id).textContent = intTemaNota.value
+            lbFechamodificado.textContent = "Modificado el :" + now
+            lbModificador.textContent= "Modificado por: " + activeEmail
+            this.modificado = now
+            GuardarVigencia()
+        }
+        intTemaNota.value = this.tema
+
+        const sm2 = document.createElement("small")
+        sm2.className = "fw-bold text-secondary"
+        sm2.textContent = "Comentario"
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(sm2)
+
+        const intComentarioNota = document.createElement("textarea")
+        intComentarioNota.className = "form-control bg-warning-subtle mb-2"
+        intComentarioNota.placeholder = "Comentario"
+        intComentarioNota.id = "intComentario" + this.id
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(intComentarioNota)
+        //Configuramos sus acciones
+        intComentarioNota.oninput = () => {
+            this.comentario = intComentarioNota.value
+            //Actualzia también el título d ela nota
+            lbFechamodificado.textContent = "Modificado el :" + now
+            lbModificador.textContent= "Modificado por: " + activeEmail
+            this.modificado = now
+            GuardarVigencia()
+        }
+        intComentarioNota.value = this.comentario
+
+        //Creamos un contenedor de respuesta a la nota
+        const intRespuestNota = document.createElement("textarea")
+        intRespuestNota.className = "form-control bg-warning-subtle mb-2"
+        intRespuestNota.placeholder = "Respuesta"
+        intRespuestNota.id = "intRespuesta" + this.id
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(intRespuestNota)
+        //Configuramos sus acciones
+        intRespuestNota.oninput = () => {
+            this.respuesta = intRespuestNota.value
+            //Actualzia también el título d ela nota
+            lbFechamodificado.textContent = "Modificado el :" + now
+            lbModificador.textContent= "Modificado por: " + activeEmail
+            this.modificado = now
+            GuardarVigencia()
+        }
+        intRespuestNota.value = this.respuesta
+
+        const sm3 = document.createElement("small")
+        sm3.className = "fw-bold text-secondary"
+        sm3.textContent = "Estado"
+        //Lo agregamos al contenedor collapse
+        divCollapse.appendChild(sm3)
+
+        //Creamos un selector de opciones
+        const selEstado = document.createElement("select")
+        selEstado.className = "form-select mb-3"
+        selEstado.ariaLabel = "Default select example"
+        selEstado.innerHTML = `
+        <option value="1">Sin resolver</option>
+        <option value="2">Con respuesta</option>
+        <option value="3">Resuelto</option>
+        `
+        //Configuramos la acción del selector
+        divCollapse.appendChild(selEstado)
+        selEstado.onchange = () => {
+            this.estado = selEstado.value
+            lbFechamodificado.textContent = "Modificado el :" + now
+            lbModificador.textContent= "Modificado por: " + activeEmail
+            this.modificado = now
+            span.style.background = colorNota[parseInt(this.estado)].color
+            span.textContent = colorNota[parseInt(this.estado)].estado
+            GuardarVigencia()
+        }
+        selEstado.value = this.estado
+
+        //Agregar un enlace a la referencia
+        const linkReferencia = document.createElement("a")
+        linkReferencia.className = "nav-link mb-3 text-primary"
+        linkReferencia.role = "button"
+        linkReferencia.textContent = "Ir a referencia"
+        linkReferencia.onclick = () => {
+
+            this.openreferencia(this.referencia)
+        }
+        divCollapse.appendChild(linkReferencia)
+
+        //Mostramos la fecha de creación de la nota
+        const lbFechacreado = document.createElement("div")
+        lbFechacreado.className = "text-end"
+        lbFechacreado.style.fontSize = "10pt"
+        lbFechacreado.textContent = "Creado el: " + this.fecha
+        divCollapse.appendChild(lbFechacreado)
+
+        //Mostramos la fecha de creación de la nota
+        const lbFechamodificado = document.createElement("div")
+        lbFechamodificado.className = "text-end text-success"
+        lbFechamodificado.style.fontSize = "10pt"
+        lbFechamodificado.textContent = "Modificado el: " + this.modificado
+        divCollapse.appendChild(lbFechamodificado)
+
+
+        //Mostramos quién crea la nota
+        const lbAutor = document.createElement("div")
+        lbAutor.style.fontSize = "10pt"
+        lbAutor.className = "text-secondary"
+        lbAutor.textContent = "Creado por : " + this.autor
+        divCollapse.appendChild(lbAutor)
+
+        //Mostramos quién modifica
+        const lbModificador = document.createElement("div")
+        lbModificador.style.fontSize = "10pt"
+        lbModificador.className = "text-success"
+        lbModificador.textContent = "Modificado por : " + this.modificadopor
+        divCollapse.appendChild(lbModificador)
+
+        //Crear el botón eliminar nota
+        const btBorrar = document.createElement("button")
+        btBorrar.className = "btn btn-outline-secondary mt-3"
+        btBorrar.type = "button"
+        btBorrar.innerHTML = `<i class="bi bi-trash3 me-2"></i> Eliminar nota`
+        btBorrar.onclick = () => {
+            this.parent.deleteNota(this.id)
+            cargar_notas_consultor(this.parent)
+
+        }
+        divCollapse.appendChild(btBorrar)
+
+        //Crear un elemento span para mostrar color avance
+        const span = document.createElement("span")
+        span.className = "badge rounded-pill"
+        span.style.background = colorNota[parseInt(this.estado)].color
+        span.textContent = colorNota[parseInt(this.estado)].estado
+        itemli.appendChild(span)
+
+    }
+
+    openreferencia(referencia) {
+        const conNivel = referencia.split("-")
+
+        if (conNivel.length == 1) {
+            const open = ActiveProyect.clsAreas[parseInt(conNivel[0])]
+            open.makerHtmlAreasItem()
+        } else if (conNivel.length == 2) {
+            const open = ActiveProyect
+                .clsAreas[parseInt(conNivel[0])]
+                .cslLineas[parseInt(conNivel[1])]
+            open.makerHTMLLineaPanel()
+        }
+        else if (conNivel.length == 3) {
+            const open = ActiveProyect
+                .clsAreas[parseInt(conNivel[0])]
+                .cslLineas[parseInt(conNivel[1])]
+                .clsPrograma[parseInt(conNivel[2])]
+            open.makerHTMLProgramaPanel(
+                ActiveProyect.clsAreas[parseInt(conNivel[0])],
+                ActiveProyect.clsAreas[parseInt(conNivel[0])].cslLineas[parseInt(conNivel[1])]
+            )
+        } else if (conNivel.length == 4) {
+            const open = ActiveProyect
+                .clsAreas[parseInt(conNivel[0])]
+                .cslLineas[parseInt(conNivel[1])]
+                .clsPrograma[parseInt(conNivel[2])]
+                .clsGestion[parseInt(conNivel[3])]
+            open.makerHTMLProyeccion(
+                ActiveProyect.clsAreas[parseInt(conNivel[0])],
+                ActiveProyect.clsAreas[parseInt(conNivel[0])].cslLineas[parseInt(conNivel[1])],
+                ActiveProyect.clsAreas[parseInt(conNivel[0])].cslLineas[parseInt(conNivel[1])]
+                    .clsPrograma[parseInt(conNivel[2])]
+            )
+        }
+
+    }
+
+}
+
 class Mandato {
     constructor(nombre, id, parentId) {
         this.nombre = nombre;
@@ -717,7 +1057,7 @@ class Mandato {
         `
         document.getElementById("divmandatoscollapse").appendChild(cMandato)
 
-        console.log(this.id + "InputMandato")
+
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
         const refInputMandato = document.getElementById(this.id + "InputMandato")
         refInputMandato.addEventListener('input', () => {
@@ -1054,13 +1394,13 @@ class Libro {
 
 
 class Linea {
-    constructor(nombre, descripcion, meta, avance, id, parent) {
+    constructor(nombre, descripcion, meta, avance, id, dominio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.meta = meta;
         this.avance = avance;
         this.id = id;
-        this.parent = parent;
+        this.parent = dominio;
         this.clsPrograma = []
     }
 
@@ -1072,32 +1412,70 @@ class Linea {
     }
 
 
-    makerHTMLLineaPanel(parent) {
-        console.log(this.parent)
+    makerHTMLLineaPanel() {
         document.getElementById("conteneder-bar-proyectos").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
 
-        //Colocamos el t+itulo de la consejería
+        //Colocamos el título de la consejería
         const Título = document.createElement('div');
         Título.className = "fs-3 fw-bold text-secondary"
-        Título.textContent = parent.nombre
+        Título.textContent = this.parent.nombre
         cEscritorio.appendChild(Título)
 
-        //Colocamos el t+itulo de la línea
+        //Colocamos el título de la línea
         const Título2 = document.createElement('div');
-        Título2.className = "ms-2 mb-5 fs-4 text-secondary border-bottom border-4 border-success"
+        Título2.className = "ms-2 mb-2 fs-4 text-secondary border-bottom border-4 border-success"
         Título2.textContent = this.nombre
-
         cEscritorio.appendChild(Título2)
 
+        //Barra navegación superior
+        const barraNavegar = document.createElement("nav")
+        barraNavegar.className = "navbar navbar-expand-lg bg-secondary"
+        barraNavegar.innerHTML = `
+        <div class="navbar-nav">
+        <a class="navbar-brand text-white ms-3" href="#">PANEL LÍNEAS</a>
+            <a class="nav-link text-white" href="#" id="lnkArea">Area / </a>
+            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
+            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+                aria-controls="offcanvasExample" id="linkNotas">
+                Notas
+            </a>
+        </div>
+        `
+        cEscritorio.appendChild(barraNavegar)
+        const linkArea = document.getElementById("lnkArea")
+        linkArea.onclick = () => {
+            this.parent.makerHtmlAreasItem()
+        }
+
+        const linkVisor = document.getElementById("lnkVisor")
+        linkVisor.onclick = () => {
+            parametrizador(this.parent)
+        }
+        const linkNotas = document.getElementById("linkNotas")
+        linkNotas.onclick = () => {
+            //Asigna la función onclick al botón para relacionarlo con el área actual
+            document.getElementById("btnAgregarNotaConsultor").onclick = () => {
+                agregar_nota_consultor(this.parent, `${this.parent.id}-${this.id}`)
+            }
+            //Carga las notas del área activa
+            cargar_notas_consultor(this.parent)
+        }
+
+
+
+        cEscritorio.appendChild(barraNavegar)
+        //===============================================
+
+
+        //Entrada del nombre de la línea
         const inputLineaNombre = document.createElement("form")
         inputLineaNombre.className = "form-floating mb-2"
         inputLineaNombre.innerHTML = `
             <input type="text" class="form-control" id="${this.id + "input-line-nombre"}" value="${this.nombre}">
             <label for="${this.id + "input-line-nombre"}">Nombre línea</label>
         `
-
         cEscritorio.appendChild(inputLineaNombre)
 
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
@@ -1108,8 +1486,10 @@ class Linea {
             GuardarVigencia()
         });
         refInputLinea.value = this.nombre;
+        //============================================
 
 
+        //Entrada descripción de la línea
         const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
         cEscritorio.appendChild(inputText)
 
@@ -1119,9 +1499,10 @@ class Linea {
             GuardarVigencia()
         });
         refDescripLinea.value = this.descripcion;
+        //============================================
 
 
-        //Porcentaje en el área
+        //Entrada Porcentaje en el área, valor numérico
         const inputMetaEnLArea = document.createElement("form")
         inputMetaEnLArea.className = "form-floating mb-2"
         inputMetaEnLArea.innerHTML = `
@@ -1136,21 +1517,16 @@ class Linea {
             GuardarVigencia()
         }
         refinputMeta.value = this.meta
+        //=========================================================
 
 
         //Sección medidor de avance
         //Identificamos cuantos programas hay y sumamos esos valores
         //*********************************************************/
-
         let avanceLinea = 0;
         this.clsPrograma.forEach(programa => {
-
             avanceLinea = avanceLinea + Math.trunc((programa.meta * programa.avance) / 100);
-
-
-
         })
-
         let colorAvance;
         let colorAvanceTexto;
 
@@ -1181,18 +1557,16 @@ class Linea {
                 <p class="text-center fs-3">${avanceLinea}%</p>
                 <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
         `
-
         cEscritorio.appendChild(indicadorAvance)
 
         //Llama a la función para parametrizar
         document.getElementById("lbParametrizador").onclick = () => {
-            parametrizador(parent)
+            parametrizador(this.parent)
         }
         //*********************************************************/
         //*********************************************************/
 
-
-
+        //Sección de lista de programas
         const Título4 = document.createElement('div');
         Título4.className = "fs-4 text-secondary border-bottom border-4"
         Título4.textContent = "Programas"
@@ -1209,12 +1583,13 @@ class Linea {
             this.addPrograma(programa)
             GuardarVigencia()
 
-            //Muestro de nuevo los programas
-            const cProgramas = document.getElementById("lstProyectos")
+            //Muestro de nuevo los programas y limpio el contenedor de programas
+            const cProgramas = document.getElementById("lstProgramas")
             cProgramas.innerHTML = '';
             let p = 0;
             this.clsPrograma.forEach(programa => {
                 programa.id = p++
+                programa.parent = this
                 const btPrograma = document.createElement('a')
                 btPrograma.className = "list-group-item list-group-item-action"
                 btPrograma.innerHTML = `
@@ -1229,11 +1604,9 @@ class Linea {
                   </div>
                 </div>
                 `
-
                 cProgramas.appendChild(btPrograma);
-
                 btPrograma.onclick = () => {
-                    programa.makerHTMLProgramaPanel(parent, this)
+                    programa.makerHTMLProgramaPanel(this.parent, this)
                 }
             })
         }
@@ -1241,26 +1614,20 @@ class Linea {
         cEscritorio.appendChild(btAgregarPrograma)
 
 
-        //Agregar listador de proyectos
-        const listProyectos = document.createElement("div")
-        listProyectos.className = "list-group m-3"
-        listProyectos.id = "lstProyectos"
-        cEscritorio.appendChild(listProyectos)
-
-
-        document.getElementById("lstProyectos").innerHTML = ""
-
-
+        //Agregar listador de programas
+        const listProgramas = document.createElement("div")
+        listProgramas.className = "list-group m-3"
+        listProgramas.id = "lstProgramas"
+        cEscritorio.appendChild(listProgramas)
 
 
         //Verifica todos los programas que hay por linea y los agrega
-        const cProgramas = document.getElementById("lstProyectos")
+        const cProgramas = document.getElementById("lstProgramas")
         cProgramas.innerHTML = '';
-
         let p = 0;
         this.clsPrograma.forEach(programa => {
             programa.id = p++
-            programa.parent=this.parent
+            programa.parent = this.parent
             const btPrograma = document.createElement('a')
             btPrograma.className = "list-group-item list-group-item-action"
             btPrograma.innerHTML = `
@@ -1278,14 +1645,11 @@ class Linea {
             cProgramas.appendChild(btPrograma);
 
             btPrograma.onclick = () => {
-                programa.makerHTMLProgramaPanel(parent, this)
+                programa.makerHTMLProgramaPanel(this.parent, this)
             }
         })
 
-
-
-
-        //Agregamos un boton borrar línea
+        //Agregamos un boton borrar programa
         const btnBorrarLinea = document.createElement("button")
         btnBorrarLinea.className = "btn btn-outline-danger mt-5 m-1"
         btnBorrarLinea.innerHTML = `<i class="bi bi-trash3"></i> Eliminar línea`
@@ -1293,15 +1657,15 @@ class Linea {
         btnBorrarLinea.onclick = () => {
             modal.modalDelete(
                 () => {
-                    parent.deleteLinea(this.id)
-                    console.log(parent.cslLineas)
+                    this.parent.deleteLinea(this.id)
                     GuardarVigencia()
-                    parent.makerHtmlAreasItem()
+                    this.parent.makerHtmlAreasItem()
                 }
             )
 
         }
         cEscritorio.appendChild(btnBorrarLinea)
+        //===========================================
 
         //Agregamos un boton retornar
         const btnretroceder = document.createElement("button")
@@ -1309,22 +1673,23 @@ class Linea {
         btnretroceder.innerHTML = `<i class="bi bi-arrow-return-left"></i> Volver`
 
         btnretroceder.onclick = () => {
-            parent.makerHtmlAreasItem()
+            this.parent.makerHtmlAreasItem()
         }
         cEscritorio.appendChild(btnretroceder)
+        //=============================
 
     }
 
 
 }
 class Programa {
-    constructor(nombre, descripcion, avance, meta, id, parent) {
+    constructor(nombre, descripcion, avance, meta, id, dominio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.avance = avance;
         this.meta = meta;
         this.id = id;
-        this.parent = parent;
+        this.parent = dominio;
         this.clsGestion = [];
     }
 
@@ -1360,33 +1725,50 @@ class Programa {
 
         cEscritorio.appendChild(Título3)
 
-
+        //Creamos barra de navegación herarquica
         const barraNavegar = document.createElement("nav")
-        barraNavegar.className="navbar navbar-expand-lg bg-body-tertiary ms-3"
-        barraNavegar.innerHTML=`
+        barraNavegar.className = "navbar navbar-expand-lg bg-secondary mb-2"
+        barraNavegar.innerHTML = `
         <div class="navbar-nav">
-            <a class="nav-link" href="#" id="lnkArea" hiden="true">Area / </a>
-            <a class="nav-link" href="#" id="lnkLinea">Linea / </a>
-            <a class="nav-link" href="#" id="lnkVisor">Visor</a>
+            <a class="navbar-brand text-white ms-3" href="#">PANEL PROGRAMAS</a>
+            <a class="nav-link text-white" href="#" id="lnkArea" hiden="true">Area / </a>
+            <a class="nav-link text-white" href="#" id="lnkLinea">Linea / </a>
+            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
+            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+                aria-controls="offcanvasExample" id="linkNotas">
+                Notas
+            </a>
         </div>
         `
+        //Cada botón me regresa a un ivel superior
         cEscritorio.appendChild(barraNavegar)
-        const linkArea= document.getElementById("lnkArea")
-        linkArea.onclick=()=>{
+        const linkArea = document.getElementById("lnkArea")
+        linkArea.onclick = () => {
             area.makerHtmlAreasItem()
-            
         }
 
-        const linkLinea= document.getElementById("lnkLinea")
-        linkLinea.onclick=()=>{
-            linea.makerHTMLLineaPanel(linea)
+        const linkLinea = document.getElementById("lnkLinea")
+        linkLinea.onclick = () => {
+            linea.parent = area
+            linea.makerHTMLLineaPanel()
         }
-        const linkVisor= document.getElementById("lnkVisor")
-        linkVisor.onclick=()=>{
+        const linkVisor = document.getElementById("lnkVisor")
+        linkVisor.onclick = () => {
             parametrizador(area)
         }
 
+        const linkNotas = document.getElementById("linkNotas")
+        linkNotas.onclick = () => {
+            //Asigna la función onclick al botón para relacionarlo con el área actual
+            document.getElementById("btnAgregarNotaConsultor").onclick = () => {
+                agregar_nota_consultor(area, `${this.id}-${linea.id}-${this.id}`)
+            }
+            //Carga las notas del área activa
+            cargar_notas_consultor(area)
+        }
+
         cEscritorio.appendChild(barraNavegar)
+        //===================================================
 
 
         //Control de entrada editable nombre del programa
@@ -1407,6 +1789,7 @@ class Programa {
         });
         refInputPrograma.value = this.nombre;
 
+        //Detalle del programa
         const inputText = HTML.inputTextArea2(this.id, "Descripción de la línea", 'InputTextLinea')
         cEscritorio.appendChild(inputText)
 
@@ -1416,7 +1799,6 @@ class Programa {
             GuardarVigencia()
         });
         refDescripPrograma.value = this.descripcion;
-
 
 
         //Porcentaje en la línea
@@ -1486,7 +1868,7 @@ class Programa {
         //*********************************************************/
 
 
-
+        //Se crea una sección para listar los proyectos
         const Título4 = document.createElement('div');
         Título4.className = "fs-4 text-secondary border-bottom border-4"
         Título4.textContent = "Proyectos"
@@ -1497,19 +1879,16 @@ class Programa {
         btAgregarGestion.className = "btn btn-outline-secondary m-1"
         btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
 
-
-
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "", 0, 0, 0, 0, this)
+            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "", 0, 0, 0, "", 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 
             document.getElementById("lstProyectos").innerHTML = ""
-
             let g = 0;
-
             this.clsGestion.forEach(gestion => {
                 gestion.id = g++
+                gestion.parent = this
                 const btGestion = document.createElement('a')
                 btGestion.className = "list-group-item list-group-item-action"
                 btGestion.innerHTML = `
@@ -1526,13 +1905,14 @@ class Programa {
                 `
                 document.getElementById("lstProyectos").appendChild(btGestion);
 
-
                 btGestion.onclick = () => {
-                    gestion.makerHTMLProyeccion(area, linea, this.nombre)
+                    gestion.makerHTMLProyeccion(area, linea, this)
                 }
             })
         }
         cEscritorio.appendChild(btAgregarGestion)
+
+
         //Agregar listador de proyectos
         const listProyectos = document.createElement("div")
         listProyectos.className = "list-group m-3"
@@ -1548,8 +1928,8 @@ class Programa {
         //Contadores para calculos de porcenctajes de avance
 
         this.clsGestion.forEach(gestion => {
-
             gestion.id = g++
+            gestion.parent = this
             const btGestion = document.createElement('a')
             btGestion.className = "list-group-item list-group-item-action"
             btGestion.innerHTML = `
@@ -1565,12 +1945,8 @@ class Programa {
                 </div>
                 `
             document.getElementById("lstProyectos").appendChild(btGestion);
-
-
-
             btGestion.onclick = () => {
-
-                gestion.makerHTMLProyeccion(area, linea, this.nombre, this)
+                gestion.makerHTMLProyeccion(area, linea, this)
             }
         })
 
@@ -1583,7 +1959,7 @@ class Programa {
         btnBorrarPrograma.onclick = () => {
             modal.modalDelete(
                 () => {
-                    this.parent.deletePrograma(this.id)
+                    linea.deletePrograma(this.id)
                     GuardarVigencia()
                     linea.makerHTMLLineaPanel(area)
                 }
@@ -1599,10 +1975,10 @@ class Programa {
         btnretroceder.innerHTML = `<i class="bi bi-arrow-return-left"></i> Volver`
 
         btnretroceder.onclick = () => {
-            linea.makerHTMLLineaPanel(area)
+            linea.parent = area
+            linea.makerHTMLLineaPanel()
         }
         cEscritorio.appendChild(btnretroceder)
-
     }
 
 
@@ -1800,21 +2176,24 @@ async function AgregarLibreria(dominio) {
     mensajes("Se creó un documento", "green")
 }
 
-async function AgregarLinea(parent) {
+async function AgregarLinea(dominio) {
     //Identificamos en que área estamos pos su id
-    const AreaActiva = parent
+    const AreaActiva = dominio
 
-    //Creamos un anueva línea de acción dentro de la clase Area
-    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, 0, 0, parent);
+    //Creamos una nueva línea de acción dentro de la clase Area
+    const linea = new Linea('Nueva linea', 'Descripción de la línea', 0, 0, this.length, dominio);
     AreaActiva.addLinea(linea)
 
+    //Busca el contenedor collapse donde se colocan las líneas y lo limpia
     const cLineas = document.getElementById("divLineascollapse")
     cLineas.innerHTML = '';
 
-    let i = 0;
+    //Contador de líneas
+    let l = 0;
+    //Por cada clae línea en el área, realizar
     AreaActiva.cslLineas.forEach(linea => {
-        linea.id = i++
-
+        linea.id = l++
+        linea.parent = dominio
         const btLinea = document.createElement('a')
         btLinea.className = "mb-1 list-group-item list-group-item-action"
         btLinea.innerHTML = `
@@ -1846,6 +2225,53 @@ function mostrar_escritorio() {
     document.getElementById("panel-escritorio").innerHTML = ""
 
 }
+function agregar_nota_consultor(dominio, referencia) {
+
+    //Referenciamos el contenedor de notas y lo limpiamos
+    const lstNotas = document.getElementById("lstNotasConsultor")
+    lstNotas.innerHTML = ""
+
+    //Creamos uan nota con base a la clase notas
+    const AreaActiva = dominio
+
+    //Creamos una nueva línea de acción dentro de la clase Area
+    let now = new Date().toLocaleString()
+    const nota = new Notas(
+        'Tema',
+        'Comentario',
+        "1",
+        referencia,
+        now,
+        now,
+        activeEmail,
+        "",
+        activeEmail,
+        0,
+        AreaActiva);
+    AreaActiva.addNota(nota)
+    let n = 0
+    AreaActiva.cslNotas.forEach(nota => {
+        nota.id = n++
+        nota.parent = AreaActiva
+        nota.makerHtmlNotas()
+        GuardarVigencia()
+    })
+
+}
+function cargar_notas_consultor(dominio) {
+    //Referenciamos el contenedor de notas y lo limpiamos
+    const lstNotas = document.getElementById("lstNotasConsultor")
+    lstNotas.innerHTML = ""
+
+    const AreaActiva = dominio
+    let n = 0
+    AreaActiva.cslNotas.forEach(nota => {
+        nota.id = n++
+        nota.parent = dominio
+        nota.makerHtmlNotas()
+    })
+
+}
 
 function parametrizador(area) {
     const cEscritorio = document.getElementById("panel-escritorio")
@@ -1868,7 +2294,7 @@ function parametrizador(area) {
 
         const colNombreLinea = document.createElement("div")
         colNombreLinea.className = "col-2 border-ini-org rounded border-warning shadow p-2 m-2 bg-warning-subtle"
-        colNombreLinea.innerHTML=`
+        colNombreLinea.innerHTML = `
         <a class="nav-link active rf-labels" aria-current="page" href="#" id="cOpenLinea${linea.id}">L${linea.id + 1}. ${linea.nombre}</a>
         `
 
@@ -1995,7 +2421,7 @@ function parametrizador(area) {
                 const cOpenProyecto = document.getElementById("cOpenGestion" + linea.id + programa.id + gestion.id)
                 cOpenProyecto.onclick = () => {
                     const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
-                    //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
+
                     elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
                 }
 
@@ -2008,9 +2434,9 @@ function parametrizador(area) {
 
     })
 
-
-
 }
+
+
 
 function backupData() {
     const a = document.createElement("a");

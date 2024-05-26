@@ -1,10 +1,10 @@
 //ESta es la continuación de las clases componentes
 //se desarrolla aparte pues tien otros elementos qu eharían grande este componente
 
-//const { doc } = require("firebase/firestore");
+
 
 class Gestion {
-    constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, id, partenid) {
+    constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, aclaraciones, id, dominio) {
         this.nombre = nombre;
         this.ogeneral = ogeneral;
         this.mandato = mandato;
@@ -14,8 +14,9 @@ class Gestion {
         this.valor = valor;
         this.indicador = indicador;
         this.cumplimiento = cumplimiento;
+        this.aclaraciones = aclaraciones
         this.id = id;
-        this.partenid = partenid;
+        this.parent = dominio;
 
         this.clsEspecificos = [];
     }
@@ -27,7 +28,7 @@ class Gestion {
         this.clsEspecificos.splice(id, 1);
     }
 
-    makerHTMLProyeccion(area, linea, programa, parentid) {
+    makerHTMLProyeccion(area, linea, programa) {
         //Iniciamos colocando los titulos de esta sección y limpiando el escritorio
 
 
@@ -51,7 +52,7 @@ class Gestion {
         //Colocamos el título del programa
         const Título3 = document.createElement('div');
         Título3.className = "ms-3 fs-5 text-secondary"
-        Título3.textContent = programa
+        Título3.textContent = programa.nombre
         cEscritorio.appendChild(Título3)
 
         //Colocamos el título del proyecto
@@ -61,46 +62,53 @@ class Gestion {
         cEscritorio.appendChild(Título4)
 
         const barraNavegar = document.createElement("nav")
-        barraNavegar.className="navbar navbar-expand-lg bg-body-tertiary ms-3"
-        barraNavegar.innerHTML=`
+        barraNavegar.className = "navbar navbar-expand-lg bg-secondary"
+        barraNavegar.innerHTML = `
         <div class="navbar-nav">
-            <a class="nav-link" href="#" id="lnkArea">Area / </a>
-            <a class="nav-link" href="#" id="lnkLinea">Linea / </a>
-            <a class="nav-link" href="#" id="lnkPrograma">Programa / </a>
-            <a class="nav-link" href="#" id="lnkVisor">Visor</a>
+        <a class="navbar-brand text-white ms-3" href="#">PANEL PROYECTOS</a>
+            <a class="nav-link text-white" href="#" id="lnkArea">Area / </a>
+            <a class="nav-link text-white" href="#" id="lnkLinea">Linea / </a>
+            <a class="nav-link text-white" href="#" id="lnkPrograma">Programa / </a>
+            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
+            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+                aria-controls="offcanvasExample" id="linkNotas">
+                Notas
+            </a>
         </div>
         `
         cEscritorio.appendChild(barraNavegar)
-        const linkArea= document.getElementById("lnkArea")
-        linkArea.onclick=()=>{
+        const linkArea = document.getElementById("lnkArea")
+        linkArea.onclick = () => {
             area.makerHtmlAreasItem()
         }
 
-        const linkLinea= document.getElementById("lnkLinea")
-        linkLinea.onclick=()=>{
-            linea.makerHTMLLineaPanel(linea)
+        const linkLinea = document.getElementById("lnkLinea")
+        linkLinea.onclick = () => {
+            linea.parent = area
+            linea.makerHTMLLineaPanel()
         }
         cEscritorio.appendChild(barraNavegar)
-        const linkPrograma= document.getElementById("lnkPrograma")
-        linkPrograma.onclick=()=>{
-            this.partenid.makerHTMLProgramaPanel(area,linea)
+        const linkPrograma = document.getElementById("lnkPrograma")
+        linkPrograma.onclick = () => {
+            this.parent.makerHTMLProgramaPanel(area, linea)
         }
-        const linkVisor= document.getElementById("lnkVisor")
-        linkVisor.onclick=()=>{
+        const linkVisor = document.getElementById("lnkVisor")
+        linkVisor.onclick = () => {
             parametrizador(area)
         }
 
+        const linkNotas = document.getElementById("linkNotas")
+        linkNotas.onclick = () => {
+            //Asigna la función onclick al botón para relacionarlo con el área actual
+            document.getElementById("btnAgregarNotaConsultor").onclick = () => {
+                agregar_nota_consultor(area, `${area.id}-${linea.id}-${programa.id}-${this.id}`)
+            }
+            //Carga las notas del área activa
+            cargar_notas_consultor(area)
+        }
+
         cEscritorio.appendChild(barraNavegar)
-
-
-
-
-
-
-
-
-
-
+        //============================================================
 
 
         //Ahora los input de cada dato
@@ -159,6 +167,18 @@ class Gestion {
             GuardarVigencia()
         });
         refMandato.value = this.mandato;
+        //================================
+        //Input para inforamción del proyecto sobre aclaraciones
+        const inputTextAclaraciones = HTML.inputTextArea2(this.id, "Aclaraciones", 'InputTextAclaraciones')
+        cEscritorio.appendChild(inputTextAclaraciones)
+
+        const refAclaraciones = document.getElementById(this.id + "InputTextAclaraciones")
+        refAclaraciones.addEventListener('input', () => {
+            this.aclaraciones = refAclaraciones.value
+            GuardarVigencia()
+        });
+        refAclaraciones.value = this.aclaraciones;
+        //================================
 
         //Selector financiador
         const inputFinanciadoProy = document.createElement("div")
@@ -168,13 +188,8 @@ class Gestion {
                 <label class="form-check-label" for="input-financiado-proy">Proyecto financiado</label>
         `
         cEscritorio.appendChild(inputFinanciadoProy)
-
-
-
         const valFinanciador = document.getElementById("input-financiado-proy")
         valFinanciador.checked = this.financiado
-
-
         valFinanciador.onchange = () => {
             this.financiado = valFinanciador.checked
             if (this.financiado == false) {
@@ -232,7 +247,6 @@ class Gestion {
         }
 
 
-
         //Porcentaje en el proyecto
         const inputIndicadorProy = document.createElement("form")
         inputIndicadorProy.className = "form-floating mb-2"
@@ -266,13 +280,47 @@ class Gestion {
         }
         refinputCumplimientoProy.value = this.cumplimiento
 
-
         const Título5 = document.createElement('div');
-        Título5.className = "ms-1 mt-4 mb-2 fs-6 text-secondary border-bottom border-2 border-secondary"
+        Título5.className = "ms-1 mt-4 mb-2 fs-4 text-secondary border-bottom border-2 border-secondary"
         Título5.textContent = "Objetivos específicos"
         cEscritorio.appendChild(Título5)
 
 
+        //Agregar botton añadir objetivos específicos al proyecto
+        const btAgregarEspecificos = document.createElement("button")
+        btAgregarEspecificos.className = "btn btn-outline-secondary m-1"
+        btAgregarEspecificos.innerHTML = `<i class="bi bi-plus"></i> Agregar objetivo`
+        cEscritorio.appendChild(btAgregarEspecificos)
+
+        //Agregamos un contendor de listad de específicos
+        const divObjetivos_Específicos = document.createElement("div")
+        divObjetivos_Específicos.id="lstEspecificos"
+
+        cEscritorio.appendChild(divObjetivos_Específicos)
+
+        //Configuramos el botón agregar objetivos
+        btAgregarEspecificos.onclick = () => {
+            const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0)
+            this.addEspecificos(ospecifico)
+            GuardarVigencia()
+
+            divObjetivos_Específicos.innerHTML = ""
+            let e = 0;
+            this.clsEspecificos.forEach(especifico => {
+                especifico.id = e++
+                especifico.parent = this
+                especifico.makerHTMLEspecificos(area,this)
+            })
+        }
+
+        //Cargar todos los específicos
+        divObjetivos_Específicos.innerHTML = ""
+        let e = 0;
+        this.clsEspecificos.forEach(especifico => {
+            especifico.id = e++
+            especifico.parent = this
+            especifico.makerHTMLEspecificos(area,this)
+        })
 
 
 
@@ -284,27 +332,31 @@ class Gestion {
         btnBorrarGestion.onclick = () => {
             modal.modalDelete(
                 () => {
-                    parentid.deleteGestion(this.id)
-                    parentid.makerHTMLProgramaPanel(area, linea)
+                    programa.deleteGestion(this.id)
+                    programa.makerHTMLProgramaPanel(area, linea)
                 }
             )
 
 
         }
         cEscritorio.appendChild(btnBorrarGestion)
+        //=============================================
+
+        //Cargamos los objetivos específicos
 
 
-        //Agregamos un boton borrar gestion
+
+        //Agregamos un boton volver
         const btnretroceder = document.createElement("button")
         btnretroceder.className = "btn btn-outline-secondary mt-5 m-1"
         btnretroceder.innerHTML = `<i class="bi bi-arrow-return-left"></i> Volver`
 
         btnretroceder.onclick = () => {
-            parentid.makerHTMLProgramaPanel(area, linea)
-
+            this.parent.makerHTMLProgramaPanel(area, linea)
         }
         cEscritorio.appendChild(btnretroceder)
-
+        
+        
 
     }
 
@@ -312,8 +364,30 @@ class Gestion {
 
 
 }
-function listarGestiones() {
 
+class oespecificos {
+    constructor(nombre, meta, avance, id, dominio) {
+        this.nombre = nombre;
+        this.meta = meta;
+        this.avance = avance;
+        this.id = id;
+        this.parent = dominio;
+        this.clsActividades = [];
+    }
+    makerHTMLEspecificos() {
+        const contenedor = document.getElementById("lstEspecificos")
+
+        const item = document.createElement("p")
+        item.textContent= this.nombre
+        contenedor.appendChild(item)
+    }
+
+
+}
+
+
+
+function listarGestiones() {
     document.getElementById("conteneder-bar-proyectos").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
 
@@ -328,11 +402,11 @@ function listarGestiones() {
     document.getElementById("panel-escritorio").appendChild(contenedor_listas)
 
     let i = 0
-    let g=1
+    let g = 1
     ActiveProyect.clsAreas.forEach(area => {
         area.cslLineas.forEach(linea => {
             linea.clsPrograma.forEach(programa => {
-                
+
                 programa.clsGestion.forEach(gestion => {
 
                     const item = document.createElement("li")
@@ -366,7 +440,7 @@ function listarGestiones() {
                     item.onclick = () => {
                         const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
                         //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
-                        elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
+                        elemento.makerHTMLProyeccion(area, linea, programa)
 
                     }
 

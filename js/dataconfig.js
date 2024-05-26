@@ -42,7 +42,6 @@ import {
 
 
 
-
 // Utiliza las claves y credenciales de mi base de datos de Tomakare
 const firebaseConfig = {
     apiKey: "AIzaSyBPNmdQLcTdPyXxpqdFdJ5cMrbFezE19iE",
@@ -155,7 +154,6 @@ onSnapshot(coleccionUsuarios, (querySnapshot) => {
 async function CredentialIn(email, password) {
     try {
         const crearcredencial = await signInWithEmailAndPassword(auth, email, password)
- 
         
         mensajes("A ingresado exitosamente", "green")
         location.href = "../app-web/index-app.html"

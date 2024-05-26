@@ -47,7 +47,7 @@ const HTML = {
         `
         return controlHTML
     },
-    inputTextArea3(id, idParent,label, idtext,value) {
+    inputTextArea3(id, idParent, label, idtext, value) {
         const controlHTML = document.createElement("form")
         controlHTML.className = "form-floating mb-2"
         controlHTML.innerHTML = `
@@ -59,13 +59,13 @@ const HTML = {
         `
         return controlHTML
     },
-    inputSpan(id,value) {
-        
+    inputSpan(id, value) {
+
         const controlHTML = document.createElement("div")
         controlHTML.className = "input-group mb-3"
         controlHTML.innerHTML = `                        
         <span class="input-group-text" id="${id}btnNumeraMandato">
-        ${id+1}
+        ${id + 1}
         </span>
        <input id="${id}InputMandato" type="text" class="form-control" placeholder="Mandato"
         aria-label="Mandatos" aria-describedby="basic-addon1"
@@ -79,13 +79,13 @@ const HTML = {
 
         return controlHTML
     },
-    inputSpan2(id,value, idtext) {
-        
+    inputSpan2(id, value, idtext) {
+
         const controlHTML = document.createElement("div")
         controlHTML.className = "input-group mb-3"
         controlHTML.innerHTML = `                        
         <span class="input-group-text" id="${id}btnNumeraLinea">
-        ${id+1}
+        ${id + 1}
         </span>
        <input id="${id}${idtext}" type="text" class="form-control" placeholder=""
         aria-label="Mandatos" aria-describedby="basic-addon1"
@@ -100,13 +100,13 @@ const HTML = {
         return controlHTML
     },
 
-    inputSpan3(id, idParent,value, idtext) {
-        
+    inputSpan3(id, idParent, value, idtext) {
+
         const controlHTML = document.createElement("div")
         controlHTML.className = "input-group mb-3"
         controlHTML.innerHTML = `                        
         <span class="input-group-text">
-        ${id+1}
+        ${id + 1}
         </span>
 
        <input id="${idParent}${id}Input${idtext}" type="text" class="form-control" placeholder="${idtext}"
@@ -121,7 +121,7 @@ const HTML = {
         `
         return controlHTML
     },
-    collapseControl1(titulo,id,contexto,icon){
+    collapseControl1(titulo, id, contexto, icon) {
         const collapse = document.createElement("div")
         collapse.innerHTML = `
             <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
@@ -140,7 +140,7 @@ const HTML = {
                     </div>
                 </div>
             `
-            return collapse
+        return collapse
     }
 
 
@@ -175,17 +175,20 @@ function hiddePanelBorrar() {
 }
 
 
+
+
+
 const HiddenControl = {
     hiddetoVigencias() {
         document.getElementById("paneListlVigencias").hidden = true
         document.getElementById("contenedor-area").hidden = true
         document.getElementById("accordionControl").hidden = true
-        
+
         document.getElementById("contenedor-bar-areas").hidden = true
         document.getElementById("ContenedorControls").hidden = false
         document.getElementById("conteneder-bar-proyectos").hidden = false
-        
-        
+
+
 
 
 
@@ -241,7 +244,7 @@ const modal = {
     modalDelete(comando) {
         const modal = new bootstrap.Modal(document.getElementById('myModal'));
         const texto = document.getElementById("textoModal")
-        texto.textContent="¿Está seguro de eliminar este elemento?"
+        texto.textContent = "¿Está seguro de eliminar este elemento?"
 
         modal.show();
         const btn = document.getElementById('btnBorrarConfirm')
