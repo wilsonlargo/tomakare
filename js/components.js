@@ -147,7 +147,6 @@ class clsProyecto {
                     gestion.indicador,
                     gestion.cumplimiento,
                     gestion.aclaraciones,
-
                     gestion.id,
                     ProgramaNew);
                 GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
@@ -159,12 +158,12 @@ class clsProyecto {
         const loadArticulacionPrj = (fromArticulacionPrj) => {
 
             return fromArticulacionPrj.map(articulacion => {
-                const newArticulacion = new ArticulacionPrj(
+                const newArticulacionPrj = new ArticulacionPrj(
                     articulacion.consejeria,
                     articulacion.mandatos,
                     articulacion.id,
-                    articulacion.parent);
-                return newArticulacion;
+                    );
+                return newArticulacionPrj;
             })
 
         }
@@ -177,7 +176,6 @@ class clsProyecto {
                     especifico.nombre,
                     especifico.meta,
                     especifico.avance,
-                    especifico.meta,
                     especifico.id,
                     especifico.parent);
                 return newEspecifico;
@@ -2073,7 +2071,10 @@ async function cargarProyectos() {
                 `
                 Contenedor.appendChild(component)
 
-                document.getElementById("btnVig" + vigencia.id).onclick = () => showVigencia(vigencia)
+                document.getElementById("btnVig" + vigencia.id).onclick = () => {
+                    cargarProyectos()
+                    showVigencia(vigencia)
+                }
 
             });
 
@@ -2087,10 +2088,12 @@ async function cargarProyectos() {
 }
 
 async function showVigencia(vigencia) {
+    cargarProyectos()
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
     ActiveProyect.makerHtml()
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
+    
 
 
 }

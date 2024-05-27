@@ -339,7 +339,7 @@ class Gestion {
         btAgregarArticulacion.className = "btn btn-outline-secondary m-1"
         btAgregarArticulacion.innerHTML = `<i class="bi bi-plus"></i> Agregar consejeria`
         btAgregarArticulacion.onclick = () => {
-            const articulacion = new ArticulacionPrj("Consejería", "Mandato", this.cslArticulacionPrj.length, this)
+            const articulacion = new ArticulacionPrj("Consejería", "Mandato", 0, this)
             this.addArticulacion(articulacion)
             GuardarVigencia()
 
@@ -348,8 +348,8 @@ class Gestion {
             let ar = 0
             this.cslArticulacionPrj.forEach(articulacion => {
                 articulacion.id = ar++
-                articulacion.parent = this
-                articulacion.makerHtmlArticulacion()
+                articulacion.parentId = this
+                articulacion.makerHtmlArticulacion(this)
 
             })
 
@@ -358,12 +358,11 @@ class Gestion {
         //=======================================================
         //Cargar las articulaciones con consejerias o mandatos
         document.getElementById("divarticulacioncollapse").innerHTML = ""
-        console.log(this.cslArticulacionPrj)
         let ar = 0
         this.cslArticulacionPrj.forEach(articulacion => {
             articulacion.id = ar++
             articulacion.parent = this
-            articulacion.makerHtmlArticulacion()
+            articulacion.makerHtmlArticulacion(this)
         })
 
 
@@ -382,27 +381,28 @@ class Gestion {
 
         //Configuramos el botón agregar objetivos
         btAgregarEspecificos.onclick = () => {
-            const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0)
+            const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0,this)
             this.addEspecificos(ospecifico)
-
+            GuardarVigencia()
 
             divObjetivos_Específicos.innerHTML = ""
             let e = 0;
             this.clsEspecificos.forEach(especifico => {
                 especifico.id = e++
                 especifico.parent = this
-                especifico.makerHTMLEspecificos()
+                especifico.makerHTMLEspecificos(this)
             })
-            GuardarVigencia()
+           
         }
 
         //Cargar todos los específicos
         divObjetivos_Específicos.innerHTML = ""
+        console.log(this.clsEspecificos)
         let e = 0;
         this.clsEspecificos.forEach(especifico => {
             especifico.id = e++
             especifico.parent = this
-            especifico.makerHTMLEspecificos()
+            especifico.makerHTMLEspecificos(this)
         })
 
 
@@ -454,7 +454,7 @@ class ArticulacionPrj {
         this.id = id
         this.parentId = parentId
     }
-    makerHtmlArticulacion(Articulacion) {
+    makerHtmlArticulacion(dominio) {
         const collapseArticulacion = document.getElementById("divarticulacioncollapse")
         const item = document.createElement("ol")
         item.className = "list-group list-group-numbered"
@@ -507,20 +507,17 @@ class ArticulacionPrj {
         }
         ref_mandato_consejeria.value = this.mandatos
 
-
-
-
-        //Agrega evento al boton borrar link
+        //Agrega evento al boton borrar articulacion
         document.getElementById(`btnEliminarArticulacion${this.id}`).onclick = () => {
-            this.parent.deleteArticulacionPrj(this.id)
+            dominio.deleteArticulacion(this.id)
             GuardarVigencia()
             const cArticulacion = document.getElementById("divarticulacioncollapse")
             cArticulacion.innerHTML = ''
             let i = 0;
-            this.parentId.cslArticulacion.forEach(articulacion => {
+            dominio.cslArticulacionPrj.forEach(articulacion => {
                 articulacion.id = i++
-                articulacion.parentId = this.parentId
-                articulacion.makerHtmlArticulacion(articulacion);
+                articulacion.parentId = dominio
+                articulacion.makerHtmlArticulacion(dominio);
             })
         }
 
@@ -534,9 +531,8 @@ class oespecificos {
         this.avance = avance;
         this.id = id;
         this.parent = dominio;
-        this.clsActividades = [];
     }
-    makerHTMLEspecificos() {
+    makerHTMLEspecificos(dominio) {
         const contenedor = document.getElementById("lstEspecificos")
 
         const item = document.createElement("div")
@@ -580,21 +576,21 @@ class oespecificos {
 
         }
         span3.onclick = () => {
-
             modal.modalDelete(
                 () => {
-                    this.parent.deleteEspecificos(this.id)
+                    dominio.deleteEspecificos(this.id)
                     GuardarVigencia()
+                    console.log(dominio.clsEspecificos)
                     contenedor.innerHTML = ""
                     let e = 0;
-                    this.parent.clsEspecificos.forEach(especifico => {
+                    dominio.clsEspecificos.forEach(especifico => {
                         especifico.id = e++
-                        especifico.parent = this.parent
-                        especifico.makerHTMLEspecificos()
+                        especifico.parent = dominio
+                        especifico.makerHTMLEspecificos(dominio)
                     })
                 }
-
             )
+
         }
 
 
