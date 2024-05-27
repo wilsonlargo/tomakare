@@ -1,8 +1,6 @@
 //ESta es la continuación de las clases componentes
 //se desarrolla aparte pues tien otros elementos qu eharían grande este componente
 
-
-
 class Gestion {
     constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, aclaraciones, id, dominio) {
         this.nombre = nombre;
@@ -288,7 +286,7 @@ class Gestion {
 
         //Agregar botton añadir objetivos específicos al proyecto
         const btAgregarEspecificos = document.createElement("button")
-        btAgregarEspecificos.className = "btn btn-outline-secondary m-1"
+        btAgregarEspecificos.className = "btn btn-outline-secondary mt-2 mb-3"
         btAgregarEspecificos.innerHTML = `<i class="bi bi-plus"></i> Agregar objetivo`
         cEscritorio.appendChild(btAgregarEspecificos)
 
@@ -309,7 +307,7 @@ class Gestion {
             this.clsEspecificos.forEach(especifico => {
                 especifico.id = e++
                 especifico.parent = this
-                especifico.makerHTMLEspecificos(area,this)
+                especifico.makerHTMLEspecificos()
             })
         }
 
@@ -319,7 +317,7 @@ class Gestion {
         this.clsEspecificos.forEach(especifico => {
             especifico.id = e++
             especifico.parent = this
-            especifico.makerHTMLEspecificos(area,this)
+            especifico.makerHTMLEspecificos()
         })
 
 
@@ -376,10 +374,67 @@ class oespecificos {
     }
     makerHTMLEspecificos() {
         const contenedor = document.getElementById("lstEspecificos")
-
-        const item = document.createElement("p")
-        item.textContent= this.nombre
+        
+        const item = document.createElement("div")
+        item.className="input-group mb-2"
         contenedor.appendChild(item)
+
+        const span1 = document.createElement("span")
+        span1.className="input-group-text bg-secondary fw-bold text-white"
+        span1.textContent= (this.id + 1) + "."
+        item.appendChild(span1)
+
+        const textArea = document.createElement("textarea")
+        textArea.className="form-control"
+        textArea.value= this.nombre
+        item.appendChild(textArea)
+        textArea.oninput=()=>{
+            this.nombre=textArea.value 
+            GuardarVigencia()
+        }
+
+        const span2 = document.createElement("span")
+        span2.className="input-group-text bg-warning fw-bold"
+        span2.innerHTML=`
+        <a class="nav-link" href="#">
+            <i class="bi bi-pencil"></i>
+        </a>
+        `
+        item.appendChild(span2)
+
+        const span3 = document.createElement("span")
+        span3.className="input-group-text bg-warning fw-bold"
+        span3.innerHTML=`
+        <a class="nav-link">
+            <i class="bi bi-trash3"></i>
+        </a>
+        `
+        item.appendChild(span3)
+
+
+        span2.onclick=()=>{
+
+        }
+        span3.onclick=()=>{
+            contenedor.innerHTML=""
+            modal.modalDelete(
+                () => {
+                    this.parent.deleteEspecificos(this.id)
+                    let e = 0;
+                    this.parent.clsEspecificos.forEach(especifico => {
+                        especifico.id = e++
+                        especifico.parent = this.parent
+                        especifico.makerHTMLEspecificos()
+                    })
+                    GuardarVigencia()
+                }
+            )
+
+        }
+
+
+        
+
     }
 
 

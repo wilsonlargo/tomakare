@@ -3,13 +3,6 @@
 //crear, abrir, eliminar proyectos, así como permitir el ingreso a los datos
 
 //Importa las instanacias de firebase y administración de base de datos
-
-
-
-// Default export is a4 paper, portrait, using millimeters for units
-
-       
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 
 import {
@@ -97,8 +90,7 @@ async function getUsuarios() {
 async function addProyecto(objProyecto) {
     const docRef = await addDoc(coleccionProyectos, objProyecto);
     cargarProyectos()
-    return docRef.id;
-    
+    return docRef.id; 
 }
 
 // Funcion para eliminar un proyecto por id

@@ -1,5 +1,5 @@
                     <div class="input-group">
-                        <span class="input-group-text">1. </i></span>
+                        <span class="input-group-text">1.</span>
                         <textarea class="form-control" aria-label="With textarea"></textarea>
                         <span class="input-group-text"><a class="nav-link" href="#"><i
                                     class="bi bi-pencil"></i></a></span>

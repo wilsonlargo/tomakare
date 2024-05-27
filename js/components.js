@@ -1,8 +1,5 @@
 //Modulo que administra los proyectos y la construcción de los objetos visibles
 
-
-//const { doc } = require("firebase/firestore");
-
 //Esta variable guarda el proyecto activo como clase
 let ActiveProyect;
 
@@ -1985,7 +1982,6 @@ class Programa {
 }
 
 
-
 //Función externa para crear un proyecto
 async function CrearProyecto() {
     //Verifia que el usuario está dentro de la lista de administrador/
@@ -2435,7 +2431,6 @@ function parametrizador(area) {
     })
 
 }
-
 
 
 function backupData() {
