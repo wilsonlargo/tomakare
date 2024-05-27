@@ -151,9 +151,24 @@ class clsProyecto {
                     gestion.id,
                     ProgramaNew);
                 GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
+                GestionNew.cslArticulacionPrj = loadArticulacionPrj(gestion.cslArticulacionPrj);
                 return GestionNew;
             });
         }
+
+        const loadArticulacionPrj = (fromArticulacionPrj) => {
+
+            return fromArticulacionPrj.map(articulacion => {
+                const newArticulacion = new ArticulacionPrj(
+                    articulacion.consejeria,
+                    articulacion.mandatos,
+                    articulacion.id,
+                    articulacion.parent);
+                return newArticulacion;
+            })
+
+        }
+
 
         const loadEspecificos = (fromClsEspecificos) => {
 
@@ -461,11 +476,15 @@ class Area {
 
         //========================================================
 
-        //Creamos ahora los input, información del área
-        const nombreArea = HTML.inputContol(this, this.id + "nombreArea", "Nombre del área")
-        document.getElementById("panel-escritorio").appendChild(nombreArea)
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intNomArea = document.getElementById(this.id + "nombreArea")
+        let labelFree = document.createElement("label")
+        labelFree.className="form-label fw-medium text-success mb-2"
+        labelFree.textContent="Nombre del área"
+        document.getElementById("panel-escritorio").appendChild(labelFree)
+
+        const intNomArea = document.createElement("input")
+        intNomArea.className="form-control mb-2"
+        document.getElementById("panel-escritorio").appendChild(intNomArea)
+
         intNomArea.addEventListener('input', () => {
             this.nombre = intNomArea.value
             const btAreaLabel = document.getElementById("btnArealabel" + this.id)
@@ -474,6 +493,13 @@ class Area {
             GuardarVigencia()
         });
         intNomArea.value = this.nombre;
+        //========================================================
+
+
+
+
+
+
 
         //Input administrador de área
         const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")

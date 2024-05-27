@@ -15,7 +15,7 @@ class Gestion {
         this.aclaraciones = aclaraciones
         this.id = id;
         this.parent = dominio;
-
+        this.cslArticulacionPrj = [];
         this.clsEspecificos = [];
     }
 
@@ -24,6 +24,12 @@ class Gestion {
     }
     deleteEspecificos(id) {
         this.clsEspecificos.splice(id, 1);
+    }
+    addArticulacion(Articulacion) {
+        this.cslArticulacionPrj.push(Articulacion);
+    }
+    deleteArticulacion(id) {
+        this.cslArticulacionPrj.splice(id, 1);
     }
 
     makerHTMLProyeccion(area, linea, programa) {
@@ -117,73 +123,115 @@ class Gestion {
             <input type="text" class="form-control" id="${this.id + "input-gestion-nombre"}" value="${this.nombre}">
             <label for="${this.id + "input-programa-nombre"}">Nombre proyecto</label>
         `
-        cEscritorio.appendChild(inputGestionNombre)
 
-        //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const refInputGestion = document.getElementById(this.id + "input-gestion-nombre")
-        refInputGestion.addEventListener('input', () => {
-            this.nombre = refInputGestion.value
-            Título4.textContent = refInputGestion.value
+
+        //===================================================
+        let labelFree = document.createElement("label")
+        labelFree.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree.textContent = "Nombre del proyecto"
+        cEscritorio.appendChild(labelFree)
+
+        const intNombre = document.createElement("input")
+        intNombre.className = "form-control mb-2"
+        cEscritorio.appendChild(intNombre)
+
+
+        intNombre.addEventListener('input', () => {
+            this.nombre = intNombre.value
+            Título4.textContent = intNombre.value
             GuardarVigencia()
         });
-        refInputGestion.value = this.nombre;
+        intNombre.value = this.nombre;
+        //===================================================
 
 
-        const inputAdminProy = document.createElement("form")
-        inputAdminProy.className = "form-floating mb-2"
-        inputAdminProy.innerHTML = `
-            <input type="text" class="form-control" id="input-gestion-administrador" value="${this.manager}">
-            <label for="input-gestion-administrador">Nombre administrador / coordiandor</label>
-        `
-        cEscritorio.appendChild(inputAdminProy)
+        //===================================================
+        let labelFree2 = document.createElement("label")
+        labelFree2.className = "form-label mb-2 fw-medium text-success"
+        labelFree2.textContent = "Nombre administrador / coordinador"
+        cEscritorio.appendChild(labelFree2)
 
-        const refinputAdminProy = document.getElementById("input-gestion-administrador")
-        refinputAdminProy.oninput = () => {
-            this.manager = refinputAdminProy.value;
+
+        const intAdministrador = document.createElement("input")
+        intAdministrador.className = "form-control mb-2"
+        cEscritorio.appendChild(intAdministrador)
+
+
+        intAdministrador.addEventListener('input', () => {
+            this.nombre = intNombre.value
             GuardarVigencia()
-        }
-        refinputAdminProy.value = this.manager
 
-        //Input para inforamción del proyecto en relación al objetivo
-        const inputTextObjetivo = HTML.inputTextArea2(this.id, "Objetivo General", 'InputTextObjetivo')
-        cEscritorio.appendChild(inputTextObjetivo)
-
-        const refObjetivoGe = document.getElementById(this.id + "InputTextObjetivo")
-        refObjetivoGe.addEventListener('input', () => {
-            this.ogeneral = refObjetivoGe.value
-            GuardarVigencia()
         });
-        refObjetivoGe.value = this.ogeneral;
+        intAdministrador.value = this.manager;
 
-        //Input para inforamción del proyecto en relación al mandato
-        const inputTextMandato = HTML.inputTextArea2(this.id, "Mandato", 'InputTextMandato')
-        cEscritorio.appendChild(inputTextMandato)
+        //===================================================
+        //===================================================
+        let labelFree3 = document.createElement("label")
+        labelFree3.className = "form-label mb-2 fw-medium text-success"
+        labelFree3.textContent = "Objetivo General"
+        cEscritorio.appendChild(labelFree3)
 
-        const refMandato = document.getElementById(this.id + "InputTextMandato")
-        refMandato.addEventListener('input', () => {
-            this.mandato = refMandato.value
+
+        const intObjetivo = document.createElement("textarea")
+        intObjetivo.className = "form-control mb-2"
+        intObjetivo.rows = 3
+        cEscritorio.appendChild(intObjetivo)
+
+        intObjetivo.addEventListener('input', () => {
+            this.ogeneral = intObjetivo.value
             GuardarVigencia()
-        });
-        refMandato.value = this.mandato;
-        //================================
-        //Input para inforamción del proyecto sobre aclaraciones
-        const inputTextAclaraciones = HTML.inputTextArea2(this.id, "Aclaraciones", 'InputTextAclaraciones')
-        cEscritorio.appendChild(inputTextAclaraciones)
 
-        const refAclaraciones = document.getElementById(this.id + "InputTextAclaraciones")
-        refAclaraciones.addEventListener('input', () => {
-            this.aclaraciones = refAclaraciones.value
-            GuardarVigencia()
         });
-        refAclaraciones.value = this.aclaraciones;
-        //================================
+        intObjetivo.value = this.ogeneral;
+
+        //===================================================
+        //===================================================
+        let labelFree4 = document.createElement("label")
+        labelFree4.className = "form-label mb-2 fw-medium text-success"
+        labelFree4.textContent = "Mandato"
+        cEscritorio.appendChild(labelFree4)
+
+
+        const intMandato = document.createElement("textarea")
+        intMandato.className = "form-control mb-2"
+        intMandato.rows = 6
+        cEscritorio.appendChild(intMandato)
+
+        intMandato.addEventListener('input', () => {
+            this.mandato = intMandato.value
+            GuardarVigencia()
+
+        });
+        intMandato.value = this.mandato;
+
+        //===================================================
+        //===================================================
+        let labelFree5 = document.createElement("label")
+        labelFree5.className = "form-label mb-2 fw-medium text-success"
+        labelFree5.textContent = "Aclaraciones"
+        cEscritorio.appendChild(labelFree5)
+
+
+        const intAclaraciones = document.createElement("textarea")
+        intAclaraciones.className = "form-control mb-2 bg-warning-subtle"
+        intAclaraciones.rows = 6
+        cEscritorio.appendChild(intAclaraciones)
+
+        intAclaraciones.addEventListener('input', () => {
+            this.aclaraciones = intAclaraciones.value
+            GuardarVigencia()
+
+        });
+        intAclaraciones.value = this.aclaraciones;
+
+        //===================================================
 
         //Selector financiador
         const inputFinanciadoProy = document.createElement("div")
         inputFinanciadoProy.className = "form-check form-switch mb-2"
         inputFinanciadoProy.innerHTML = `
                 <input class="form-check-input" type="checkbox" role="switch" id="input-financiado-proy">
-                <label class="form-check-label" for="input-financiado-proy">Proyecto financiado</label>
+                <label class="form-check-label fw-medium" for="input-financiado-proy">Proyecto financiado</label>
         `
         cEscritorio.appendChild(inputFinanciadoProy)
         const valFinanciador = document.getElementById("input-financiado-proy")
@@ -204,7 +252,7 @@ class Gestion {
             GuardarVigencia()
         }
 
-        //Entrada de fuente
+        //Entrada de fuente nombre
         const inputfuenteProy = document.createElement("form")
         inputfuenteProy.className = "form-floating mb-2"
         inputfuenteProy.innerHTML = `
@@ -220,7 +268,7 @@ class Gestion {
         }
         refinputfuenteProy.value = this.fuente
 
-        //Entrada de fuente
+        //Entrada de fuente valor
         const inputvalorProy = document.createElement("form")
         inputvalorProy.className = "form-floating mb-2"
         inputvalorProy.innerHTML = `
@@ -245,43 +293,79 @@ class Gestion {
         }
 
 
-        //Porcentaje en el proyecto
-        const inputIndicadorProy = document.createElement("form")
-        inputIndicadorProy.className = "form-floating mb-2"
-        inputIndicadorProy.innerHTML = `
-            <input type="text" class="form-control" id="input-indicador" value="${this.indicador}">
-            <label for="input-indicador">Porcentaje en el programa</label>
-        `
+
+        //===================================================
+        let labelFree7 = document.createElement("label")
+        labelFree7.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree7.textContent = "Porcentaje en el programa"
+        cEscritorio.appendChild(labelFree7)
+
+        const inputIndicadorProy = document.createElement("input")
+        inputIndicadorProy.className = "form-control mb-2 fs-4 text-success"
         cEscritorio.appendChild(inputIndicadorProy)
 
-        const refinputIndicadorProy = document.getElementById("input-indicador")
-        refinputIndicadorProy.oninput = () => {
+        inputIndicadorProy.addEventListener('input', () => {
             this.indicador = refinputIndicadorProy.value;
             GuardarVigencia()
-        }
-        refinputIndicadorProy.value = this.indicador
+        });
+        inputIndicadorProy.value = this.indicador
+        //===================================================
+        //===================================================
+        let labelFree8 = document.createElement("label")
+        labelFree8.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree8.textContent = "Porcentaje cumplimiento"
+        cEscritorio.appendChild(labelFree8)
 
-
-        //Porcentaje en el proyecto
-        const inputCumplimientoProy = document.createElement("form")
-        inputCumplimientoProy.className = "form-floating mb-2"
-        inputCumplimientoProy.innerHTML = `
-                    <input type="text" class="form-control" id="input-cumplimiento" value="${this.cumplimiento}">
-                    <label for="input-cumplimiento">Porcentaje de cumplimiento</label>
-                `
+        const inputCumplimientoProy = document.createElement("input")
+        inputCumplimientoProy.className = "form-control mb-2 fs-4"
         cEscritorio.appendChild(inputCumplimientoProy)
 
-        const refinputCumplimientoProy = document.getElementById("input-cumplimiento")
-        refinputCumplimientoProy.oninput = () => {
-            this.cumplimiento = refinputCumplimientoProy.value;
+        inputCumplimientoProy.addEventListener('input', () => {
+            this.cumplimiento = inputCumplimientoProy.value;
             GuardarVigencia()
-        }
-        refinputCumplimientoProy.value = this.cumplimiento
+        });
+        inputCumplimientoProy.value = this.cumplimiento
+        //===================================================
+
+        //Collapse para articulacion / versión simplificada
+        const collapseArticulacion = HTML.collapseControl1("Articulación con Consejerías y mandatos", "cArticulacionCollapse", "articulacion", 'bi-arrow-left-right')
+        cEscritorio.appendChild(collapseArticulacion)
 
         const Título5 = document.createElement('div');
-        Título5.className = "ms-1 mt-4 mb-2 fs-4 text-secondary border-bottom border-2 border-secondary"
+        Título5.className = "ms-1 mt-4 mb-2 fs-4 border-bottom border-2 border-secondary fw-medium text-success"
         Título5.textContent = "Objetivos específicos"
         cEscritorio.appendChild(Título5)
+        const btAgregarArticulacion = document.createElement("button")
+        btAgregarArticulacion.className = "btn btn-outline-secondary m-1"
+        btAgregarArticulacion.innerHTML = `<i class="bi bi-plus"></i> Agregar consejeria`
+        btAgregarArticulacion.onclick = () => {
+            const articulacion = new ArticulacionPrj("Consejería", "Mandato", this.cslArticulacionPrj.length, this)
+            this.addArticulacion(articulacion)
+            GuardarVigencia()
+
+            document.getElementById("divarticulacioncollapse").innerHTML = ""
+
+            let ar = 0
+            this.cslArticulacionPrj.forEach(articulacion => {
+                articulacion.id = ar++
+                articulacion.parent = this
+                articulacion.makerHtmlArticulacion()
+
+            })
+
+        }
+        document.getElementById("divarticulacionbutton").appendChild(btAgregarArticulacion)
+        //=======================================================
+        //Cargar las articulaciones con consejerias o mandatos
+        document.getElementById("divarticulacioncollapse").innerHTML = ""
+        console.log(this.cslArticulacionPrj)
+        let ar = 0
+        this.cslArticulacionPrj.forEach(articulacion => {
+            articulacion.id = ar++
+            articulacion.parent = this
+            articulacion.makerHtmlArticulacion()
+        })
+
 
 
         //Agregar botton añadir objetivos específicos al proyecto
@@ -292,7 +376,7 @@ class Gestion {
 
         //Agregamos un contendor de listad de específicos
         const divObjetivos_Específicos = document.createElement("div")
-        divObjetivos_Específicos.id="lstEspecificos"
+        divObjetivos_Específicos.id = "lstEspecificos"
 
         cEscritorio.appendChild(divObjetivos_Específicos)
 
@@ -300,7 +384,7 @@ class Gestion {
         btAgregarEspecificos.onclick = () => {
             const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0)
             this.addEspecificos(ospecifico)
-            GuardarVigencia()
+
 
             divObjetivos_Específicos.innerHTML = ""
             let e = 0;
@@ -309,6 +393,7 @@ class Gestion {
                 especifico.parent = this
                 especifico.makerHTMLEspecificos()
             })
+            GuardarVigencia()
         }
 
         //Cargar todos los específicos
@@ -353,14 +438,93 @@ class Gestion {
             this.parent.makerHTMLProgramaPanel(area, linea)
         }
         cEscritorio.appendChild(btnretroceder)
-        
-        
+
+
 
     }
 
 
 
 
+}
+class ArticulacionPrj {
+    constructor(consejeria, mandatos, id, parentId) {
+        this.consejeria = consejeria;
+        this.mandatos = mandatos;
+        this.id = id
+        this.parentId = parentId
+    }
+    makerHtmlArticulacion(Articulacion) {
+        const collapseArticulacion = document.getElementById("divarticulacioncollapse")
+        const item = document.createElement("ol")
+        item.className = "list-group list-group-numbered"
+        item.innerHTML = `
+        <div class="">
+            <div class="row justify-content-between">
+                <div class="col-10 fw-bold text-start" data-bs-toggle="collapse" href="#collapseArticulacion${this.id}"
+                    role="button">
+                    <div id="tituloArticulacion${this.id}"><i class="bi bi-people-fill fs-4 me-2"></i>${this.id + 1}. ${this.consejeria}</div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseArticulacion${this.id}">
+                <div class="card card-body">
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Consejeria-Articulacion${this.id}"
+                            style="height: 50px"></textarea>
+                        <label for="int-Consejeria-Articulacion${this.id}">Consejeria</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Mandatos-Articulacion${this.id}"
+                            style="height: 100px"></textarea>
+                        <label for="int-Mandatos-Documento${this.id}">Mandatos</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger" id="btnEliminarArticulacion${this.id}" style="width: 200px;">
+                    <i class="bi bi-file-earmark-x me-2"></i>
+                    Eliminar mandato</button>                 
+                </div>
+            </div>
+        </div>`
+
+        collapseArticulacion.appendChild(item)
+
+        //Configuración nombre de la consejeria en articulación
+        const ref_nombre_consejeria = document.getElementById(`int-Consejeria-Articulacion${this.id}`)
+        //Se vincula y actualiza el nombre de la consejeria, junto al título del control y en la DB
+        ref_nombre_consejeria.oninput = () => {
+            this.consejeria = ref_nombre_consejeria.value
+            //Actualiza el título sin perder el numerador y el ícono
+            document.getElementById(`tituloArticulacion${this.id}`).innerHTML = `<i class="bi bi-people-fill fs-4 me-2"></i>${this.id + 1}. ${ref_nombre_consejeria.value}`
+            GuardarVigencia()
+        }
+        ref_nombre_consejeria.value = this.consejeria
+
+        //Configuración nombre del mandato en articulación
+        const ref_mandato_consejeria = document.getElementById(`int-Mandatos-Articulacion${this.id}`)
+        //Se vincula y actualiza el nombre de la consejeria, junto al título del control y en la DB
+        ref_mandato_consejeria.oninput = () => {
+            this.mandatos = ref_mandato_consejeria.value
+            GuardarVigencia()
+        }
+        ref_mandato_consejeria.value = this.mandatos
+
+
+
+
+        //Agrega evento al boton borrar link
+        document.getElementById(`btnEliminarArticulacion${this.id}`).onclick = () => {
+            this.parent.deleteArticulacionPrj(this.id)
+            GuardarVigencia()
+            const cArticulacion = document.getElementById("divarticulacioncollapse")
+            cArticulacion.innerHTML = ''
+            let i = 0;
+            this.parentId.cslArticulacion.forEach(articulacion => {
+                articulacion.id = i++
+                articulacion.parentId = this.parentId
+                articulacion.makerHtmlArticulacion(articulacion);
+            })
+        }
+
+    }
 }
 
 class oespecificos {
@@ -374,28 +538,28 @@ class oespecificos {
     }
     makerHTMLEspecificos() {
         const contenedor = document.getElementById("lstEspecificos")
-        
+
         const item = document.createElement("div")
-        item.className="input-group mb-2"
+        item.className = "input-group mb-2"
         contenedor.appendChild(item)
 
         const span1 = document.createElement("span")
-        span1.className="input-group-text bg-secondary fw-bold text-white"
-        span1.textContent= (this.id + 1) + "."
+        span1.className = "input-group-text bg-secondary fw-bold text-white"
+        span1.textContent = (this.id + 1) + "."
         item.appendChild(span1)
 
         const textArea = document.createElement("textarea")
-        textArea.className="form-control"
-        textArea.value= this.nombre
+        textArea.className = "form-control"
+        textArea.value = this.nombre
         item.appendChild(textArea)
-        textArea.oninput=()=>{
-            this.nombre=textArea.value 
+        textArea.oninput = () => {
+            this.nombre = textArea.value
             GuardarVigencia()
         }
 
         const span2 = document.createElement("span")
-        span2.className="input-group-text bg-warning fw-bold"
-        span2.innerHTML=`
+        span2.className = "input-group-text bg-warning fw-bold"
+        span2.innerHTML = `
         <a class="nav-link" href="#">
             <i class="bi bi-pencil"></i>
         </a>
@@ -403,8 +567,8 @@ class oespecificos {
         item.appendChild(span2)
 
         const span3 = document.createElement("span")
-        span3.className="input-group-text bg-warning fw-bold"
-        span3.innerHTML=`
+        span3.className = "input-group-text bg-warning fw-bold"
+        span3.innerHTML = `
         <a class="nav-link">
             <i class="bi bi-trash3"></i>
         </a>
@@ -412,28 +576,29 @@ class oespecificos {
         item.appendChild(span3)
 
 
-        span2.onclick=()=>{
+        span2.onclick = () => {
 
         }
-        span3.onclick=()=>{
-            contenedor.innerHTML=""
+        span3.onclick = () => {
+
             modal.modalDelete(
                 () => {
                     this.parent.deleteEspecificos(this.id)
+                    GuardarVigencia()
+                    contenedor.innerHTML = ""
                     let e = 0;
                     this.parent.clsEspecificos.forEach(especifico => {
                         especifico.id = e++
                         especifico.parent = this.parent
                         especifico.makerHTMLEspecificos()
                     })
-                    GuardarVigencia()
                 }
-            )
 
+            )
         }
 
 
-        
+
 
     }
 
