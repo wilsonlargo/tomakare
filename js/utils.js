@@ -121,10 +121,10 @@ const HTML = {
         `
         return controlHTML
     },
-    collapseControl1(titulo, id, contexto, icon) {
+    collapseControl1(titulo, id, contexto, icon, style) {
         const collapse = document.createElement("div")
         collapse.innerHTML = `
-            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
+            <a class="nav-link ${style}" 
                         data-bs-toggle="collapse" 
                         href="#${id}" 
                         role="button" aria-expanded="true" 

@@ -35,52 +35,51 @@ class Gestion {
     makerHTMLProyeccion(area, linea, programa) {
         //Iniciamos colocando los titulos de esta sección y limpiando el escritorio
 
-
         document.getElementById("conteneder-bar-proyectos").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
 
         //Colocamos el ttulo de la consejería
         const Título = document.createElement('div');
-        Título.className = "fs-3 fw-bold text-secondary"
-        Título.textContent = area.nombre
+        Título.className = "ps-2 bg-secondary text-white fw-bold"
+        Título.style.fontSize="18px"
+        Título.textContent = this.parent.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
-        Título2.className = "ms-2 fs-4 text-secondary"
-        Título2.textContent = linea.nombre
-
+        Título2.className = "ps-2 bg-secondary text-warning fw-medium"
+        Título2.style.fontSize="16px"
+        Título2.textContent = this.nombre
         cEscritorio.appendChild(Título2)
 
         //Colocamos el título del programa
         const Título3 = document.createElement('div');
-        Título3.className = "ms-3 fs-5 text-secondary"
-        Título3.textContent = programa.nombre
+        Título3.className = "ps-2 bg-secondary text-info"
+        Título3.style.fontSize="15px"
+        Título3.textContent = this.nombre
         cEscritorio.appendChild(Título3)
 
         //Colocamos el título del proyecto
         const Título4 = document.createElement('div');
-        Título4.className = "ms-4 mb-1 fs-6 text-success border-bottom border-4 w-60 border-success"
+        Título4.className = "pe-4 pb-2 bg-secondary shadow text-white text-end border border-top border-1 border-white sticky-top"
+        Título4.style.fontSize="16px"
         Título4.textContent = this.nombre
         cEscritorio.appendChild(Título4)
 
-        const barraNavegar = document.createElement("nav")
-        barraNavegar.className = "navbar navbar-expand-lg bg-secondary"
-        barraNavegar.innerHTML = `
-        <div class="navbar-nav">
-        <a class="navbar-brand text-white ms-3" href="#">PANEL PROYECTOS</a>
-            <a class="nav-link text-white" href="#" id="lnkArea">Area / </a>
-            <a class="nav-link text-white" href="#" id="lnkLinea">Linea / </a>
-            <a class="nav-link text-white" href="#" id="lnkPrograma">Programa / </a>
-            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
-            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+        const barraNavegar = document.getElementById("navbarplan")
+         barraNavegar.innerHTML = `
+            <a class="col-auto nav-link m-2 fw-bold"  href="#">PANEL PROYECTOS / </a>
+            <a class="col-auto nav-link m-2"  href="#" id="lnkArea">Area / </a>
+            <a class="col-auto nav-link m-2"  href="#" id="lnkLinea">Linea / </a>
+            <a class="col-auto nav-link m-2"  href="#" id="lnkPrograma">Programa / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkVisor"> <i class="bi bi-eyeglasses me-2"></i>Visor / </a>
+            <a class="col-auto nav-link m-2" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
                 aria-controls="offcanvasExample" id="linkNotas">
-                Notas
+                <i class="bi bi-sticky me-2"></i> Notas
             </a>
-        </div>
+    
         `
-        cEscritorio.appendChild(barraNavegar)
         const linkArea = document.getElementById("lnkArea")
         linkArea.onclick = () => {
             area.makerHtmlAreasItem()
@@ -91,7 +90,6 @@ class Gestion {
             linea.parent = area
             linea.makerHTMLLineaPanel()
         }
-        cEscritorio.appendChild(barraNavegar)
         const linkPrograma = document.getElementById("lnkPrograma")
         linkPrograma.onclick = () => {
             this.parent.makerHTMLProgramaPanel(area, linea)
@@ -110,8 +108,6 @@ class Gestion {
             //Carga las notas del área activa
             cargar_notas_consultor(area)
         }
-
-        cEscritorio.appendChild(barraNavegar)
         //============================================================
 
 
@@ -127,12 +123,13 @@ class Gestion {
 
         //===================================================
         let labelFree = document.createElement("label")
-        labelFree.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree.className = "labelorg-orange-light text-secondary border border-1 border-warning mt-3"
         labelFree.textContent = "Nombre del proyecto"
         cEscritorio.appendChild(labelFree)
 
+
         const intNombre = document.createElement("input")
-        intNombre.className = "form-control mb-2"
+        intNombre.className = "form-control mb-2 ms-2"
         cEscritorio.appendChild(intNombre)
 
 
@@ -147,13 +144,13 @@ class Gestion {
 
         //===================================================
         let labelFree2 = document.createElement("label")
-        labelFree2.className = "form-label mb-2 fw-medium text-success"
+        labelFree2.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree2.textContent = "Nombre administrador / coordinador"
         cEscritorio.appendChild(labelFree2)
 
 
         const intAdministrador = document.createElement("input")
-        intAdministrador.className = "form-control mb-2"
+        intAdministrador.className = "form-control mb-2 ms-2"
         cEscritorio.appendChild(intAdministrador)
 
 
@@ -167,13 +164,13 @@ class Gestion {
         //===================================================
         //===================================================
         let labelFree3 = document.createElement("label")
-        labelFree3.className = "form-label mb-2 fw-medium text-success"
+        labelFree3.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree3.textContent = "Objetivo General"
         cEscritorio.appendChild(labelFree3)
 
 
         const intObjetivo = document.createElement("textarea")
-        intObjetivo.className = "form-control mb-2"
+        intObjetivo.className = "form-control mb-2 ms-2"
         intObjetivo.rows = 3
         cEscritorio.appendChild(intObjetivo)
 
@@ -187,13 +184,13 @@ class Gestion {
         //===================================================
         //===================================================
         let labelFree4 = document.createElement("label")
-        labelFree4.className = "form-label mb-2 fw-medium text-success"
+        labelFree4.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree4.textContent = "Mandato"
         cEscritorio.appendChild(labelFree4)
 
 
         const intMandato = document.createElement("textarea")
-        intMandato.className = "form-control mb-2"
+        intMandato.className = "form-control mb-2 ms-2"
         intMandato.rows = 6
         cEscritorio.appendChild(intMandato)
 
@@ -207,13 +204,13 @@ class Gestion {
         //===================================================
         //===================================================
         let labelFree5 = document.createElement("label")
-        labelFree5.className = "form-label mb-2 fw-medium text-success"
+        labelFree5.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree5.textContent = "Aclaraciones"
         cEscritorio.appendChild(labelFree5)
 
 
         const intAclaraciones = document.createElement("textarea")
-        intAclaraciones.className = "form-control mb-2 bg-warning-subtle"
+        intAclaraciones.className = "form-control mb-2 ms-2 bg-warning-subtle"
         intAclaraciones.rows = 6
         cEscritorio.appendChild(intAclaraciones)
 
@@ -296,12 +293,12 @@ class Gestion {
 
         //===================================================
         let labelFree7 = document.createElement("label")
-        labelFree7.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree7.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree7.textContent = "Porcentaje en el programa"
         cEscritorio.appendChild(labelFree7)
 
         const inputIndicadorProy = document.createElement("input")
-        inputIndicadorProy.className = "form-control mb-2 fs-4 text-success"
+        inputIndicadorProy.className = "form-control mb-2 ms-2 fs-4 text-success"
         cEscritorio.appendChild(inputIndicadorProy)
 
         inputIndicadorProy.addEventListener('input', () => {
@@ -312,12 +309,12 @@ class Gestion {
         //===================================================
         //===================================================
         let labelFree8 = document.createElement("label")
-        labelFree8.className = "form-label mb-2 fw-medium text-success mt-3"
+        labelFree8.className = "labelorg-orange-light text-secondary border border-1 border-warning"
         labelFree8.textContent = "Porcentaje cumplimiento"
         cEscritorio.appendChild(labelFree8)
 
         const inputCumplimientoProy = document.createElement("input")
-        inputCumplimientoProy.className = "form-control mb-2 fs-4"
+        inputCumplimientoProy.className = "form-control mb-2 fs-4 ms-2"
         cEscritorio.appendChild(inputCumplimientoProy)
 
         inputCumplimientoProy.addEventListener('input', () => {
@@ -328,11 +325,13 @@ class Gestion {
         //===================================================
 
         //Collapse para articulacion / versión simplificada
-        const collapseArticulacion = HTML.collapseControl1("Articulación con Consejerías y mandatos", "cArticulacionCollapse", "articulacion", 'bi-arrow-left-right')
+        const collapseArticulacion = HTML.collapseControl1("Articulación con Consejerías y mandatos", 
+        "cArticulacionCollapse", "articulacion", 
+        'bi-arrow-left-right',"text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
         cEscritorio.appendChild(collapseArticulacion)
 
         const Título5 = document.createElement('div');
-        Título5.className = "ms-1 mt-4 mb-2 fs-4 border-bottom border-2 border-secondary fw-medium text-success"
+        Título5.className = "text-white collapse-org bg-warning shadow-sm mt-2"
         Título5.textContent = "Objetivos específicos"
         cEscritorio.appendChild(Título5)
         const btAgregarArticulacion = document.createElement("button")

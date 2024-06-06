@@ -43,13 +43,22 @@
 </head>
 
 <header class="sticky-top">
-
-    <div class="fs-3 text-white fw-medium" style="background-color: #566573;">
-        <img class="m-2" src="../scr/logo.png" width="50px" height="50px">
-        Sistema de Buen Gobierno ONIC
-        <img src="../scr/Banner-separador.png" width="100%" height="40px">
+    <div class="row fs-3 text-white fw-medium bg-warning">
+        <div class="col-auto">
+            <img class="m-2" src="../scr/logo.png" width="50px" height="50px">
+        </div>
+        <div class="col">
+            Organización Nacional Indígena de Colombia ONIC
+        </div>
     </div>
-
+    <div class="row">
+        <div class="text-end text-white fs-5 pe-5 bg-secondary">
+            Sistema de Gestión de Plan Estratégico (Plansbgonic v.1.0)
+        </div>
+        
+    </div>
+    <div id="navbarplan" class="row bg-warning-subtle shadow-sm container-fluid flex-nowrap font-secondary">
+    </div>
 </header>
 
 
@@ -76,7 +85,7 @@
                         </li>
                         <li>
                             <a href="#panel-areas" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                            onclick="cargarProyectos()">
+                                onclick="cargarProyectos()">
                                 <i class="fs-3 fw-bold bi-file-earmark-person text-white"></i> <span
                                     class="ms-1 d-none d-sm-inline text-white">Consejerías</span> </a>
                             <ul class="collapse hide nav flex-column ms-2" id="panel-areas" data-bs-parent="#menu">
@@ -105,19 +114,18 @@
 
                 </div>
             </div>
-            <div class="col py-3">
+            <div class="col">
                 <div>
                     <a href="#" class="nav-link p-1" id="conteneder-bar-proyectos" hidden="true">
-                        <button class="btn btn-outline-secondary m-1" onclick="CrearProyecto()">
+                        <button class="btn btn-outline-secondary" onclick="CrearProyecto()">
                             <i class="bi bi-calendar2-plus"></i> Agregar vigencia</button>
-                        <button class="btn btn-outline-secondary m-1" onclick="BorrarVigencia()">
+                        <button class="btn btn-outline-secondary" onclick="BorrarVigencia()">
                             <i class="bi bi-calendar-x"></i> Borrar vigencia</button>
-                        <button class="btn btn-outline-secondary m-1" onclick="AgregarArea()">
+                        <button class="btn btn-outline-secondary" onclick="AgregarArea()">
                             <i class="bi bi-person-fill-add"></i> Agregar consejería</button>
                     </a>
                 </div>
-                <div id="panel-escritorio" class="m-2">
-
+                <div id="panel-escritorio" class="">
 
                 </div>
 
@@ -209,16 +217,17 @@
         <ol class="list-group list-group-numbered" id="lstNotasConsultor">
             <li class="list-group-item d-flex justify-content-between align-items-start bg-warning-subtle">
                 <div class="ms-2 me-auto">
-                    
+
                     <div class="collapse " id="collapseNota" style="width: 300px;">
                         <a class="nav-link mb-3" role="button">
                             Referencia
                         </a>
                         <p class="text-end">fecha modificado</p>
                         <p class="text-end">autor</p>
-                        <button type="button" class="btn btn-outline-secondary"> <i class="bi bi-trash3 me-2"></i> Eliminar nota</button>
+                        <button type="button" class="btn btn-outline-secondary"> <i class="bi bi-trash3 me-2"></i>
+                            Eliminar nota</button>
 
-                        
+
                     </div>
                 </div>
                 <span class="badge text-bg-primary rounded-pill">sin resolver</span>

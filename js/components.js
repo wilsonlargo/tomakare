@@ -162,7 +162,7 @@ class clsProyecto {
                     articulacion.consejeria,
                     articulacion.mandatos,
                     articulacion.id,
-                    );
+                );
                 return newArticulacionPrj;
             })
 
@@ -253,14 +253,13 @@ class clsProyecto {
             area.id = i++
             //Este es el contenedor general del área
             const component = document.createElement('li')
-            component.className = "w-100 border-bottom border-4"
+            component.className = "w-100"
             component.innerHTML = `
-                <a href="#" class="nav-link px-0 text-white" id="${"btnArea" + area.id}">
+                <a href="#" class="nav-link px-0 text-white item-panel fw-bold" id="${"btnArea" + area.id}">
                      ${area.id + 1}.
-                    <span class="d-none d-sm-inline text-white" id="${"btnArealabel" + area.id}">
-                        ${area.nombre}
-                    </span>
-            
+                    <span class="d-none d-sm-inline text-white fw-normal" id="${"btnArealabel" + area.id}">
+                    ${area.nombre}
+                    </span>           
                  </a>  
                 `
             document.getElementById("panel-areas").appendChild(component)
@@ -304,7 +303,7 @@ class clsProyecto {
                  <p class="text-secondary tex-org-big-gris">${this.clsAreas.length}</p>
                  <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2" id="contador-areas">
                  CONSEJERÍAS
-             </a>
+                </a>
                 </p>
                 `
         ContContadores.appendChild(ContConsejerias)
@@ -340,12 +339,12 @@ class clsProyecto {
         const Contvigencias = document.createElement("div")
         Contvigencias.className = "col-sm-12 col-md-6 col-lg-4 col-xl-2 border border-1 m-2 shadow rounded mt-2"
         Contvigencias.innerHTML = `
-                                        <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
-                                            <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2" id="contador-gestiones">
-                                                PROYECTOS
-                                            </a>
-                                        </p>
-                                        `
+            <p class="text-secondary tex-org-big-gris">${contadorProyectos}</p>
+                <a href="#" class="nav-link text-center text-foot-foto bg-secondary text-white p-2" id="contador-gestiones">
+                    PROYECTOS
+                </a>
+            </p>
+            `
         ContContadores.appendChild(Contvigencias)
         contenedor.appendChild(ContContadores)
 
@@ -438,24 +437,22 @@ class Area {
 
         //Colocamos el t+itulo de la consejería
         const Título = document.createElement('div');
-        Título.className = "mb-1 fs-3 fw-bold text-secondary border-bottom border-4 border-success"
+        Título.className = "mb-1 bg-secondary text-white p-2 fw-bold sticky-top"
+        Título.style.fontSize = "16px"
+
         Título.textContent = this.nombre
         cEscritorio.appendChild(Título)
 
         //Barra de navegación que me lleva al parametrizador
-        const barraNavegar = document.createElement("nav")
-        barraNavegar.className = "navbar navbar-expand-lg mb-3 bg-secondary"
+        const barraNavegar = document.getElementById("navbarplan")
         barraNavegar.innerHTML = `
-        <div class="navbar-nav">
-            <a class="navbar-brand text-white ms-3" href="#">PANEL CONSEJERÍA</a>
-            <a class="nav-link text-white" href="#" id="lnkVisor">Visor</a>
-            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
-                aria-controls="offcanvasExample" id="linkNotas">
-                Notas
-            </a>
-        </div>
+        <a class="col-auto nav-link m-2" href="#">PANEL CONSEJERÍA / </a>
+        <a class="col-auto nav-link m-2" href="#" id="lnkVisor"> <i class="bi bi-eyeglasses me-2"></i>Visor / </a>
+        <a class="col-auto nav-link m-2" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+            aria-controls="offcanvasExample" id="linkNotas">
+            <i class="bi bi-sticky me-2"></i> Notas
+        </a>
         `
-        cEscritorio.appendChild(barraNavegar)
         const linkVisor = document.getElementById("lnkVisor")
         linkVisor.onclick = () => {
             parametrizador(this)
@@ -469,18 +466,15 @@ class Area {
             //Carga las notas del área activa
             cargar_notas_consultor(this)
         }
-
-
-
         //========================================================
 
-        let labelFree = document.createElement("label")
-        labelFree.className="form-label fw-medium text-success mb-2"
-        labelFree.textContent="Nombre del área"
+        let labelFree = document.createElement("div")
+        labelFree.className = "labelorg-orange-light text-secondary border border-1 border-warning"
+        labelFree.textContent = "Nombre del área"
         document.getElementById("panel-escritorio").appendChild(labelFree)
 
         const intNomArea = document.createElement("input")
-        intNomArea.className="form-control mb-2"
+        intNomArea.className = "form-control mb-2 ms-2"
         document.getElementById("panel-escritorio").appendChild(intNomArea)
 
         intNomArea.addEventListener('input', () => {
@@ -494,16 +488,16 @@ class Area {
         //========================================================
 
 
-
-
-
-
-
         //Input administrador de área
-        const adminArea = HTML.inputContol(this, this.id + "adminArea", "Administrador del área / consejería")
-        document.getElementById("panel-escritorio").appendChild(adminArea)
+        let labelFree2 = document.createElement("div")
+        labelFree2.className = "labelorg-orange-light text-secondary border border-1 border-warning"
+        labelFree2.textContent = "Administrador del área o administrador"
+        document.getElementById("panel-escritorio").appendChild(labelFree2)
+
+        const intAdminArea = document.createElement("input")
+        intAdminArea.className = "form-control mb-2 ms-2"
+        document.getElementById("panel-escritorio").appendChild(intAdminArea)
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intAdminArea = document.getElementById(this.id + "adminArea")
         intAdminArea.addEventListener('input', () => {
             this.administrador = intAdminArea.value
             GuardarVigencia()
@@ -512,10 +506,15 @@ class Area {
 
 
         //Input pueblo de área
-        const puebloArea = HTML.inputContol(this, this.id + "puebloArea", "Pueblo mandatario")
-        document.getElementById("panel-escritorio").appendChild(puebloArea)
+        let labelFree3 = document.createElement("div")
+        labelFree3.className = "labelorg-orange-light text-secondary border border-1 border-warning"
+        labelFree3.textContent = "Pueblo mandatario"
+        document.getElementById("panel-escritorio").appendChild(labelFree3)
+
+        const intPuebloArea = document.createElement("input")
+        intPuebloArea.className = "form-control mb-2 ms-2"
+        document.getElementById("panel-escritorio").appendChild(intPuebloArea)
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intPuebloArea = document.getElementById(this.id + "puebloArea")
         intPuebloArea.addEventListener('input', () => {
             this.pueblo = intPuebloArea.value
             GuardarVigencia()
@@ -524,10 +523,17 @@ class Area {
 
 
         //Creamos ahora los input, detalle
-        const detalleArea = HTML.inputTextArea(this.id + "detalleArea", "Descripción del área")
-        document.getElementById("panel-escritorio").appendChild(detalleArea)
+        let labelFree4 = document.createElement("div")
+        labelFree4.className = "labelorg-orange-light text-secondary border border-1 border-warning"
+        labelFree4.textContent = "Descripción del área"
+        document.getElementById("panel-escritorio").appendChild(labelFree4)
+
+
+        const intDetArea = document.createElement("textarea")
+        intDetArea.className = "form-control mb-2 ms-2 mb-3"
+        intDetArea.rows = 5
+        document.getElementById("panel-escritorio").appendChild(intDetArea)
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intDetArea = document.getElementById(this.id + "detalleArea")
         intDetArea.addEventListener('input', () => {
             this.detalle = intDetArea.value
             GuardarVigencia()
@@ -536,10 +542,16 @@ class Area {
 
 
         //Input funciones
-        const funcionesArea = HTML.inputTextArea(this.id + "funcionesArea", "Funciones del área/consejería")
-        document.getElementById("panel-escritorio").appendChild(funcionesArea)
+        let labelFree5 = document.createElement("div")
+        labelFree5.className = "labelorg-orange-light text-secondary border border-1 border-warning"
+        labelFree5.textContent = "Funciones del área/consejería"
+        document.getElementById("panel-escritorio").appendChild(labelFree5)
+
+        const intFuntionsArea = document.createElement("textarea")
+        intFuntionsArea.className = "form-control mb-2 ms-2 mb-3"
+        intFuntionsArea.rows = 5
+        document.getElementById("panel-escritorio").appendChild(intFuntionsArea)
         //Configuramos el control de entrada para que se actualice, con un metodo oninput
-        const intFuntionsArea = document.getElementById(this.id + "funcionesArea")
         intFuntionsArea.addEventListener('input', () => {
             this.funciones = intFuntionsArea.value
             GuardarVigencia()
@@ -581,12 +593,11 @@ class Area {
 
         //Muestra un indicador de avance
         const indicadorAvance = document.createElement("div")
-        indicadorAvance.className = "border border-2 p-2 ms-1"
+        indicadorAvance.className = "p-2 ms-2 mb-3 bg-secondary text-white"
         indicadorAvance.style.width = "100px"
         indicadorAvance.innerHTML = `
                 <p class="text-center fs-3">${avance}%</p>
-                <a class="nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
-
+                <a class=" border border-1 border-white nav-link active text-center ${colorAvance} ${colorAvanceTexto} P-2" aria-current="page" href="#" id="lbParametrizador">AVANCE</a>
         `
         cEscritorio.appendChild(indicadorAvance)
 
@@ -600,7 +611,7 @@ class Area {
         //Aquí se crea uan pestaña collapse para mostrar lso mandatos
         const collapseMandatos = document.createElement("div")
         collapseMandatos.innerHTML = `
-            <a class="nav-link mb-3 fs-4 text-secondary border-bottom border-4" 
+            <a class="nav-link mb-2 collapse-org bg-warning bg-gradient shadow-sm" 
             data-bs-toggle="collapse" href="#collapseMandatos" 
             role="button" aria-expanded="true" 
             aria-controls="collapseMandatos">
@@ -617,13 +628,10 @@ class Area {
             `
         cEscritorio.appendChild(collapseMandatos)
         //=========================================================
-
-
         //con esto identifica en que área está y agrega un indice
         const btnAgregarMandato = document.createElement("button")
         btnAgregarMandato.className = "btn btn-outline-secondary m-2"
         btnAgregarMandato.innerHTML = `<i class="bi bi-plus"></i> Agregar mandato`
-
 
         btnAgregarMandato.onclick = () => {
             AgregarMandato(this.id)
@@ -638,9 +646,10 @@ class Area {
             mandato.makerHtmlMandato();
         })
 
+        //Contenedor de lineas
         const collapseLineas = document.createElement("div")
         collapseLineas.innerHTML = `
-            <a class="nav-link mb-2 fs-4 text-secondary border-bottom border-4" 
+            <a class="nav-link mb-2 collapse-org bg-info bg-gradient shadow-sm" 
             data-bs-toggle="collapse" href="#collapseLineas" 
             role="button" aria-expanded="true" 
             aria-controls="collapseLineas">
@@ -658,7 +667,12 @@ class Area {
         cEscritorio.appendChild(collapseLineas)
 
         //Collapse para articulacion / versión simplificada
-        const collapseArticulacion = HTML.collapseControl1("Articulación de Consejerías", "cArticulacionCollapse", "articulacion", 'bi-arrow-left-right')
+        const collapseArticulacion = HTML.collapseControl1(
+            "Articulación de Consejerías",
+            "cArticulacionCollapse",
+            "articulacion",
+            "bi-arrow-left-right",
+            "text-white collapse-org bg-secondary bg-gradient shadow-sm")
         cEscritorio.appendChild(collapseArticulacion)
         //Agregar un boton para agregar un documento
         const btAgregarArticulacion = document.createElement("button")
@@ -682,7 +696,8 @@ class Area {
 
 
         //Collapse para libreria / versión simplificada
-        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria", "bi-journals")
+        const collapseLibros = HTML.collapseControl1("Librería / Anexos", "cLibreriaCollapse", "libreria",
+            "bi-journals", "text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
         cEscritorio.appendChild(collapseLibros)
         //Agregar un boton para agregar un documento
         const btAgregarLibro = document.createElement("button")
@@ -878,7 +893,7 @@ class Notas {
             //Actualzia también el título d ela nota
             document.getElementById("lbTituloNota" + this.id).textContent = intTemaNota.value
             lbFechamodificado.textContent = "Modificado el :" + now
-            lbModificador.textContent= "Modificado por: " + activeEmail
+            lbModificador.textContent = "Modificado por: " + activeEmail
             this.modificado = now
             GuardarVigencia()
         }
@@ -901,7 +916,7 @@ class Notas {
             this.comentario = intComentarioNota.value
             //Actualzia también el título d ela nota
             lbFechamodificado.textContent = "Modificado el :" + now
-            lbModificador.textContent= "Modificado por: " + activeEmail
+            lbModificador.textContent = "Modificado por: " + activeEmail
             this.modificado = now
             GuardarVigencia()
         }
@@ -919,7 +934,7 @@ class Notas {
             this.respuesta = intRespuestNota.value
             //Actualzia también el título d ela nota
             lbFechamodificado.textContent = "Modificado el :" + now
-            lbModificador.textContent= "Modificado por: " + activeEmail
+            lbModificador.textContent = "Modificado por: " + activeEmail
             this.modificado = now
             GuardarVigencia()
         }
@@ -945,7 +960,7 @@ class Notas {
         selEstado.onchange = () => {
             this.estado = selEstado.value
             lbFechamodificado.textContent = "Modificado el :" + now
-            lbModificador.textContent= "Modificado por: " + activeEmail
+            lbModificador.textContent = "Modificado por: " + activeEmail
             this.modificado = now
             span.style.background = colorNota[parseInt(this.estado)].color
             span.textContent = colorNota[parseInt(this.estado)].estado
@@ -1440,31 +1455,31 @@ class Linea {
 
         //Colocamos el título de la consejería
         const Título = document.createElement('div');
-        Título.className = "fs-3 fw-bold text-secondary"
+        Título.className = "ps-2 bg-secondary text-white fw-bold"
+        Título.style.fontSize = "16px"
         Título.textContent = this.parent.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
-        Título2.className = "ms-2 mb-2 fs-4 text-secondary border-bottom border-4 border-success"
+        Título2.className = "pe-2 pb-2 bg-secondary text-warning fw-medium text-end border-top border-1 border-white sticky-top"
+        Título2.style.fontSize = "14px"
         Título2.textContent = this.nombre
         cEscritorio.appendChild(Título2)
 
         //Barra navegación superior
-        const barraNavegar = document.createElement("nav")
-        barraNavegar.className = "navbar navbar-expand-lg bg-secondary"
+        const barraNavegar = document.getElementById("navbarplan")
         barraNavegar.innerHTML = `
-        <div class="navbar-nav">
-        <a class="navbar-brand text-white ms-3" href="#">PANEL LÍNEAS</a>
-            <a class="nav-link text-white" href="#" id="lnkArea">Area / </a>
-            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
-            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+            <a class="col-auto nav-link m-2 fw-bold" href="#" href="#">PANEL LÍNEAS / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkArea">Area / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkVisor"> <i class="bi bi-eyeglasses me-2"></i>Visor / </a>
+            <a class="col-auto nav-link m-2" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
                 aria-controls="offcanvasExample" id="linkNotas">
-                Notas
+                <i class="bi bi-sticky me-2"></i> Notas
             </a>
-        </div>
+    
+
         `
-        cEscritorio.appendChild(barraNavegar)
         const linkArea = document.getElementById("lnkArea")
         linkArea.onclick = () => {
             this.parent.makerHtmlAreasItem()
@@ -1484,9 +1499,6 @@ class Linea {
             cargar_notas_consultor(this.parent)
         }
 
-
-
-        cEscritorio.appendChild(barraNavegar)
         //===============================================
 
 
@@ -1728,41 +1740,38 @@ class Programa {
 
         //Colocamos el ttulo de la consejería
         const Título = document.createElement('div');
-        Título.className = "fs-3 fw-bold text-secondary"
-        Título.textContent = area.nombre
+        Título.className = "ps-2 bg-secondary text-white fw-bold"
+        Título.style.fontSize = "18px"
+        Título.textContent = this.parent.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
-        Título2.className = "ms-2 fs-4 text-secondary"
-        Título2.textContent = linea.nombre
-
+        Título2.className = "ps-2 bg-secondary text-warning fw-medium"
+        Título2.style.fontSize = "16px"
+        Título2.textContent = this.nombre
         cEscritorio.appendChild(Título2)
 
         //Colocamos el título del programa
         const Título3 = document.createElement('div');
-        Título3.className = "ms-3 mb-2 fs-5 text-secondary border-bottom border-4 w-60 border-success"
+        Título3.className = "pe-4 pb-2 bg-secondary text-info text-end border border-top border-1 border-white sticky-top"
+        Título3.style.fontSize = "16px"
         Título3.textContent = this.nombre
-
         cEscritorio.appendChild(Título3)
 
         //Creamos barra de navegación herarquica
-        const barraNavegar = document.createElement("nav")
-        barraNavegar.className = "navbar navbar-expand-lg bg-secondary mb-2"
+        const barraNavegar = document.getElementById("navbarplan")
         barraNavegar.innerHTML = `
-        <div class="navbar-nav">
-            <a class="navbar-brand text-white ms-3" href="#">PANEL PROGRAMAS</a>
-            <a class="nav-link text-white" href="#" id="lnkArea" hiden="true">Area / </a>
-            <a class="nav-link text-white" href="#" id="lnkLinea">Linea / </a>
-            <a class="nav-link text-white" href="#" id="lnkVisor">Visor / </a>
-            <a class="nav-link text-white" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
+            <a class="col-auto nav-link m-2 fw-bold" href="#" href="#">PANEL PROGRAMAS / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkArea" hiden="true">Area / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkLinea">Linea / </a>
+            <a class="col-auto nav-link m-2" href="#" id="lnkVisor"> <i class="bi bi-eyeglasses me-2"></i>Visor / </a>
+            <a class="col-auto nav-link m-2" data-bs-toggle="offcanvas" href="#offcanvasNotas" role="button"
                 aria-controls="offcanvasExample" id="linkNotas">
-                Notas
+                <i class="bi bi-sticky me-2"></i> Notas
             </a>
-        </div>
         `
         //Cada botón me regresa a un ivel superior
-        cEscritorio.appendChild(barraNavegar)
         const linkArea = document.getElementById("lnkArea")
         linkArea.onclick = () => {
             area.makerHtmlAreasItem()
@@ -1788,7 +1797,6 @@ class Programa {
             cargar_notas_consultor(area)
         }
 
-        cEscritorio.appendChild(barraNavegar)
         //===================================================
 
 
@@ -2038,6 +2046,7 @@ async function CrearProyecto() {
 
 }
 async function cargarProyectos() {
+    document.getElementById("navbarplan").innerHTML = ""
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
@@ -2088,12 +2097,13 @@ async function cargarProyectos() {
 }
 
 async function showVigencia(vigencia) {
+    document.getElementById("navbarplan").innerHTML = ""
     cargarProyectos()
     ActiveProyect = clsProyecto.loadAsInstance(vigencia);
     ActiveProyect.makerHtml()
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
-    
+
 
 
 }
@@ -2245,13 +2255,13 @@ async function AgregarLinea(dominio) {
 }
 
 function mostrar_escritorio() {
+    document.getElementById("navbarplan").innerHTML = ""
     document.getElementById("conteneder-bar-proyectos").hidden = true
     document.getElementById("panel-inicio").hidden = false
     document.getElementById("panel-escritorio").innerHTML = ""
 
 }
 function agregar_nota_consultor(dominio, referencia) {
-
     //Referenciamos el contenedor de notas y lo limpiamos
     const lstNotas = document.getElementById("lstNotasConsultor")
     lstNotas.innerHTML = ""
@@ -2299,6 +2309,241 @@ function cargar_notas_consultor(dominio) {
 }
 
 function parametrizador(area) {
+    document.getElementById("navbarplan").innerHTML = ""
+    const cEscritorio = document.getElementById("panel-escritorio")
+    cEscritorio.innerHTML = ""
+
+    //Colocamos el ttulo de la consejería
+    const Título = document.createElement('div');
+    Título.className = "ps-2 bg-secondary text-white fw-bold"
+    Título.style.fontSize = "18px"
+    Título.textContent = area.nombre
+    cEscritorio.appendChild(Título)
+
+    const Título2 = document.createElement('div');
+    Título2.className = "ps-2 bg-secondary text-warning fw-medium pb-3"
+    Título2.style.fontSize = "16px"
+    Título2.textContent = "Esquema general de la consejería, indicadores y avances"
+    cEscritorio.appendChild(Título2)
+
+
+    //Creamos el inicio de la tabla
+    const tabla = document.createElement("tabla")
+    tabla.className = "table-striped"
+    cEscritorio.appendChild(tabla)
+    const tbody = document.createElement("tbody")
+    tabla.appendChild(tbody)
+
+
+
+    area.cslLineas.forEach(linea => {
+        //Analizamos cuántas líneas hay por consejería
+        //Cada línea será una fila de la tabla
+        const tr_linea = document.createElement("tr")
+
+        const td_linea = document.createElement("td")
+        td_linea.appendChild(_put_Linea(linea))
+        tr_linea.appendChild(td_linea)
+
+        const td_program = document.createElement("td")
+        tr_linea.appendChild(td_program)
+
+
+        linea.clsPrograma.forEach(programa => {
+            const tr_programas = document.createElement("tr")
+            td_program.appendChild(tr_programas)
+
+            const td_programa = document.createElement("td")
+            td_programa.appendChild(_put_Programa(linea,programa))
+
+            tr_programas.appendChild(td_programa)
+
+            programa.clsGestion.forEach(gestion => {
+                const tr_gestion = document.createElement("tr")
+                tr_programas.appendChild(tr_gestion)
+                const td_gestion = document.createElement("td")
+                td_gestion.appendChild(_put_Gestion(linea,programa,gestion))
+                tr_gestion.appendChild(td_gestion)
+
+
+            })
+
+        })
+        tbody.appendChild(tr_linea)
+
+    })
+
+    function _put_Linea(linea) {
+        const td = document.createElement("div")
+        td.className = "item-schema bg-info border-primary shadow-sm"
+        td.innerHTML =
+            `
+        <div class="row text-white align-items-center">
+            <div class="col-auto fw-bold fs-4">
+                ${linea.id + 1}.
+            </div>
+            <div class="col" id="cOpenLinea${linea.id}">
+                ${linea.nombre}
+            </div>
+        </div>
+        <div class="row text-white align-items-center">
+            <div class="col fw-bold text-end">
+                Meta
+            </div>
+            <div class="col fw-bold">
+            <input type="text" class="form-control" id="inAvanceLinea${linea.id}" value="${linea.meta}">
+            </div>      
+        </div>
+        <div class="row text-white align-items-center">
+            <div class="col fw-bold text-end">
+                Avance
+            </div>
+            <div class="col fs-6">
+                ${linea.avance}%
+            </div>      
+        </div>
+        `
+
+
+        return td
+    }
+    function _put_Programa(linea,programa) {
+        const td = document.createElement("div")
+        td.className = "item-schema border-warning bg-warning-subtle shadow-sm"
+
+        td.innerHTML =
+            `
+            <div class="row text-secondary align-items-center">
+                <div class="col-auto fw-bold fs-4">
+                    ${programa.id + 1}.
+                </div>
+                <div class="col" id="cOpenPrograma${linea.id}${programa.id}">
+                    ${programa.nombre}
+                </div>
+            </div>
+            <div class="row text-secondary align-items-center">
+                <div class="col fw-bold text-end">
+                    Meta
+                </div>
+                <div class="col fw-bold">
+                <input type="text" class="form-control" id="inMetaPrograma${linea.id}${programa.id}" value="${programa.meta}">
+                </div>
+            </div>
+            <div class="row text-secondary align-items-center">
+                <div class="col fw-bold text-end">
+                    Avance
+                </div>
+                <div class="col fs-6">
+                    ${programa.avance}%
+                </div>      
+            </div>
+            `
+
+        return td
+    }
+    function _put_Gestion(linea,programa,gestion) {
+        const td = document.createElement("div")
+        td.className = "item-schema border-secondary bg-light shadow-sm"
+        td.innerHTML =
+            `
+        <div class="row text-secondary align-items-center">
+            <div class="col-auto fw-bold fs-4">
+                ${gestion.id + 1}.
+            </div>
+            <div class="col" id="cOpenGestion${linea.id}${programa.id}${gestion.id}">
+                ${gestion.nombre}
+            </div>
+        </div>
+        <div class="row text-secondary align-items-center">
+            <div class="col fw-bold text-end">
+                Meta
+            </div>
+            <div class="col fw-bold">
+                <input type="text" class="form-control" id="inAvanceGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.indicador}">
+            </div>      
+        </div>
+        <div class="row text-secondary align-items-center">
+            <div class="col fw-bold text-end">
+                Avance
+            </div>
+            <div class="col fs-6">
+             <input type="text" class="form-control" id="inMetaGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.cumplimiento}">
+            </div>      
+        </div>
+        `
+        
+
+        return td
+    }
+
+    area.cslLineas.forEach(linea => {
+        //Configuramos para que se actualize la línea y su meta
+        const refAvanceLinea = document.getElementById("inAvanceLinea" + linea.id)
+        refAvanceLinea.oninput = () => {
+            linea.meta = refAvanceLinea.value
+            GuardarVigencia()
+
+        }
+        refAvanceLinea.value = linea.meta
+        const cOpenLiena = document.getElementById("cOpenLinea" + linea.id)
+        cOpenLiena.onclick = () => {
+            const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id]
+            elemento.makerHTMLLineaPanel(area)
+        }
+        linea.clsPrograma.forEach(programa => {
+            //Configuramos para que se actualize el programa y su meta
+            const refAvancePrograma = document.getElementById("inMetaPrograma" + linea.id + programa.id)
+            refAvancePrograma.oninput = () => {
+                programa.meta = refAvancePrograma.value
+                GuardarVigencia()
+            }
+            refAvancePrograma.value = programa.meta
+
+            const cOpenPrograma = document.getElementById("cOpenPrograma" + linea.id + programa.id)
+            cOpenPrograma.onclick = () => {
+                const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id]
+                elemento.makerHTMLProgramaPanel(area, linea)
+            }
+            programa.clsGestion.forEach(gestion => {
+                //Configuramos para que se actualize la gestion y su meta
+                const refMetaGestion = document.getElementById("inMetaGestion" + linea.id + programa.id + gestion.id)
+                refMetaGestion.oninput = () => {
+                    gestion.indicador = refMetaGestion.value
+                    GuardarVigencia()
+                }
+                refMetaGestion.value = gestion.indicador
+
+                const refAvanceGestion = document.getElementById("inAvanceGestion" + linea.id + programa.id + gestion.id)
+                refAvanceGestion.oninput = () => {
+                    gestion.cumplimiento = refAvanceGestion.value
+                    GuardarVigencia()
+                }
+                refAvanceGestion.value = gestion.cumplimiento
+
+                const cOpenProyecto = document.getElementById("cOpenGestion" + linea.id + programa.id + gestion.id)
+                cOpenProyecto.onclick = () => {
+                    const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
+
+                    elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
+                }
+
+
+            })
+
+
+        })
+
+
+    })
+
+
+
+
+
+}
+
+function parametrizador2(area) {
+    document.getElementById("navbarplan").innerHTML = ""
     const cEscritorio = document.getElementById("panel-escritorio")
     cEscritorio.innerHTML = ""
     //Colocamos el ttulo de la consejería
