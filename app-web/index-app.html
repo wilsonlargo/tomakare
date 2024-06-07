@@ -39,6 +39,10 @@
         integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/"
         crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 </head>
 
@@ -55,7 +59,7 @@
         <div class="text-end text-white fs-5 pe-5 bg-secondary">
             Sistema de Gestión de Plan Estratégico (Plansbgonic v.1.0)
         </div>
-        
+
     </div>
     <div id="navbarplan" class="row bg-warning-subtle shadow-sm container-fluid flex-nowrap font-secondary">
     </div>
@@ -130,14 +134,8 @@
                 </div>
 
                 <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" type="button"
-                        data-bs-toggle="collapse" onclick="visorAreas()" data-bs-target="#collapseVigencias"
-                        aria-expanded="false" aria-controls="#collapseVigencias">
-                        <i class="bi bi-calendar2-plus fs-1"></i> Módulo de Gestión
-                        <hr class="border border-4">
-                        <p class="">Sistema de gestión de actividades, programas y estartegias de la ONIC</p>
-                    </button>
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
+                        onclick="muestra()">
                         <i class="bi bi-file-earmark-text fs-1"></i> Módulo Documental
                         <hr class="border border-4">
                         <p class="">Sistema de administración de documentos, certificados</p>
@@ -153,22 +151,75 @@
         </div>
     </div>
 
+    <div id="element-to-print">
+
+        <div class="row m-5 align-items-center">
+            <div class="col-auto">
+                <img src="../scr/logo.png" style="width: 100px; height: 100px;">
+            </div>
+            <div class="col fw-bold fs-3">ORGANICACIÓN INDÍGENA DE COLOMBIA</div>
+        </div>
+        <div class="m-5">
+            <div class="row">
+                <div class="col text-end">
+                    CERT No. 234567578
+                </div>
+            </div>
+            <div class="text-center mt-3 mb-3 h1 fw-bold text-success">CERTIFICADO</div>
+            <p class="mt-2 mt-2" style="text-align: justify;">La Organización Nacional Indígena de Colombia certifica
+                que NOMBRE DEL BENEFICIARIO, Identificado con documento 89.000.000, se encuentra registrado en nuestra
+                base de datos y que forma parte del resguardo y comunidad. El presente certificado se da a los (DD) días
+                del mes de (MM) de 2024.
+            </p>
+            <a class="nav-link ms-5 mb-2" href="https://getbootstrap.com/docs/5.3/components/navbar/">Ver este enlace
+                para validar este documento</a>
+
+            <div class="row">
+                <div class="col">
+
+                </div>
+                <div class="col text-center">
+                    <img src="../scr/fwl.png" style="width: 100px; height: 100px;">
+                </div>
+                <div class="col">
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col">
+
+                </div>
+                <div class="col text-center">
+                    FIRMA AUTORIZADA
+                </div>
+                <div class="col">
+
+                </div>
+
+            </div>
 
 
 
+
+        </div>
+
+
+    </div>
     <script>
-        function start() {
+        function muestra() {
 
-            var doc = new jsPDF()
-            //var img = new Image()
-            //img.src = '../scr/logo.png'
-            //doc.addImage(img, 'png', 10, 78, 12, 15)
+            var opt = {
+                margin: 1,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3 },
+                jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+            var element = document.getElementById('element-to-print');
+            var worker = html2pdf().set(opt).from(element).save();
 
-            doc.setFontSize(12)
-
-            doc.splitTextToSize("esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes  esperamso que sea del mejora agrado para todos ustedes esperamso que sea del mejora agrado para todos ustedes", 1)
-
-            doc.save('a4.pdf')
 
         }
     </script>
