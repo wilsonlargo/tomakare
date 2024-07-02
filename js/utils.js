@@ -239,6 +239,10 @@ const HiddenControl = {
     }
 }
 
+function open_sig(){
+    location.href = "./app-GIS/index-gis.html";
+}
+
 const modal = {
 
     modalDelete(comando) {

@@ -1,0 +1,19 @@
+  var myIcon = L.divIcon({ className: 'my-div-icons',
+  html:
+  `
+<ul class="list-group" style="width:200px;">
+  <li class="list-group-item">An item</li>
+  <li class="list-group-item">A second item</li>
+  <li class="list-group-item">A third item</li>
+  <li class="list-group-item">A fourth item</li>
+  <li class="list-group-item">And a fifth one</li>
+</ul>
+  ` 
+});
+  // you can set .my-div-icon styles in CSS
+
+  L.marker([5.1, -75.55], {
+    icon: myIcon,
+    draggable: true,
+  }
+  ).addTo(map);

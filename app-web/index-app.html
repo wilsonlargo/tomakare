@@ -43,7 +43,7 @@
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
+        
 </head>
 
 <header class="sticky-top">
@@ -140,7 +140,7 @@
                         <hr class="border border-4">
                         <p class="">Sistema de administración de documentos, certificados</p>
                     </button>
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1">
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" onclick="open_sig()">
                         <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
                         <hr class="border border-4">
                         <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
@@ -219,7 +219,6 @@
             };
             var element = document.getElementById('element-to-print');
             var worker = html2pdf().set(opt).from(element).save();
-
 
         }
     </script>

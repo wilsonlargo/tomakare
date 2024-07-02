@@ -1,0 +1,15 @@
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.my-div-icon {
+    background-color: white;
+    padding: 20px;
+    font-size: 20pt;
+}
+
+.my-div-icon i {
+    margin-left: -20px;
+    margin-top: -50px;
+}
