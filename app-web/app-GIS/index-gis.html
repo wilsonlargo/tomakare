@@ -42,7 +42,8 @@
     <div class="collapse navbar-collapse text-white" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasCapas" role="button" aria-controls="offcanvasCapas">
+          <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasCapas" role="button"
+            aria-controls="offcanvasCapas">
             Panel capas
           </a>
         </li>
@@ -86,24 +87,52 @@
 
 </html>
 <div class="offcanvas offcanvas-start shadow" tabindex="-1" id="offcanvasCapas" data-bs-scroll="true"
-    data-bs-backdrop="false">
-    <div class="offcanvas-header bg-primary">
-        <h5 class="offcanvas-title text-white" id="offcanvasCapasLabel">Panel capas</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="btn-group w-100" role="group" aria-label="Basic example">
-
-        <button type="button" class="btn btn-secondary">
-          <label for="file-input-layers">
-            <i class="bi bi-folder2-open"></i>
-          </label>
+  data-bs-backdrop="false">
+  <div class="offcanvas-header bg-primary">
+    <h5 class="offcanvas-title text-white" id="offcanvasCapasLabel">Panel capas</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="btn-group w-100" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary">
+        <label for="file-input-layers">
+          <i class="bi bi-folder2-open"></i>
+        </label>
       </button>
-        <button type="button" class="btn btn-secondary" onclick="">
-          <i class="bi bi-download"></i>
-        </button>
+      <button type="button" class="btn btn-secondary" onclick="">
+        <i class="bi bi-download"></i>
+      </button>
+    </div>
+    <div class="accordion m-1" id="accordionExample">
+      <div class="accordion-item">
 
+        <div class="form-check">
+          <div class="row">
+            <div class="col-auto me-2">
+              <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseOne" aria-expanded="true"
+                aria-controls="collapseOne">
+                <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+              </a>
+            </div>
+            <div class="col-auto">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+              Default checkbox
+            </label>
+          </div>
+          </div>
+          
+
+        </div>
+
+        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            Config
+          </div>
+        </div>
+      </div>
     </div>
-    <input id="file-input-layers" style="visibility:hidden; width: 50px;" type="file" accept=".geojson" onchange="openfile(event)">
-    </div>
+    <input id="file-input-layers" style="visibility:hidden; width: 50px;" type="file" accept=".geojson"
+      onchange="openfile(event)">
+  </div>
 </div>
