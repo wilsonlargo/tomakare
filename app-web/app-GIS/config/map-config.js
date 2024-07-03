@@ -38,7 +38,8 @@ function openfile(control) {
 
     };
     lector.readAsText(archivo);
-    let a = fetch("001tablero.json")
-      console.log(a)
+    let a = fetch("./001tablero.json")
+    console.log(a)
+
 
 }
