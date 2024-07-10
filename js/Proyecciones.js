@@ -44,6 +44,7 @@ class Gestion {
         //Iniciamos colocando los titulos de esta sección y limpiando el escritorio
 
         document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("panel-biblioteca").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
 
@@ -869,6 +870,7 @@ class Evidencia {
 
 function listarGestiones() {
     document.getElementById("conteneder-bar-proyectos").hidden = true
+    document.getElementById("panel-biblioteca").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
 
     //Colocamos el título del programa

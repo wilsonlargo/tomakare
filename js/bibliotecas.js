@@ -31,6 +31,7 @@ class clsbiBlioteca {
                     libro.tipo,
                     libro.portada,
                     libro.ruta,
+                    libro.año,
                     libro.id,
                     libro.dominio,
                 );
@@ -64,19 +65,17 @@ class clsbiBlioteca {
     }
 
     makerHTMLBiblioteca(){
-        const escritorio = document.getElementById("panel-escritorio")
-        const btnAgregar = document.createElement("button ")
-        btnAgregar.type="button"
-        btnAgregar.className="btn btn-primary"
-        btnAgregar.textContent="Agregar"
-        escritorio.appendChild(btnAgregar)
+        const escritorio = document.getElementById("panel-biblioteca")
+
+
+
 
 
     }
 
 }
 class Documento {
-    constructor(consejeria, categoria, titulo, clave, descripcion, link, tipo, portada, ruta, id, dominio) {
+    constructor(consejeria, categoria, titulo, clave, descripcion, link, tipo, portada, ruta,año, id, dominio) {
         this.consejeria = consejeria;
         this.categoria = categoria
         this.titulo = titulo
@@ -86,6 +85,7 @@ class Documento {
         this.tipo = tipo
         this.portada = portada
         this.ruta = ruta
+        this.año = año
         this.id = id
         this.dominio = dominio
 
@@ -98,11 +98,11 @@ async function cargarBiblioteca() {
     document.getElementById("conteneder-bar-proyectos").hidden = true
     document.getElementById("panel-inicio").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
+    document.getElementById("panel-biblioteca").hidden = false
 
     const bibliotecas = GLOBAL.state.bibliotecas;
     ActiveBiblioteca = clsbiBlioteca.loadAsInstance(bibliotecas[0]);
-
-    console.log(bibliotecas)
+    ActiveBiblioteca.makerHTMLBiblioteca()
 
 
 }
@@ -114,7 +114,7 @@ async function GuardarBiblioteca() {
     }
 }
 async function AgregarDocumento() {
-    ActiveBiblioteca.addCaso(new Documento("Consejería", "Categoria", "Título", "", "Descripción", "#", "", "", "", 0, ActiveBiblioteca))
+    ActiveBiblioteca.addDocumento(new Documento("Consejería", "Categoria", "Título", "", "Descripción", "#", "", "", "","", 0, ActiveBiblioteca))
     GuardarBiblioteca()
     mensajes("Elemento creado", "Green")
 }

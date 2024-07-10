@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestion ONIC v.2</title>
 
-    
+
 
     <!--Toasty-->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -43,7 +43,7 @@
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        
+
 </head>
 
 <header class="sticky-top">
@@ -138,6 +138,32 @@
                 <div id="panel-escritorio" class="">
 
                 </div>
+                <div id="panel-biblioteca" class="" hidden="true">
+                    <div class="mb-1 mt-3 bg-secondary text-white p-2 fw-bold sticky-top" style="font-size: 16X;">
+                        Biblioteca y repositorio general
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-secondary" onclick="AgregarDocumento()">Agregar
+                            documento</button>
+                    </div>
+
+                    <div class="border border-1 border-secondary rounded mt-3 p-2">
+                        <table class="table m-1 table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Título</th>
+                                    <th scope="col">Autor</th>
+                                    <th scope="col">Año</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-biblioteca">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
 
                 <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
                     <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
@@ -146,7 +172,8 @@
                         <hr class="border border-4">
                         <p class="">Sistema de administración de documentos, certificados</p>
                     </button>
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" onclick="open_sig()">
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
+                        onclick="open_sig()">
                         <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
                         <hr class="border border-4">
                         <p class="">Sistema de información geográfica para apoyo de las consejerías</p>

@@ -443,6 +443,7 @@ class Area {
 
     makerHtmlAreasItem() {
         document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("panel-biblioteca").hidden = true
         document.getElementById("panel-inicio").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
@@ -2061,6 +2062,7 @@ async function cargarProyectos() {
     document.getElementById("navbarplan").innerHTML = ""
     document.getElementById("conteneder-bar-proyectos").hidden = false
     document.getElementById("panel-inicio").hidden = true
+    document.getElementById("panel-biblioteca").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
     try {
 
