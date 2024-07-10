@@ -87,8 +87,6 @@ class clsProyecto {
         }
 
 
-
-
         //Carga de la base de datos la clase articulación con todos sus campos
         const loadArticulacion = (fromcslArticulacion) => {
             return fromcslArticulacion.map(articulacion => {
@@ -151,8 +149,25 @@ class clsProyecto {
                     ProgramaNew);
                 GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
                 GestionNew.cslArticulacionPrj = loadArticulacionPrj(gestion.cslArticulacionPrj);
+                GestionNew.clsEvidencias= loadclsEvidencias(gestion.clsEvidencias);
                 return GestionNew;
             });
+        }
+
+        const loadclsEvidencias = (fromClsEvidencias) => {
+
+            return fromClsEvidencias.map(evidencia => {
+                const newEvidencias = new Evidencia(
+                    evidencia.nombre, 
+                    evidencia.tipo,
+                    evidencia.keys,
+                    evidencia.link,
+                    evidencia.descripcion,
+                    evidencia.id
+                );
+                return newEvidencias;
+            })
+
         }
 
         const loadArticulacionPrj = (fromArticulacionPrj) => {
@@ -167,7 +182,6 @@ class clsProyecto {
             })
 
         }
-
 
         const loadEspecificos = (fromClsEspecificos) => {
 

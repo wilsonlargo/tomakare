@@ -150,61 +150,7 @@
         </div>
     </div>
 
-    <div id="element-to-print">
 
-        <div class="row m-5 align-items-center">
-            <div class="col-auto">
-                <img src="../scr/logo.png" style="width: 100px; height: 100px;">
-            </div>
-            <div class="col fw-bold fs-3">ORGANICACIÓN INDÍGENA DE COLOMBIA</div>
-        </div>
-        <div class="m-5">
-            <div class="row">
-                <div class="col text-end">
-                    CERT No. 234567578
-                </div>
-            </div>
-            <div class="text-center mt-3 mb-3 h1 fw-bold text-success">CERTIFICADO</div>
-            <p class="mt-2 mt-2" style="text-align: justify;">La Organización Nacional Indígena de Colombia certifica
-                que NOMBRE DEL BENEFICIARIO, Identificado con documento 89.000.000, se encuentra registrado en nuestra
-                base de datos y que forma parte del resguardo y comunidad. El presente certificado se da a los (DD) días
-                del mes de (MM) de 2024.
-            </p>
-            <a class="nav-link ms-5 mb-2" href="https://getbootstrap.com/docs/5.3/components/navbar/">Ver este enlace
-                para validar este documento</a>
-
-            <div class="row">
-                <div class="col">
-
-                </div>
-                <div class="col text-center">
-                    <img src="../scr/fwl.png" style="width: 100px; height: 100px;">
-                </div>
-                <div class="col">
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col">
-
-                </div>
-                <div class="col text-center">
-                    FIRMA AUTORIZADA
-                </div>
-                <div class="col">
-
-                </div>
-
-            </div>
-
-
-
-
-        </div>
-
-
-    </div>
     <script>
         function muestra() {
 
@@ -216,8 +162,8 @@
                 jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
-            var element = document.getElementById('element-to-print');
-            var worker = html2pdf().set(opt).from(element).save();
+            //var element = document.getElementById('element-to-print');
+            //var worker = html2pdf().set(opt).from(element).save();
 
         }
     </script>
