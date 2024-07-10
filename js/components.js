@@ -207,8 +207,6 @@ class clsProyecto {
         proyecto.clsAreas = loadAreas(objProyecto.clsAreas);
         return proyecto;
 
-
-
     }
 
     //Función interna de esta clase para guardar la info dentro de esta clase activa

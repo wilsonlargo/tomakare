@@ -56,6 +56,8 @@ const coleccionProyectos = collection(db, "proyectos");
 // Referencia a las colecciones de usuarios
 const coleccionUsuarios = collection(db, "usuarios");
 
+const coleccionBiblioteca = collection(db, "biblioteca");
+
 
 
 /* Funciones base para manejar la base de datos de proyectos */
@@ -86,11 +88,35 @@ async function getUsuarios() {
     return usuarios;
 }
 
+async function getBibliotecas() {
+    const bibliotecas = [];
+    const querySnapshot = await getDocs(coleccionBiblioteca)
+    querySnapshot.forEach((doc) => {
+        bibliotecas.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    return bibliotecas;
+}
+
 // Función para agregar un objeto de proyecto a la base de datos
 async function addProyecto(objProyecto) {
     const docRef = await addDoc(coleccionProyectos, objProyecto);
     cargarProyectos()
     return docRef.id; 
+}
+
+async function addBiblioteca(objBiblioteca) {
+    const docRef = await addDoc(coleccionBiblioteca, objBiblioteca);
+    //cargarBibliotecas()
+    return docRef.id; 
+}
+
+async function borrarBiblioteca(id) {
+    await deleteDoc(doc(db, "biblioteca", id));
+    mensajes("se eliminó esta librería", "orange")
+    cargarBibliotecas()
 }
 
 // Funcion para eliminar un proyecto por id
@@ -112,11 +138,28 @@ async function getProyecto(id) {
     }) : null;
 }
 
+async function getBiblioteca(id) {
+    const docRef = doc(db, "biblioteca", id);
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.exists() ? ({
+        ...docSnap.data(),
+        id: docSnap.id,
+    }) : null;
+}
+
 // Función para actualizar un proyecto
 async function updateProyecto(proyecto) {
     const docRef = doc(db, "proyectos", proyecto.id);
     await setDoc(docRef, proyecto);
 }
+
+async function updateBiblioteca(biblioteca) {
+    const docRef = doc(db, "biblioteca", biblioteca.id);
+    await setDoc(docRef, biblioteca);
+}
+
+
 
 
 // Escuchar si hay en un cambio en la coleccion de proyectos y actualizar automaticamente la lista de proyectos
@@ -140,6 +183,17 @@ onSnapshot(coleccionUsuarios, (querySnapshot) => {
         });
     });
     aUsers = usuarios
+});
+
+onSnapshot(coleccionBiblioteca, (querySnapshot) => {
+    const bibliotecas = [];
+    querySnapshot.forEach((doc) => {
+        bibliotecas.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    GLOBAL.state.bibliotecas = bibliotecas;
 });
 
 //Función para autorizar ingreso a la base de datos
@@ -175,6 +229,11 @@ GLOBAL.firestore = {
     CredentialIn, //para iniciar la aplicación, evoca la función en este módulo (CredentialIn(email,pass))
     CredentialOut, //para cerrar la aplicación
     getUsuarios, //función para verificar usuarios programadores
+    getBibliotecas,
+    getBiblioteca,
+    addBiblioteca,
+    borrarBiblioteca,
+    updateBiblioteca,
 }
 
 //Función que escucha el cambio en inicio o cerrar sesión
