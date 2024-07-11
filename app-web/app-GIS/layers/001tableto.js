@@ -1,4 +1,4 @@
-{
+const layer_tablero={
     "type": "FeatureCollection",
     "features": [
       {
