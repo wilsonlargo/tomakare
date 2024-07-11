@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Documental ONIC</title>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
+
+    <!--Toasty-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!--Bootstrapp-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="./config.js"></script>
+    <script src="./loadData.js" async></script>
+
+</head>
+<header class="sticky-top">
+    <div class="row fs-3 text-white fw-medium bg-warning">
+        <div class="col-auto">
+            <img class="m-2" src="/scr/logo.png" width="50px" height="50px">
+        </div>
+        <div class="col">
+            Organización Nacional Indígena de Colombia ONIC
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-end text-white fs-5 pe-5 bg-secondary">
+            Sistema de Gestión ONIC
+        </div>
+
+    </div>
+
+</header>
+
+<body onload="createCaptcha()">
+    <div class="m-3">El presente panel le permite consultar información relacionada con el estado de afiliación y
+        existencia dentro
+        de la base de datos de la ONIC, por favor diligenciar los campos número de documento y la opción Capchat,
+        posterior a ello consultar.</div>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-auto text-center">
+            <div id="divdatos" hidden="true">
+                <small class="fw-bold">Número de documento</small>
+                <input type="text" class="form-control m-3" id="intDocumento">
+                <button type="button" class="btn btn-secondary" onclick="validar_datos()">Consultar</button>
+            </div>
+            <form onclick="validateCaptcha()" id="divcapcha">
+                <div id="captcha">
+                </div>
+                <input type="text" placeholder="Captcha" id="cpatchaTextBox" />
+                <button type="submit" class="btn btn-secondary">Verificar</button>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</body>
+<script>
+    var code;
+    function createCaptcha() {
+        //clear the contents of captcha div first 
+        document.getElementById('captcha').innerHTML = "";
+        var charsArray =
+            "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
+        var lengthOtp = 6;
+        var captcha = [];
+        for (var i = 0; i < lengthOtp; i++) {
+            //below code will not allow Repetition of Characters
+            var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+            if (captcha.indexOf(charsArray[index]) == -1)
+                captcha.push(charsArray[index]);
+            else i--;
+        }
+        var canv = document.createElement("canvas");
+        canv.id = "captcha";
+        canv.width = 100;
+        canv.height = 50;
+        var ctx = canv.getContext("2d");
+        ctx.font = "25px Georgia";
+        ctx.strokeText(captcha.join(""), 0, 30);
+        //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+        code = captcha.join("");
+        document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
+    }
+    function validateCaptcha() {
+        event.preventDefault();
+        debugger
+        if (document.getElementById("cpatchaTextBox").value == code) {
+            mensajes("Captcha valido","green")
+            document.getElementById("divdatos").hidden=false
+            document.getElementById("divcapcha").hidden=true
+        } else {
+            mensajes("Captcha invalido, intente de nuevo","red")
+            document.getElementById("divdatos").hidden=true
+            createCaptcha();
+        }
+    }
+</script>
+
+</html>

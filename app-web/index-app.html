@@ -38,14 +38,12 @@
     <script src="../js/Proyecciones.js"></script>
     <script src="../js/visores.js"></script>
 
-  
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
 </head>
 
 <header class="sticky-top">
@@ -153,7 +151,7 @@
                         <table class="table m-1 table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">Tipo</th>
                                     <th scope="col">Título</th>
                                     <th scope="col">Autor</th>
                                     <th scope="col">Año</th>
@@ -168,18 +166,22 @@
                 </div>
 
                 <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
-                        onclick="muestra()">
+
+                    <a class="btn btn-outline-secondary m-1" 
+                    href="./app-certificado/index-signature.html"
+                    role="button"
+                    style="width: 300px; height: 200px;">
                         <i class="bi bi-file-earmark-text fs-1"></i> Módulo Documental
                         <hr class="border border-4">
                         <p class="">Sistema de administración de documentos, certificados</p>
-                    </button>
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
-                        onclick="open_sig()">
-                        <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
-                        <hr class="border border-4">
-                        <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
-                    </button>
+                    </a>
+
+                        <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
+                            onclick="open_sig()">
+                            <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
+                            <hr class="border border-4">
+                            <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
+                        </button>
 
                 </div>
             </div>
@@ -187,22 +189,7 @@
     </div>
 
 
-    <script>
-        function muestra() {
 
-            var opt = {
-                margin: 1,
-                filename: 'myfile.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3 },
-                jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-            //var element = document.getElementById('element-to-print');
-            //var worker = html2pdf().set(opt).from(element).save();
-
-        }
-    </script>
 
 </body>
 

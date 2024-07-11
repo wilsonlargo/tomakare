@@ -17,3 +17,25 @@
     draggable: true,
   }
   ).addTo(map);
+
+   a = L.geoJSON(Parse, {
+            style: function (feature) {
+                //console.log(feature.properties.CLASIFICAC)
+                const propiedad_color = feature.properties.CLASIFICAC
+                //console.log(rango["Alto"][0])
+                try {
+                    return {
+                        color: "red",
+                        fillColor: "red",
+                        fillOpacity: rango[propiedad_color][0],
+                        weight: 1,
+                    };
+                } catch (error) {
+                    return { color: "", fillOpacity: 0 };
+                }
+            }
+        }).bindPopup(function (layer) {
+            return layer.feature.properties.CLASIFICAC;
+        }).addTo(map);
+
+        lis_layers.push(["layer_" + name_layer[0], a])
