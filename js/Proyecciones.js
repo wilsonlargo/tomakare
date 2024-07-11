@@ -17,6 +17,7 @@ class Gestion {
         this.parent = dominio;
         this.cslArticulacionPrj = [];
         this.clsEspecificos = [];
+        this.clsEvidencias = [];
     }
 
     addEspecificos(Especifico) {
@@ -32,10 +33,18 @@ class Gestion {
         this.cslArticulacionPrj.splice(id, 1);
     }
 
+    addEvidencias(Evidencias) {
+        this.clsEvidencias.push(Evidencias);
+    }
+    deleteEvidencias(id) {
+        this.clsEvidencias.splice(id, 1);
+    }
+
     makerHTMLProyeccion(area, linea, programa) {
         //Iniciamos colocando los titulos de esta sección y limpiando el escritorio
 
         document.getElementById("conteneder-bar-proyectos").hidden = true
+        document.getElementById("panel-biblioteca").hidden = true
         const cEscritorio = document.getElementById("panel-escritorio")
         cEscritorio.innerHTML = ''
 
@@ -405,6 +414,34 @@ class Gestion {
         })
 
 
+        //Collapse para evidencias / versión simplificada
+        const collapseEvidenicias = HTML.collapseControl1("Evidencias / Anexos", "cEvidenciasCollapse", "libreria",
+            "bi-journals", "text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
+        cEscritorio.appendChild(collapseEvidenicias)
+        const cEvidencias = document.getElementById("cEvidenciasCollapse")
+        //Agregar un boton para agregar un documento
+        const btAgregarLibro = document.createElement("button")
+        btAgregarLibro.className = "btn btn-outline-secondary m-1"
+        btAgregarLibro.innerHTML = `<i class="bi bi-plus"></i> Agregar documento`
+        btAgregarLibro.onclick = () => {
+            const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion", 0, this)
+            this.addEvidencias(evidencia)
+            GuardarVigencia()
+
+
+        }
+        document.getElementById("divlibreriabutton").appendChild(btAgregarLibro)
+
+        
+        cEvidencias.innerHTML = ''
+        let doc = 0;
+        this.clsEvidencias.forEach(evidencia => {
+
+            evidencia.id = doc++
+            evidencia.parentId = this
+            evidencia.makerHtmlEvidencia(evidencia);
+        })
+
 
         //Agregamos un boton borrar gestion
         const btnBorrarGestion = document.createElement("button")
@@ -443,6 +480,7 @@ class Gestion {
     }
 
 
+    
 
 
 }
@@ -523,6 +561,8 @@ class ArticulacionPrj {
     }
 }
 
+
+
 class oespecificos {
     constructor(nombre, meta, avance, id, dominio) {
         this.nombre = nombre;
@@ -600,10 +640,237 @@ class oespecificos {
 
 }
 
+class Evidencia {
+    constructor(nombre, tipo, keys, link, descripcion, id, parentId) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.keys = keys;
+        this.link = link;
+        this.descripcion = descripcion;
+        this.id = id
+        this.parentId = parentId
+    }
+    makerHtmlEvidencia(libro) {
+
+        const tiposDoc = {
+            "texto": () => {
+                const icono = "bi bi-file-earmark-text-fill fs-4 me-2"
+                return icono
+            },
+            "calculo": () => {
+                const icono = "bi-file-earmark-spreadsheet-fill fs-4 me-2"
+                return icono
+            },
+            "video": () => {
+                const icono = "bi-file-earmark-play-fill fs-4 me-2"
+                return icono
+            },
+            "presentacion": () => {
+                const icono = "bi bi-file-earmark-easel-fill fs-4 me-2"
+                return icono
+            },
+            "audio": () => {
+                const icono = "bi bi-file-earmark-music-fill fs-4 me-2"
+                return icono
+            },
+            "web": () => {
+                const icono = "bi bi-filetype-html fs-4 me-2"
+                return icono
+            },
+            "imagen": () => {
+                const icono = "bi bi-file-image-fill fs-4 me-2"
+                return icono
+            },
+            "pdf": () => {
+                const icono = "bi bi-file-earmark-pdf-fill fs-4 me-2"
+                return icono
+            }
+
+
+        }
+
+        const collaseLibros = document.getElementById("cEvidenciasCollapse")
+        const item = document.createElement("ol")
+        item.className = "list-group list-group-numbered"
+        item.innerHTML = `
+        <div class="">
+            <div class="row justify-content-between">
+                <div class="col-10 fw-bold text-start" data-bs-toggle="collapse" href="#collapseLibro${libro.id}"
+                    role="button" aria-controls="collapseLibro${libro.id}">
+                    <div id="tituloLibro${libro.id}"><i class="bi bi-file-earmark-text-fill fs-4 me-2" id="icoPrincipal${libro.id}"></i>${libro.id + 1}. ${libro.nombre}</div>
+                </div>
+                <div class="col-2 text-end">
+                    <a id="btnLinkPrincipal${libro.id}" class="nav-link active fs-3 text-primary" aria-current="page"
+                        href="#" target="_blank"><i class="bi bi-link-45deg"></i></a>
+                </div>
+            </div>
+            <div class="collapse" id="collapseLibro${libro.id}">
+                <div class="card card-body">
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Nombre-Documento${libro.id}"
+                            style="height: 50px"></textarea>
+                        <label for="int-Nombre-Documento${libro.id}">Título del documento</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-keys-Documento${libro.id}"
+                            style="height: 50px"></textarea>
+                        <label for="int-keys-Documento${libro.id}">Palabras claves / categorias</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                    <textarea class="form-control" id="int-descripcion-Documento${libro.id}"
+                        style="height: 50px"></textarea>
+                    <label for="int-descripcion-Documento${libro.id}">Descripción / Tema del documento</label>
+                    </div>
+                    <div class="input-group mb-2">
+                        <textarea class="form-control" aria-label="With textarea" id="int-link-Documento${libro.id}" placeholder="Vínculo o enlace del documento"></textarea>
+                        <span class="input-group-text">
+                            <a id="btnLinkSecundario${libro.id}" class="nav-link active fs-5" aria-current="page"
+                            href="#" target="_blank"><i class="bi bi-link-45deg"></i>
+                        </a>
+                    </span>
+                      </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btntipo${libro.id}">
+                          Tipo de archivo
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li id="btnTexto${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-text-fill me-2 fs-4"></i>Documento texto</a></li>
+                          <li id="btnCalculo${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-spreadsheet-fill me-2 fs-4"></i>Hoja cálculo</a></li>
+                          <li id="btnVideo${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-play-fill me-2 fs-4"></i>Video</a></li>
+                          <li id="btnAudio${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-music-fill me-2 fs-4"></i>Audio</a></li>
+                          <li id="btnPresentacion${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-easel-fill me-2 fs-4"></i>Presentación</a></li>
+                          <li id="btnImagen${libro.id}"><a class="dropdown-item"><i class="bi bi-file-image-fill me-2 fs-4"></i>Imagen</a></li>
+                          <li id="btnWeb${libro.id}"><a class="dropdown-item"><i class="bi bi-filetype-html me-2 fs-4"></i>Página web</a></li>
+                          <li id="btnPdf${libro.id}"><a class="dropdown-item"><i class="bi bi-file-earmark-pdf-fill me-2 fs-4"></i>Documento pdf</a></li>
+                        </ul>
+                        <button type="button" class="btn btn-outline-danger" id="btnEliminarLink${libro.id}">Eliminar vínculo</button>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>`
+
+        collaseLibros.appendChild(item)
+        //Configuración nombre del libro
+        const ref_nombre_libro = document.getElementById(`int-Nombre-Documento${libro.id}`)
+        //document.getElementById(`tituloLibro${libro.id}`)
+        //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
+        ref_nombre_libro.oninput = () => {
+            libro.nombre = ref_nombre_libro.value
+            //Actualiza el título sin perder el numerador y el ícono
+            document.getElementById(`tituloLibro${libro.id}`).innerHTML = `<i class="bi bi-file-earmark-text-fill fs-4 me-2"></i>${libro.id + 1}. ${ref_nombre_libro.value}`
+            GuardarVigencia()
+        }
+        ref_nombre_libro.value = libro.nombre
+
+
+        //Configuración palabras clave del libro
+        const ref_keys_libro = document.getElementById(`int-keys-Documento${libro.id}`)
+        ref_keys_libro.oninput = () => {
+            libro.keys = ref_keys_libro.value
+            GuardarVigencia()
+        }
+        ref_keys_libro.value = libro.keys
+
+
+        //Configuración descripcion del libro
+        const ref_descripcion_libro = document.getElementById(`int-descripcion-Documento${libro.id}`)
+        ref_descripcion_libro.oninput = () => {
+            libro.descripcion = ref_descripcion_libro.value
+            GuardarVigencia()
+        }
+        ref_descripcion_libro.value = libro.descripcion
+
+        //Configuración enlace del libro
+        const ref_link_libro = document.getElementById(`int-link-Documento${libro.id}`)
+        ref_link_libro.oninput = () => {
+            libro.link = ref_link_libro.value
+            //actualiza los enlaces para abrir en otro documento
+            document.getElementById(`btnLinkPrincipal${libro.id}`).href = ref_link_libro.value
+            document.getElementById(`btnLinkSecundario${libro.id}`).href = ref_link_libro.value
+            GuardarVigencia()
+        }
+        ref_link_libro.value = libro.link
+        //Cuando carga la clase actualiza los enlaces para abrir en una página aparte
+        document.getElementById(`btnLinkPrincipal${libro.id}`).href = libro.link
+        document.getElementById(`btnLinkSecundario${libro.id}`).href = libro.link
+
+        //Según sea la selección en el menú tipo, así msimo le asigna un valor a cada evento
+        //El cambio de tipo actualiza en la BD y cambia el icono de cada archivo
+
+        document.getElementById(`btnTexto${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.texto()
+            libro.tipo = "texto"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnCalculo${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.calculo()
+            libro.tipo = "calculo"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnVideo${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.video()
+            libro.tipo = "video"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+
+        document.getElementById(`btnAudio${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.audio()
+            libro.tipo = "audio"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnPresentacion${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.presentacion()
+            libro.tipo = "presentacion"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnImagen${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.imagen()
+            libro.tipo = "imagen"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnWeb${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.web()
+            libro.tipo = "web"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+        document.getElementById(`btnPdf${libro.id}`).onclick = () => {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.pdf()
+            libro.tipo = "pdf"
+            document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        }
+
+        //Actualzia el texto del boton tipo en relación a la BD
+        document.getElementById(`btntipo${libro.id}`).textContent = "Documento tipo " + libro.tipo
+        //Si al mirar la BD hay un error en el tipo de documento, deja por defecto texto
+        try {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc[libro.tipo]()
+        } catch (error) {
+            document.getElementById(`icoPrincipal${libro.id}`).className = tiposDoc.texto()
+            libro.tipo = "texto"
+        }
+
+        //Agrega evento al boton borrar link
+        document.getElementById(`btnEliminarLink${libro.id}`).onclick = () => {
+            this.parentId.deleteLibreria(libro.id)
+            GuardarVigencia()
+            const cLibros = document.getElementById("divlibreriacollapse")
+            cLibros.innerHTML = ''
+            let i = 0;
+            this.parentId.cslLibrerias.forEach(libro => {
+                libro.id = i++
+                libro.parentId = this.parentId
+                libro.makerHtmlLibro(libro);
+            })
+        }
+
+    }
+}
 
 
 function listarGestiones() {
     document.getElementById("conteneder-bar-proyectos").hidden = true
+    document.getElementById("panel-biblioteca").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
 
     //Colocamos el título del programa

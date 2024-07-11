@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestion ONIC v.2</title>
 
-    
+
 
     <!--Toasty-->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -32,6 +32,7 @@
 
     <!--Configuraciónes para inbterfas de usuario y adminsitración de DB-->
     <script src="../js/components.js"></script>
+    <script src="../js/bibliotecas.js"></script>
 
     <!--Configuraciónes para inbterfas de usuario y adminsitración de DB-->
     <script src="../js/Proyecciones.js"></script>
@@ -44,7 +45,7 @@
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        
+
 </head>
 
 <header class="sticky-top">
@@ -97,6 +98,12 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="#" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                onclick="cargarBiblioteca()">
+                                <i class="fs-3 fw-bold bi-journal-bookmark text-white"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-white">Biblioteca</span> </a>
+                        </li>
+                        <li>
                             <a href="#panel-config" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                 <i class="fs-3 fw-bold bi bi-gear-fill text-white"></i> <span
                                     class="ms-1 d-none d-sm-inline text-white">Configuración</span> </a>
@@ -133,6 +140,32 @@
                 <div id="panel-escritorio" class="">
 
                 </div>
+                <div id="panel-biblioteca" class="" hidden="true">
+                    <div class="mb-1 mt-3 bg-secondary text-white p-2 fw-bold sticky-top" style="font-size: 16X;">
+                        Biblioteca y repositorio general
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-secondary" onclick="AgregarDocumento()">Agregar
+                            documento</button>
+                    </div>
+
+                    <div class="border border-1 border-secondary rounded mt-3 p-2">
+                        <table class="table m-1 table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Título</th>
+                                    <th scope="col">Autor</th>
+                                    <th scope="col">Año</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-biblioteca">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
 
                 <div id="panel-inicio" class="row container-fluid m-3" hidden="true">
                     <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
@@ -141,7 +174,8 @@
                         <hr class="border border-4">
                         <p class="">Sistema de administración de documentos, certificados</p>
                     </button>
-                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1" onclick="open_sig()">
+                    <button style="width: 300px; height: 200px;" class="btn btn-outline-secondary m-1"
+                        onclick="open_sig()">
                         <i class="bi bi-globe-americas fs-1"></i> Módulo SIG
                         <hr class="border border-4">
                         <p class="">Sistema de información geográfica para apoyo de las consejerías</p>
@@ -152,61 +186,7 @@
         </div>
     </div>
 
-    <div id="element-to-print">
 
-        <div class="row m-5 align-items-center">
-            <div class="col-auto">
-                <img src="../scr/logo.png" style="width: 100px; height: 100px;">
-            </div>
-            <div class="col fw-bold fs-3">ORGANICACIÓN INDÍGENA DE COLOMBIA</div>
-        </div>
-        <div class="m-5">
-            <div class="row">
-                <div class="col text-end">
-                    CERT No. 234567578
-                </div>
-            </div>
-            <div class="text-center mt-3 mb-3 h1 fw-bold text-success">CERTIFICADO</div>
-            <p class="mt-2 mt-2" style="text-align: justify;">La Organización Nacional Indígena de Colombia certifica
-                que NOMBRE DEL BENEFICIARIO, Identificado con documento 89.000.000, se encuentra registrado en nuestra
-                base de datos y que forma parte del resguardo y comunidad. El presente certificado se da a los (DD) días
-                del mes de (MM) de 2024.
-            </p>
-            <a class="nav-link ms-5 mb-2" href="https://getbootstrap.com/docs/5.3/components/navbar/">Ver este enlace
-                para validar este documento</a>
-
-            <div class="row">
-                <div class="col">
-
-                </div>
-                <div class="col text-center">
-                    <img src="../scr/fwl.png" style="width: 100px; height: 100px;">
-                </div>
-                <div class="col">
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col">
-
-                </div>
-                <div class="col text-center">
-                    FIRMA AUTORIZADA
-                </div>
-                <div class="col">
-
-                </div>
-
-            </div>
-
-
-
-
-        </div>
-
-
-    </div>
     <script>
         function muestra() {
 
@@ -218,8 +198,8 @@
                 jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
-            var element = document.getElementById('element-to-print');
-            var worker = html2pdf().set(opt).from(element).save();
+            //var element = document.getElementById('element-to-print');
+            //var worker = html2pdf().set(opt).from(element).save();
 
         }
     </script>

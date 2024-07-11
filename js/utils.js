@@ -8,9 +8,13 @@ const GLOBAL = {
         proyectos: [],
         usuario: null,
         usuarios: [],
+        bibliotecas: [],
+        biblioteca: null,
     },
     firestore: {},
 };
+
+
 
 let aUsers = []
 let activeEmail;
