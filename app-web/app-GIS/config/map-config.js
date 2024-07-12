@@ -4,10 +4,9 @@ const rango = {
     "Moderada": ["0.6"],
     "Baja": ["0.4"],
     "Muy Baja": ["0.2"],
-
 }
 let lis_layers = []
-let a
+let lis_layers_open = []
 function openfile(control) {
     const archivo = control.target.files[0];
     if (!archivo) {
@@ -19,7 +18,7 @@ function openfile(control) {
     lector.onload = function (e) {
         var contenido = e.target.result;
         var Parse = JSON.parse(contenido)
-        a = L.geoJSON(Parse, {
+        const LayerActive = L.geoJSON(Parse, {
             style: function (feature) {
                 //console.log(feature.properties.CLASIFICAC)
                 const propiedad_color = feature.properties.CLASIFICAC
@@ -29,18 +28,20 @@ function openfile(control) {
                         color: "red",
                         fillColor: "red",
                         fillOpacity: rango[propiedad_color][0],
+                        pane:"003",
                         weight: 1,
                     };
                 } catch (error) {
-                    return { color: "", fillOpacity: 0 };
+                    return {
+                        color: "", 
+                        fillOpacity: 0};
                 }
             }
         }).bindPopup(function (layer) {
             return layer.feature.properties.CLASIFICAC;
-        }).addTo(map);
+        },{pane:"004"}).addTo(map);
 
-        lis_layers.push(["layer_" + name_layer[0], a])
-
+        lis_layers_open.push(["layer_"+ name_layer[0],LayerActive])
 
         let control = document.createElement("div")
         control.innerHTML =
@@ -75,28 +76,14 @@ function openfile(control) {
         const controlcheck = document.getElementById("layer_" + name_layer[0])
         controlcheck.checked=true
         controlcheck.onchange=()=>{
-            const activeLayer= lis_layers.filter(value => value[0] == controlcheck.id)
-            if (controlcheck.checked == true) {
-                L.geoJSON(a, {
-                    style: function (feature) {
-                        //console.log(feature.properties.CLASIFICAC)
-                        //const propiedad_color = feature.properties.CLASIFICAC
-                        //console.log(rango["Alto"][0])
-                        try {
-                            return {
-                                color: "red",
 
-                            };
-                        } catch (error) {
-                            return { color: "", fillOpacity: 0 };
-                        }
-                    }
-                }).addTo(map);
+            const activeLayer= lis_layers_open.filter(value => value[0] == controlcheck.id)
+            if (controlcheck.checked == true) {
+                activeLayer[0][1].addTo(map)
                 
             } else {
-                let layer_remove = lis_layers.filter(value => value[0] == controlcheck.id)
-                map.removeLayer(a)
-                //lis_layers = layer_noremove
+                //let layer_remove = lis_layers.filter(value => value[0] == controlcheck.id)
+                map.removeLayer(activeLayer[0][1])
             }
         }        
     };
@@ -118,6 +105,7 @@ const layers = {
                         return {
                             fillColor: "white",
                             fillOpacity: 1,
+                            pane:"001"
                         };
                     } catch (error) {
                         return { color: "", fillOpacity: 0 };
@@ -131,6 +119,37 @@ const layers = {
             let layer_remove = lis_layers.filter(value => value[0] == arguments.callee.name)
             let layer_noremove = lis_layers.filter(value => value[0] !== arguments.callee.name)
             console.log(layer_remove[0][1])
+            map.removeLayer(layer_remove[0][1])
+            lis_layers = layer_noremove
+        }
+
+    },
+    "layer_basemap"(control) {
+        
+        if (control.checked == true) {
+            const layer = L.geoJSON(layer_basemap, {
+                style: function (feature) {
+                    //console.log(feature.properties.CLASIFICAC)
+                    //console.log(rango["Alto"][0])
+                    try {
+                        return {
+                            color: "black",
+                            fillColor: "green",
+                            fillOpacity: 1,
+                            weight: 1,
+                            pane:"002"
+                        };
+                    } catch (error) {
+                        return { color: "", fillOpacity: 0 };
+                    }
+                }
+            }).bindPopup(function (layer) {
+                //return layer.feature.properties.CLASIFICAC;
+            }).addTo(map);
+            lis_layers.push(["layer_basemap", layer])
+        } else {
+            let layer_remove = lis_layers.filter(value => value[0] == arguments.callee.name)
+            let layer_noremove = lis_layers.filter(value => value[0] !== arguments.callee.name)
             map.removeLayer(layer_remove[0][1])
             lis_layers = layer_noremove
         }

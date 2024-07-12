@@ -33,6 +33,7 @@
   <script src="./config/map-config.js"></script>
 
   <script src="./layers/001tableto.js"></script>
+  <script src="./layers/002basemap.js"></script>
 
 </head>
 <nav class="navbar navbar-expand-lg bg-primary sticky-top">
@@ -86,6 +87,20 @@
   L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: ''
   }).addTo(map);
+
+  map.createPane('001');
+  map.getPane('001').style.zIndex = 400;
+  //Crea una capa en el mapa para colocar el mapa croquis.
+  map.createPane('002');
+  map.getPane('002').style.zIndex = 600;
+
+  map.createPane('003');
+  map.getPane('003').style.zIndex = 800;
+
+  map.createPane('004');
+  map.getPane('004').style.zIndex = 1000;
+
+
 </script>
 
 </html>
@@ -95,7 +110,7 @@
     <h5 class="offcanvas-title text-white" id="offcanvasCapasLabel">Panel capas</h5>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-body" >
+  <div class="offcanvas-body">
     <div class="btn-group w-100" role="group" aria-label="Basic example">
       <button type="button" class="btn btn-secondary">
         <label for="file-input-layers">
@@ -123,6 +138,28 @@
         </div>
       </div>
       <div id="collapseTablero" class="accordion-collapse collapse m-2">
+        <div class="accordion-body">
+          Config
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item m-2 border border-1 p-1">
+      <div class="form-check">
+        <div class="row">
+          <div class="col-auto me-2">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap">
+              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+            </a>
+          </div>
+          <div class="col-auto">
+            <input class="form-check-input" type="checkbox" onchange="layers['layer_basemap'](this)">
+            <label class="form-check-label" for="flexCheckDefault">
+              Ver mapa base
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="collapseBasemap" class="accordion-collapse collapse m-2">
         <div class="accordion-body">
           Config
         </div>
