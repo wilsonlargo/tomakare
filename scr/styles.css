@@ -127,3 +127,10 @@ td-center {
     display: flex;
     align-items: center; 
 }
+
+.bgimg{
+    background-image: url('./fondo.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
