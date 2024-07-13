@@ -18,9 +18,9 @@ const rango = {
     "Muy Baja": ["0.2"],
 }
 let format_layer = {
-    "layer_tablero": ["white", "white", 1, 1, "1"],
-    "layer_basemap": ["black", "orange", 1, 1, "2"],  
-    "layer_departamentos": ["black", "orange", 1, 1, "3"],
+    "layer_tablero": ["white", "white", 1, 1, "1",[]],
+    "layer_basemap": ["black", "orange", 1, 1, "2",[]],  
+    "layer_departamentos": ["black", "orange", 1, 1, "3",["DPTO_CNMBR"]],
 }
 
 let lis_layers = []
@@ -38,9 +38,9 @@ function openfile(control) {
         var Parse = JSON.parse(contenido)
         const LayerActive = L.geoJSON(Parse, {
             style: function (feature) {
-                //console.log(feature.properties.CLASIFICAC)
+
                 const propiedad_color = feature.properties.CLASIFICAC
-                //console.log(rango["Alto"][0])
+
                 try {
                     return {
                         color: "red",
@@ -116,15 +116,18 @@ function openfile(control) {
 const layers = {
     //función que obtiene desde el control el nombre del control y nombre de la capa
     "put_layer"(control, layer_name) {
+        const format = format_layer[layer_name]
         //Verifica si el contro check su estado
-        console.log(layer_name)
         if (control.checked == true) {
             //Si es activado crea uan capa con base al archivo local
             //..eval(layer_name)...usa el texto, lo convierte en uan variable que evoca la capa
             const layer = L.geoJSON(eval(layer_name), {
+                
                 style: function (feature) {
+                    
                     //Según sea la capa así mismo aplica el formato
-                    const format = format_layer[layer_name]
+
+                   
                     try {
                         return {
                             //Aplica el formato para la capa
@@ -139,8 +142,11 @@ const layers = {
                     }
                 }
             }).bindPopup(function (layer) {
-                //return layer.feature.properties.CLASIFICAC;
-            }).addTo(map);
+                return {
+                    layer.feature.properties[format[5]];
+                }
+            },{ pane: "labels" }).addTo(map);
+
             lis_layers.push([layer_name, layer])
         } else {
             //Crear dos filtros para mostrar o quitar la capa
@@ -213,7 +219,7 @@ function config_format(layer_name) {
                     map.removeLayer(layer_remove[0][1])
                     lis_layers = layer_noremove
                     layers.put_layer(checkLayer, layer_name)
-                    //console.log(layer_remove)
+
                 }
 
 
@@ -269,7 +275,7 @@ function config_format(layer_name) {
                     map.removeLayer(layer_remove[0][1])
                     lis_layers = layer_noremove
                     layers.put_layer(checkLayer, layer_name)
-                    //console.log(layer_remove)
+
                 }
 
 
@@ -338,7 +344,6 @@ function config_format(layer_name) {
                     map.removeLayer(layer_remove[0][1])
                     lis_layers = layer_noremove
                     layers.put_layer(checkLayer, layer_name)
-                    //console.log(layer_remove)
                 }
 
 
