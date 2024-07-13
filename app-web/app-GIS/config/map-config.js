@@ -18,8 +18,8 @@ const rango = {
     "Muy Baja": ["0.2"],
 }
 let format_layer = {
-    "layer_basemap": ["black", "orange", 1, 1, "002"],
-    "layer_tablero": ["white", "white", 1, 1, "001"]
+    "layer_basemap": ["black", "orange", 1, 1, "2"],
+    "layer_tablero": ["white", "white", 1, 1, "1"]
 }
 
 let lis_layers = []
@@ -45,7 +45,7 @@ function openfile(control) {
                         color: "red",
                         fillColor: "red",
                         fillOpacity: rango[propiedad_color][0],
-                        pane: "003",
+                        pane: "3",
                         weight: 1,
                     };
                 } catch (error) {
@@ -57,7 +57,7 @@ function openfile(control) {
             }
         }).bindPopup(function (layer) {
             return layer.feature.properties.CLASIFICAC;
-        }, { pane: "004" }).addTo(map);
+        }, { pane: "4" }).addTo(map);
 
         lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
 
