@@ -34,6 +34,7 @@
 
   <script src="./layers/001tableto.js"></script>
   <script src="./layers/002basemap.js"></script>
+  <script src="./layers/003departamentos.js"></script>
 
 </head>
 <nav class="navbar navbar-expand-lg bg-primary sticky-top">
@@ -98,7 +99,10 @@
   map.getPane('3').style.zIndex = 800;
 
   map.createPane('4');
-  map.getPane('4').style.zIndex = 1000;
+  map.getPane('4').style.zIndex = 900;
+
+  map.createPane('labels');
+  map.getPane('labels').style.zIndex = 2000;
 
 
 </script>
@@ -173,6 +177,32 @@
         </div>
       </div>
     </div>
+        <!--Control collapse departamentos-->
+        <div class="accordion-item m-2 border border-1 p-1">
+          <div class="form-check">
+            <div class="row">
+              <div class="col-auto me-2">
+                <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap" onclick="config_format('layer_departamentos')">
+                  <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+                </a>
+              </div>
+              <div class="col-auto">
+                <input class="form-check-input" 
+                type="checkbox" 
+                onchange="layers['put_layer'](this,'layer_departamentos')"
+                id="checklayer_departamentos">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Departamentos
+                </label>
+              </div>
+            </div>
+          </div>
+          <div id="collapseBasemap" class="accordion-collapse collapse m-2">
+            <div class="accordion-body container-fluid" id="layer_departamentos">
+              
+            </div>
+          </div>
+        </div>
     <div id="body_layers">
 
     </div>

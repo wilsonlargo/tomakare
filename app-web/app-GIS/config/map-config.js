@@ -18,8 +18,9 @@ const rango = {
     "Muy Baja": ["0.2"],
 }
 let format_layer = {
-    "layer_basemap": ["black", "orange", 1, 1, "2"],
-    "layer_tablero": ["white", "white", 1, 1, "1"]
+    "layer_tablero": ["white", "white", 1, 1, "1"],
+    "layer_basemap": ["black", "orange", 1, 1, "2"],  
+    "layer_departamentos": ["black", "orange", 1, 1, "3"],
 }
 
 let lis_layers = []
@@ -45,7 +46,7 @@ function openfile(control) {
                         color: "red",
                         fillColor: "red",
                         fillOpacity: rango[propiedad_color][0],
-                        pane: "3",
+                        pane: "4",
                         weight: 1,
                     };
                 } catch (error) {
@@ -57,7 +58,7 @@ function openfile(control) {
             }
         }).bindPopup(function (layer) {
             return layer.feature.properties.CLASIFICAC;
-        }, { pane: "4" }).addTo(map);
+        }, { pane: "labels" }).addTo(map);
 
         lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
 
@@ -116,6 +117,7 @@ const layers = {
     //función que obtiene desde el control el nombre del control y nombre de la capa
     "put_layer"(control, layer_name) {
         //Verifica si el contro check su estado
+        console.log(layer_name)
         if (control.checked == true) {
             //Si es activado crea uan capa con base al archivo local
             //..eval(layer_name)...usa el texto, lo convierte en uan variable que evoca la capa
