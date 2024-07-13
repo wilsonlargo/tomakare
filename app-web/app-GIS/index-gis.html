@@ -121,16 +121,20 @@
         <i class="bi bi-download"></i>
       </button>
     </div>
+    <!--Control collapse tablero-->
     <div class="accordion-item m-2 border border-1 p-1">
       <div class="form-check">
         <div class="row">
           <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseTablero">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseTablero" onclick="config_format('layer_tablero')">
               <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
             </a>
           </div>
           <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['layer_tablero'](this)">
+            <input class="form-check-input" 
+            type="checkbox" 
+            onchange="layers['put_layer'](this,'layer_tablero')"
+            id="checklayer_tablero">
             <label class="form-check-label" for="flexCheckDefault">
               Ver tablero
             </label>
@@ -138,21 +142,25 @@
         </div>
       </div>
       <div id="collapseTablero" class="accordion-collapse collapse m-2">
-        <div class="accordion-body">
-          Config
+        <div class="accordion-body container-fluid" id="layer_tablero">
+
         </div>
       </div>
     </div>
+    <!--Control collapse basemap-->
     <div class="accordion-item m-2 border border-1 p-1">
       <div class="form-check">
         <div class="row">
           <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap" onclick="config_format('layer_basemap')">
               <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
             </a>
           </div>
           <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['layer_basemap'](this)">
+            <input class="form-check-input" 
+            type="checkbox" 
+            onchange="layers['put_layer'](this,'layer_basemap')"
+            id="checklayer_basemap">
             <label class="form-check-label" for="flexCheckDefault">
               Ver mapa base
             </label>
@@ -160,8 +168,8 @@
         </div>
       </div>
       <div id="collapseBasemap" class="accordion-collapse collapse m-2">
-        <div class="accordion-body">
-          Config
+        <div class="accordion-body container-fluid" id="layer_basemap">
+          
         </div>
       </div>
     </div>
