@@ -18,9 +18,9 @@ const rango = {
     "Muy Baja": ["0.2"],
 }
 let format_layer = {
-    "layer_tablero": ["white", "white", 1, 1, "1",[]],
-    "layer_basemap": ["black", "orange", 1, 1, "2",[]],  
-    "layer_departamentos": ["black", "orange", 1, 1, "3",["DPTO_CNMBR"]],
+    "layer_tablero": ["white", "white", 1, 1, "1", []],
+    "layer_basemap": ["black", "orange", 1, 1, "2", []],
+    "layer_departamentos": ["black", "orange", 1, 1, "3", ["DPTO_CNMBR"]],
 }
 
 let lis_layers = []
@@ -122,12 +122,12 @@ const layers = {
             //Si es activado crea uan capa con base al archivo local
             //..eval(layer_name)...usa el texto, lo convierte en uan variable que evoca la capa
             const layer = L.geoJSON(eval(layer_name), {
-                
+
                 style: function (feature) {
-                    
+
                     //Según sea la capa así mismo aplica el formato
 
-                   
+
                     try {
                         return {
                             //Aplica el formato para la capa
@@ -142,12 +142,9 @@ const layers = {
                     }
                 }
             }).bindPopup(function (layer) {
-                return {
-                    layer.feature.properties[format[5]];
-                }
-            },{ pane: "labels" }).addTo(map);
-
-            lis_layers.push([layer_name, layer])
+                layer.feature.properties[format[5]];
+            }, { pane: "labels" }).addTo(map);
+                lis_layers.push([layer_name, layer])
         } else {
             //Crear dos filtros para mostrar o quitar la capa
             //Solo para capas locales fijas, que siempre se presentarán en el programa
