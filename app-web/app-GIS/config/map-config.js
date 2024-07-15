@@ -144,7 +144,7 @@ const layers = {
             }).bindPopup(function (layer) {
                 layer.feature.properties[format[5]];
             }, { pane: "labels" }).addTo(map);
-                lis_layers.push([layer_name, layer])
+                return lis_layers.push([layer_name, layer])
         } else {
             //Crear dos filtros para mostrar o quitar la capa
             //Solo para capas locales fijas, que siempre se presentarán en el programa
