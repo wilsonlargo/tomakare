@@ -35,6 +35,7 @@
   <script src="./layers/001tableto.js"></script>
   <script src="./layers/002basemap.js"></script>
   <script src="./layers/003departamentos.js"></script>
+  <script src="./layers/004resguardos.js"></script>
 
 </head>
 <nav class="navbar navbar-expand-lg bg-primary sticky-top">
@@ -84,7 +85,9 @@
   </div>
 </body>
 <script>
-  var map = L.map('map').setView([5.1, -75.55], 5);
+  var map = L.map('map', {
+    zoomDelta: 0.25, zoomSnap: 0.25
+  }).setView([5.1, -75.55], 5);
   L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: ''
   }).addTo(map);
@@ -100,6 +103,9 @@
 
   map.createPane('4');
   map.getPane('4').style.zIndex = 900;
+
+  map.createPane('5');
+  map.getPane('5').style.zIndex = 1100;
 
   map.createPane('labels');
   map.getPane('labels').style.zIndex = 2000;
@@ -126,83 +132,105 @@
       </button>
     </div>
     <!--Control collapse tablero-->
-    <div class="accordion-item m-2 border border-1 p-1">
+    <div class="accordion-item border border-1 p-1 mb-1">
       <div class="form-check">
         <div class="row">
           <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseTablero" onclick="config_format('layer_tablero')">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseTablero"
+              onclick="config_format('layer_tablero')">
               <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
             </a>
           </div>
           <div class="col-auto">
-            <input class="form-check-input" 
-            type="checkbox" 
-            onchange="layers['put_layer'](this,'layer_tablero')"
-            id="checklayer_tablero">
+            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_tablero')"
+              id="checklayer_tablero">
             <label class="form-check-label" for="flexCheckDefault">
               Ver tablero
             </label>
           </div>
         </div>
       </div>
-      <div id="collapseTablero" class="accordion-collapse collapse m-2">
+      <div id="collapseTablero" class="accordion-collapse collapse ms-1">
         <div class="accordion-body container-fluid" id="layer_tablero">
 
         </div>
       </div>
     </div>
     <!--Control collapse basemap-->
-    <div class="accordion-item m-2 border border-1 p-1">
+    <div class="accordion-item border border-1 p-1 mb-1">
       <div class="form-check">
         <div class="row">
           <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap" onclick="config_format('layer_basemap')">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap"
+              onclick="config_format('layer_basemap')">
               <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
             </a>
           </div>
           <div class="col-auto">
-            <input class="form-check-input" 
-            type="checkbox" 
-            onchange="layers['put_layer'](this,'layer_basemap')"
-            id="checklayer_basemap">
+            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_basemap')"
+              id="checklayer_basemap">
             <label class="form-check-label" for="flexCheckDefault">
               Ver mapa base
             </label>
           </div>
         </div>
       </div>
-      <div id="collapseBasemap" class="accordion-collapse collapse m-2">
+      <div id="collapseBasemap" class="accordion-collapse collapse ms-1">
         <div class="accordion-body container-fluid" id="layer_basemap">
-          
+
         </div>
       </div>
     </div>
-        <!--Control collapse departamentos-->
-        <div class="accordion-item m-2 border border-1 p-1">
-          <div class="form-check">
-            <div class="row">
-              <div class="col-auto me-2">
-                <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap" onclick="config_format('layer_departamentos')">
-                  <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-                </a>
-              </div>
-              <div class="col-auto">
-                <input class="form-check-input" 
-                type="checkbox" 
-                onchange="layers['put_layer'](this,'layer_departamentos')"
-                id="checklayer_departamentos">
-                <label class="form-check-label" for="flexCheckDefault">
-                  Departamentos
-                </label>
-              </div>
-            </div>
+    <!--Control collapse departamentos-->
+    <div class="accordion-item border border-1 p-1 mb-1">
+      <div class="form-check">
+        <div class="row">
+          <div class="col-auto me-2">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapsedepartamentos"
+              onclick="config_format('layer_departamentos')">
+              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+            </a>
           </div>
-          <div id="collapseBasemap" class="accordion-collapse collapse m-2">
-            <div class="accordion-body container-fluid" id="layer_departamentos">
-              
-            </div>
+          <div class="col-auto">
+            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_departamentos')"
+              id="checklayer_departamentos">
+            <label class="form-check-label" for="flexCheckDefault">
+              Departamentos
+            </label>
           </div>
         </div>
+      </div>
+      <div id="collapsedepartamentos" class="accordion-collapse collapse ms-1">
+        <div class="accordion-body container-fluid" id="layer_departamentos">
+
+        </div>
+      </div>
+    </div>
+    <!--Control collapse resguardos-->
+    <div class="accordion-item border border-1 p-1 mb-1">
+      <div class="form-check">
+        <div class="row">
+          <div class="col-auto me-2">
+            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseresguardos"
+              onclick="config_format('layer_resguardos')">
+              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+            </a>
+          </div>
+          <div class="col-auto">
+            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_resguardos')"
+              id="checklayer_resguardos">
+            <label class="form-check-label" for="checklayer_resguardos">
+              Resguardos
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="collapseresguardos" class="accordion-collapse collapse ms-1">
+        <div class="accordion-body container-fluid" id="layer_resguardos">
+
+        </div>
+      </div>
+    </div>
     <div id="body_layers">
 
     </div>

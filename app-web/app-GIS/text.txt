@@ -39,3 +39,4 @@
         }).addTo(map);
 
         lis_layers.push(["layer_" + name_layer[0], a])
+        ["DPTO_CNMBR","DPTO_CCDGO"]
