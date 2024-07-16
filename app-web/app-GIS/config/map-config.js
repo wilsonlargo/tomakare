@@ -76,26 +76,30 @@ function openfile(control) {
 
     lector.onload = function (e) {
         var contenido = e.target.result;
-        var Parse = JSON.parse(contenido)
-        const newFormato = ["blue", "blue", 1, 1, "4", [], "local"]
+        var layer_local = JSON.parse(contenido)
+    
 
-        let layer_existe = format_layer["layer_" + name_layer[0]]
-        if (layer_existe == null) {
-            format_layer["layer_" + name_layer[0]] = newFormato
-        }
-        const LayerActive = L.geoJSON(Parse, {
+
+        let propiedades=[]
+        
+        const LayerActive = L.geoJSON(layer_local, {
             style: function (feature) {
                 let propiedad_color
+                for (const property in feature.properties) {                  
+                    if (propiedades.includes(property)!==true){
+                        propiedades.push(property)
+                    }
+                }             
                 try {
                     propiedad_color = rango[feature.properties.CLASIFICAC][0]
                 } catch (error) {
                     propiedad_color = rango["null"][0]
                 }
                 return {
-                    color: format_layer["layer_" + name_layer[0]][0],
-                    fillColor: format_layer["layer_" + name_layer[0]][1],
-                    pane: format_layer["layer_" + name_layer[0]][4],
-                    weight: format_layer["layer_" + name_layer[0]][3],
+                    color: "blue",
+                    fillColor: "blue",
+                    pane: "4",
+                    weight: 1,
                     fillOpacity: propiedad_color
                 }
             }
@@ -104,6 +108,14 @@ function openfile(control) {
         }, { pane: "labels" }).addTo(map);
 
         lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
+
+        const newFormato = ["blue", "blue", 1, 1, "4", [], "local",propiedades]
+        let layer_existe = format_layer["layer_" + name_layer[0]]
+        if (layer_existe == null) {
+            format_layer["layer_" + name_layer[0]] = newFormato
+        }
+
+
 
         let control = document.createElement("div")
         control.innerHTML =
@@ -136,7 +148,6 @@ function openfile(control) {
             `
         const newLayer = document.getElementById("body_layers")
         newLayer.appendChild(control)
-
 
         const controlcheck = document.getElementById("checklayer_" + name_layer[0])
         controlcheck.checked = true
@@ -213,6 +224,7 @@ const layers = {
 function config_format(layer_name) {
     const cCollapseBody = document.getElementById(layer_name)
     cCollapseBody.innerHTML = ""
+
 
     const btngroup = document.createElement("div")
     btngroup.className = "btn-group"
