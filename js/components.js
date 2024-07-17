@@ -2272,8 +2272,8 @@ function mostrar_escritorio() {
     document.getElementById("navbarplan").innerHTML = ""
     document.getElementById("conteneder-bar-proyectos").hidden = true
     document.getElementById("panel-inicio").hidden = false
+    document.getElementById("panel-biblioteca").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
-
 }
 function agregar_nota_consultor(dominio, referencia) {
     //Referenciamos el contenedor de notas y lo limpiamos

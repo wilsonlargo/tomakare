@@ -238,3 +238,36 @@
       onchange="openfile(event)">
   </div>
 </div>
+<!-- Contenedor de formulario modal -->
+<div class="modal" id="modal_atributos">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Administrador de capas</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" id="open-modal-panel">
+        <small class="fw-bold">Atributo de etiqueta</small>
+        <p>Seleccione el campo o campos origen del contenido de la etiqueta que se mostrará en cada polígono</p>
+        <div class="input-group mb-3">
+          <button class="btn btn-outline-secondary fw-bold fs-4" type="button">+</button>
+          <select class="form-select form-select-sm" id="intCampos_layer">
+
+          </select>
+        </div>
+
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button id="btnAplicar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">aceptar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

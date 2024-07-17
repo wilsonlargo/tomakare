@@ -66,6 +66,7 @@ let format_layer = {
 
 let lis_layers = []
 let lis_layers_open = []
+
 function openfile(control) {
     const archivo = control.target.files[0];
     if (!archivo) {
@@ -77,19 +78,20 @@ function openfile(control) {
     lector.onload = function (e) {
         var contenido = e.target.result;
         var layer_local = JSON.parse(contenido)
-    
+        let propiedades = []
 
-
-        let propiedades=[]
-        
         const LayerActive = L.geoJSON(layer_local, {
             style: function (feature) {
                 let propiedad_color
-                for (const property in feature.properties) {                  
-                    if (propiedades.includes(property)!==true){
+                //Mira los campos y verifica si alguno forma parte de la lista general
+                for (const property in feature.properties) {
+                    if (propiedades.includes(property) !== true) {
+                        const option = document.create
                         propiedades.push(property)
                     }
-                }             
+                }
+
+
                 try {
                     propiedad_color = rango[feature.properties.CLASIFICAC][0]
                 } catch (error) {
@@ -100,27 +102,23 @@ function openfile(control) {
                     fillColor: "blue",
                     pane: "4",
                     weight: 1,
-                    fillOpacity: propiedad_color
+                    fillOpacity: 1
                 }
             }
-        }).bindPopup(function (layer) {
-            return layer.feature.properties.CLASIFICAC;
-        }, { pane: "labels" }).addTo(map);
-
+        }).addTo(map);
         lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
 
-        const newFormato = ["blue", "blue", 1, 1, "4", [], "local",propiedades]
+        const newFormato = ["blue", "blue", 1, 1, "4", [], "local", propiedades]
         let layer_existe = format_layer["layer_" + name_layer[0]]
+
         if (layer_existe == null) {
             format_layer["layer_" + name_layer[0]] = newFormato
         }
 
-
-
         let control = document.createElement("div")
         control.innerHTML =
             `
-            <div class="accordion-item border border-1 p-1 mb-1">
+            <div class="accordion-item border border-1 p-1 mb-1 bg-body-tertiary">
             <div class="form-check">
                 <div class="row">
                 <div class="col-auto me-2">
@@ -143,11 +141,104 @@ function openfile(control) {
                 <div class="accordion-body container-fluid" id="layer_${name_layer[0]}">
                 
                 </div>
+
+                
+                <div class="accordion" id="accordion_att${name_layer[0]}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#_att${name_layer[0]}" aria-expanded="false">
+                        Atributos
+                    </button>
+                    </h2>
+                    <div id="_att${name_layer[0]}" class="accordion-collapse collapse">
+                    <div class="accordion-body" id="collapsebody_att${name_layer[0]}">
+                        
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
             </div>
             `
         const newLayer = document.getElementById("body_layers")
         newLayer.appendChild(control)
+
+        const bodyCollaseAtt = document.getElementById(`collapsebody_att${name_layer[0]}`)
+        bodyCollaseAtt.innerHTML = ""
+        const sm1 = document.createElement("small")
+        sm1.className = "fw-bold"
+        sm1.textContent = "Campos de la capa"
+        bodyCollaseAtt.appendChild(sm1)
+
+        const sel_Campo = document.createElement("select")
+        sel_Campo.className = "form-select form-select-sm"
+        bodyCollaseAtt.appendChild(sel_Campo)
+
+        propiedades.forEach(campo => {
+            const option = document.createElement("option")
+            option.value = campo
+            option.textContent = campo
+            sel_Campo.appendChild(option)
+        })
+
+        const sm4 = document.createElement("small")
+        sm4.className = "fw-bold"
+        sm4.textContent = "Valor a buscar"
+        bodyCollaseAtt.appendChild(sm4)
+
+        const sel_Valor = document.createElement("select")
+        sel_Valor.className = "form-select form-select-sm"
+        bodyCollaseAtt.appendChild(sel_Valor)
+
+
+        let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+        sel_Campo.onchange = () => {
+            let atributos = []
+            sel_Valor.innerHTML = ""
+            for (const property in capa[0][1]._layers) {
+
+                const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+
+                if (atributos.includes(att) !== true) {
+                    atributos.push(att)
+                    const option = document.createElement("option")
+                    option.value = att
+                    option.textContent = att
+                    sel_Valor.appendChild(option)
+
+                }
+            }
+        }
+
+        const sm2 = document.createElement("small")
+        sm2.className = "fw-bold"
+        sm2.textContent = "Atibutos de la capa"
+        bodyCollaseAtt.appendChild(sm2)
+
+        const sel_Att = document.createElement("select")
+        sel_Att.className = "form-select form-select-sm"
+        sel_Att.innerHTML = `
+            <option value="fillOpacity">Opacidad polígono</option>
+            <option value="fillColor" selected>Color poligono</option>                
+        `
+        bodyCollaseAtt.appendChild(sel_Att)
+
+        const sm3 = document.createElement("small")
+        sm3.className = "fw-bold"
+        sm3.textContent = "Resultado"
+        bodyCollaseAtt.appendChild(sm3)
+
+        const int_Valor = document.createElement("input")
+        int_Valor.className = "form-control"
+        int_Valor.type = "text"
+        bodyCollaseAtt.appendChild(int_Valor)
+
+        const btnAplicar = document.createElement("button")
+        btnAplicar.className = "btn btn-outline-secondary"
+        btnAplicar.textContent = "aplicar"
+        btnAplicar.type = "button"
+        bodyCollaseAtt.appendChild(btnAplicar)
 
         const controlcheck = document.getElementById("checklayer_" + name_layer[0])
         controlcheck.checked = true
@@ -159,8 +250,34 @@ function openfile(control) {
                 map.removeLayer(activeLayer[0][1])
             }
         }
+
+        btnAplicar.onclick = () => {
+            let layers = capa[0][1]._layers
+
+            for (const property in layers) {
+                const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+                if (att == sel_Valor.value.trim()) {
+                    capa[0][1]._layers[property].options[sel_Att.value] = int_Valor.value.trim()
+                    capa[0][1]._layers[property].on('click', function(e) 
+                    {
+                        capa[0][1]._layers[property].bindPopup(att,{pane:"labels"})
+		                capa[0][1]._layers[property].openPopup()
+
+                    })
+                    
+
+                }
+            }
+            map.removeLayer(capa[0][1])
+            capa[0][1].addTo(map)
+
+
+        }
+
     };
     lector.readAsText(archivo);
+
+
 }
 
 //Esta variable única inserta las capas y las visualiza
@@ -297,7 +414,7 @@ function config_format(layer_name) {
                         }
                         capa[0][1].addTo(map)
                     }
- 
+
                 }
             }
         })
@@ -471,7 +588,7 @@ function config_format(layer_name) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = ""
-        i.textContent = format_layer[layer_name][2]*100 + "%"
+        i.textContent = format_layer[layer_name][2] * 100 + "%"
         i.style.color = "black"
 
 
@@ -563,7 +680,7 @@ function config_format(layer_name) {
         btnOpacity.appendChild(i)
 
         //Colocamos los colores en el ul control
-        const Pane = ["1","2","3","4","5"]
+        const Pane = ["1", "2", "3", "4", "5"]
 
         Pane.forEach(value => {
             const li = document.createElement("li")
@@ -598,6 +715,7 @@ function config_format(layer_name) {
                             capa[0][1]._layers[property].options.pane = format_layer[layer_name][4]
                         }
                         capa[0][1].addTo(map)
+                        console.log(layer_remove)
                     }
                 }
 
@@ -606,5 +724,16 @@ function config_format(layer_name) {
         })
 
     }
+}
+const modal_open_layer = {
+
+    modalAplicar(comando) {
+        const modal = new bootstrap.Modal(document.getElementById('modal_atributos'));
+        modal.show();
+        const btn = document.getElementById('btnAplicar')
+        btn.onclick = comando
+
+    }
+
 
 }
