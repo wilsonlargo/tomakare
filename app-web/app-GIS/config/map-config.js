@@ -10,14 +10,7 @@ const ColorList = [
     "#8B4513", "#FFFF00", "#FF6347", "#40E0D0", "#00FF7F"
 ]
 
-const rango = {
-    "Muy Alta": ["1"],
-    "Alta": ["0.8"],
-    "Moderada": ["0.6"],
-    "Baja": ["0.4"],
-    "Muy Baja": ["0.2"],
-    "null": ["1"],
-}
+
 let format_layer = {
     //                 linea,  fondo,  opacidad, grueso, pane, atributos
     "layer_tablero": ["white", "white", 1, 1, "1", [{
@@ -262,7 +255,6 @@ function openfile(control) {
                     {
                         capa[0][1]._layers[property].bindPopup(att,{pane:"labels"})
 		                capa[0][1]._layers[property].openPopup()
-
                     })
                     
 
