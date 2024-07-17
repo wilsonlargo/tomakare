@@ -55,6 +55,21 @@ let format_layer = {
         ],
         "nolocal"
     ],
+    "layer_municipios": ["black", "pink", 1, 1, "3",
+        [
+            {
+                "formato": "fw-bold",
+                "label": "Municipio:",
+                "text": "nombre_mpi"
+            },
+            {
+                "formato": "fw-bold",
+                "label": "Departamento:",
+                "text": "nombre_dpt"
+            },
+        ],
+        "nolocal"
+    ],
 }
 
 let lis_layers = []

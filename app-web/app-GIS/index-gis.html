@@ -209,6 +209,31 @@
         </div>
       </div>
     </div>
+            <!--Control collapse municipios-->
+            <div class="accordion-item border border-1 p-1 mb-1">
+              <div class="form-check">
+                  <div class="row">
+                      <div class="col-auto me-2">
+                          <a data-bs-toggle="collapse" href="#" data-bs-target="#collapsemunicipios"
+                              onclick="config_format('layer_municipios')">
+                              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+                          </a>
+                      </div>
+                      <div class="col-auto">
+                          <input class="form-check-input" type="checkbox"
+                              onchange="layers['put_layer'](this,'layer_municipios')" id="checklayer_municipios">
+                          <label class="form-check-label" for="flexCheckDefault">
+                              Municipios
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              <div id="collapsemunicipios" class="accordion-collapse collapse ms-1">
+                  <div class="accordion-body container-fluid" id="layer_municipios">
+  
+                  </div>
+              </div>
+          </div>
     <!--Control collapse resguardos-->
     <div class="accordion-item border border-1 p-1 mb-1">
       <div class="form-check">
@@ -239,38 +264,5 @@
     </div>
     <input id="file-input-layers" style="visibility:hidden; width: 50px;" type="file" accept=".geojson"
       onchange="openfile(event)">
-  </div>
-</div>
-<!-- Contenedor de formulario modal -->
-<div class="modal" id="modal_atributos">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Administrador de capas</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body" id="open-modal-panel">
-        <small class="fw-bold">Atributo de etiqueta</small>
-        <p>Seleccione el campo o campos origen del contenido de la etiqueta que se mostrará en cada polígono</p>
-        <div class="input-group mb-3">
-          <button class="btn btn-outline-secondary fw-bold fs-4" type="button">+</button>
-          <select class="form-select form-select-sm" id="intCampos_layer">
-
-          </select>
-        </div>
-
-
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button id="btnAplicar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">aceptar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-
-    </div>
   </div>
 </div>
