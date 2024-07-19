@@ -72,7 +72,7 @@
 </nav>
 
 <body onload="loadlayers()">
-  <div id="layerjsdiv"></div>
+    <div id="layerjsdiv"></div>
   <div id="panel-mapa">
     <div class="row justify-content-center align-items-center">
       <div>
@@ -88,6 +88,8 @@
   L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: ''
   }).addTo(map);
+
+
 
   map.createPane('1');
   map.getPane('1').style.zIndex = 400;

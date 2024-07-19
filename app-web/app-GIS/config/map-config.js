@@ -359,6 +359,56 @@ function loadlayers() {
     }
 
 }
+function maker_coltrol_layer(name, title) {
+    const accordion_item = document.createElement("div")
+    accordion_item.className = "accordion-item border border-1 p-1 mb-1"
+
+    const btn_group = document.createElement("div")
+    btn_group.className = "btn-group"
+    btn_group.role = "group"
+
+    btn_group.innerHTML = `            
+    <a class="ms-1 me-2" data-bs-toggle="collapse" href="#" data-bs-target="#collapse${name}"
+      id=btnConfigLayer${name}>
+      <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+    </a>`
+
+    const form_check = document.createElement("div")
+    form_check.className = "form-check"
+
+    const input = document.createElement("input")
+    input.className = "form-check-input"
+    input.type = "checkbox"
+    input.id = "checklayer_" + name
+    input.onchange = () => layers['put_layer'](input, 'layer_' + name)
+    form_check.appendChild(input)
+
+    const label = document.createElement("label")
+    label.className = "form-check-label"
+    label.for = "checklayer_" + name
+    label.textContent = title
+    form_check.appendChild(label)
+    btn_group.appendChild(form_check)
+    accordion_item.appendChild(btn_group)
+
+    const accordion_collapse = document.createElement("div")
+    accordion_collapse.className = "accordion-collapse collapse container-fluid"
+    accordion_collapse.id = "collapse" + name
+    accordion_collapse.innerHTML = `
+    <div class="accordion-body container-fluid" id="bodyCollapse${name}">
+                
+    </div>
+    `
+
+
+    accordion_item.appendChild(accordion_collapse)
+
+    panel_control_layers.appendChild(accordion_item)
+
+    const btnConfigLayer = document.getElementById("btnConfigLayer" + name)
+    btnConfigLayer.onclick = () => config_format("layer_" + name, "bodyCollapse" + name)
+
+}
 
 function openfile(control) {
     const archivo = control.target.files[0];
@@ -390,8 +440,8 @@ function openfile(control) {
                     propiedad_color = "blue"
                 }
                 return {
-                    color: "blue",
-                    fillColor: "blue",
+                    color: "white",
+                    fillColor: "lime",
                     pane: "4",
                     weight: 1,
                     fillOpacity: 1
@@ -402,7 +452,7 @@ function openfile(control) {
 
         const newFormato = {
             "format": {
-                color_linea: "'black'",
+                color_linea: "'white'",
                 color_fondo: "'lime'",
                 opacidad: 1,
                 ancho_linea: 3,
@@ -416,172 +466,285 @@ function openfile(control) {
                 },
             ],
             "target": {
-                "local": "nolocal",
+                "local": "local",
             },
-            "atributes": []
+            "atributes": {
+
+            }
         }
         let layer_existe = format_layer["layer_" + name_layer[0]]
 
         if (layer_existe == null) {
             format_layer["layer_" + name_layer[0]] = newFormato
         }
+        maker_coltrol_layer(name_layer[0], name_layer[0])
+        function maker_coltrol_layer(name, title) {
+            const accordion_item = document.createElement("div")
+            accordion_item.className = "accordion-item border border-1 p-1 mb-1"
 
-        let control = document.createElement("div")
-        control.innerHTML =
-            `
-            <div class="accordion-item border border-1 p-1 mb-1 bg-body-tertiary">
-            <div class="form-check">
-                <div class="row">
-                <div class="col-auto me-2">
-                    <a data-bs-toggle="collapse" href="#" data-bs-target="#collapse${name_layer[0]}" onclick="config_format('layer_${name_layer[0]}')">
-                    <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-                    </a>
-                </div>
-                <div class="col-auto">
-                    <input class="form-check-input" 
-                    type="checkbox" 
-                    onchange=""
-                    id="checklayer_${name_layer[0]}">
-                    <label class="form-check-label" for="flexCheckDefault">
-                    ${name_layer[0]}
-                    </label>
-                </div>
-                </div>
-            </div>
-            <div id="collapse${name_layer[0]}" class="accordion-collapse collapse">
-                <div class="accordion-body container-fluid" id="layer_${name_layer[0]}">
-                
-                </div>
+            const btn_group = document.createElement("div")
+            btn_group.className = "btn-group"
+            btn_group.role = "group"
 
-                
-                <div class="accordion" id="accordion_att${name_layer[0]}">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
-                    data-bs-target="#_att${name_layer[0]}" aria-expanded="false">
-                        Atributos
-                    </button>
-                    </h2>
-                    <div id="_att${name_layer[0]}" class="accordion-collapse collapse">
-                    <div class="accordion-body" id="collapsebody_att${name_layer[0]}">
-                        
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
-            `
-        const newLayer = document.getElementById("body_layers")
-        newLayer.appendChild(control)
+            btn_group.innerHTML = `            
+            <a class="ms-1 me-2" data-bs-toggle="collapse" href="#" data-bs-target="#collapse${name}"
+              id=btnConfigLayer${name}>
+              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+            </a>`
 
-        const bodyCollaseAtt = document.getElementById(`collapsebody_att${name_layer[0]}`)
-        bodyCollaseAtt.innerHTML = ""
-        const sm1 = document.createElement("small")
-        sm1.className = "fw-bold"
-        sm1.textContent = "Campos de la capa"
-        bodyCollaseAtt.appendChild(sm1)
+            const form_check = document.createElement("div")
+            form_check.className = "form-check"
 
-        const sel_Campo = document.createElement("select")
-        sel_Campo.className = "form-select form-select-sm"
-        bodyCollaseAtt.appendChild(sel_Campo)
-
-        propiedades.forEach(campo => {
-            const option = document.createElement("option")
-            option.value = campo
-            option.textContent = campo
-            sel_Campo.appendChild(option)
-        })
-
-        const sm4 = document.createElement("small")
-        sm4.className = "fw-bold"
-        sm4.textContent = "Valor a buscar"
-        bodyCollaseAtt.appendChild(sm4)
-
-        const sel_Valor = document.createElement("select")
-        sel_Valor.className = "form-select form-select-sm"
-        bodyCollaseAtt.appendChild(sel_Valor)
-
-
-        let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
-        sel_Campo.onchange = () => {
-            let atributos = []
-            sel_Valor.innerHTML = ""
-            for (const property in capa[0][1]._layers) {
-
-                const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
-
-                if (atributos.includes(att) !== true) {
-                    atributos.push(att)
-                    const option = document.createElement("option")
-                    option.value = att
-                    option.textContent = att
-                    sel_Valor.appendChild(option)
-
+            const input = document.createElement("input")
+            input.className = "form-check-input"
+            input.type = "checkbox"
+            input.id = "checklayer_" + name
+            input.checked = true
+            input.onchange = () => {
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+                if (input.checked == true) {
+                    activeLayer[0][1].addTo(map)
+                } else {
+                    map.removeLayer(activeLayer[0][1])
                 }
             }
-        }
 
-        const sm2 = document.createElement("small")
-        sm2.className = "fw-bold"
-        sm2.textContent = "Atibutos de la capa"
-        bodyCollaseAtt.appendChild(sm2)
+            form_check.appendChild(input)
 
-        const sel_Att = document.createElement("select")
-        sel_Att.className = "form-select form-select-sm"
-        sel_Att.innerHTML = `
+
+            const label = document.createElement("label")
+            label.className = "form-check-label"
+            label.for = "checklayer_" + name
+            label.textContent = title
+            form_check.appendChild(label)
+            btn_group.appendChild(form_check)
+            accordion_item.appendChild(btn_group)
+
+            const accordion_collapse = document.createElement("div")
+            accordion_collapse.className = "accordion-collapse collapse container-fluid"
+            accordion_collapse.id = "collapse" + name
+            accordion_collapse.innerHTML = `
+            <div class="accordion-body container-fluid" id="bodyCollapse${name}">
+                        
+            </div>
+            `
+
+            accordion_item.appendChild(accordion_collapse)
+
+            panel_control_layers.appendChild(accordion_item)
+
+            const btnConfigLayer = document.getElementById("btnConfigLayer" + name)
+            btnConfigLayer.onclick = () => config_format("layer_" + name, "bodyCollapse" + name)
+
+            //Configuración para los atributos
+            const a = document.createElement("div")
+            a.innerHTML = `
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button collapsed" 
+                    type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#collapsebody_att${name}" 
+                    aria-expanded="false">
+                    <div class="bg-info p-1 
+                    rounded text-white 
+                    text-center fw-bold 
+                    border-primary border-1 
+                    border">Atributos de capa</div>
+
+                </button>
+                </h2>
+                <div id="collapsebody_att${name}" 
+                    class="accordion-collapse collapse" 
+                    data-bs-parent="#accordionExample">
+                    Aquì los atributos
+                </div>
+            </div>
+            `
+            accordion_collapse.appendChild(a)
+
+
+            const bodyCollaseAtt = document.getElementById(`collapsebody_att${name}`)
+            bodyCollaseAtt.innerHTML = ""
+
+            const sm1 = document.createElement("small")
+            sm1.className = "fw-bold ms-1"
+            sm1.textContent = "Campos de la capa"
+            bodyCollaseAtt.appendChild(sm1)
+
+
+            const sel_Campo = document.createElement("select")
+            sel_Campo.className = "form-select form-select-sm ms-1"
+            bodyCollaseAtt.appendChild(sel_Campo)
+
+            propiedades.forEach(campo => {
+                const option = document.createElement("option")
+                option.value = campo
+                option.textContent = campo
+                sel_Campo.appendChild(option)
+            })
+
+            const sm4 = document.createElement("small")
+            sm4.className = "fw-bold"
+            sm4.textContent = "Valor a buscar"
+            bodyCollaseAtt.appendChild(sm4)
+
+            const sel_Valor = document.createElement("select")
+            sel_Valor.className = "form-select form-select-sm"
+            bodyCollaseAtt.appendChild(sel_Valor)
+
+
+            let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+            sel_Campo.onchange = () => {
+                let atributos = []
+                sel_Valor.innerHTML = ""
+                for (const property in capa[0][1]._layers) {
+
+                    const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+
+                    if (atributos.includes(att) !== true) {
+                        atributos.push(att)
+                        const option = document.createElement("option")
+                        option.value = att
+                        option.textContent = att
+                        sel_Valor.appendChild(option)
+
+                    }
+                }
+            }
+
+            const sm2 = document.createElement("small")
+            sm2.className = "fw-bold"
+            sm2.textContent = "Atibutos de la capa"
+            bodyCollaseAtt.appendChild(sm2)
+
+            const sel_Att = document.createElement("select")
+            sel_Att.className = "form-select form-select-sm"
+            sel_Att.innerHTML = `
             <option value="fillOpacity">Opacidad polígono</option>
             <option value="fillColor" selected>Color poligono</option>                
-        `
-        bodyCollaseAtt.appendChild(sel_Att)
+            `
+            bodyCollaseAtt.appendChild(sel_Att)
 
-        const sm3 = document.createElement("small")
-        sm3.className = "fw-bold"
-        sm3.textContent = "Resultado"
-        bodyCollaseAtt.appendChild(sm3)
+            const sm3 = document.createElement("small")
+            sm3.className = "fw-bold"
+            sm3.textContent = "Resultado"
+            bodyCollaseAtt.appendChild(sm3)
 
-        const int_Valor = document.createElement("input")
-        int_Valor.className = "form-control"
-        int_Valor.type = "text"
-        bodyCollaseAtt.appendChild(int_Valor)
+            const int_Valor = document.createElement("input")
+            int_Valor.className = "form-control"
+            int_Valor.type = "text"
+            bodyCollaseAtt.appendChild(int_Valor)
 
-        const btnAplicar = document.createElement("button")
-        btnAplicar.className = "btn btn-outline-secondary"
-        btnAplicar.textContent = "aplicar"
-        btnAplicar.type = "button"
-        bodyCollaseAtt.appendChild(btnAplicar)
+            const btnAplicar = document.createElement("button")
+            btnAplicar.className = "btn btn-outline-secondary"
+            btnAplicar.textContent = "aplicar"
+            btnAplicar.type = "button"
+            bodyCollaseAtt.appendChild(btnAplicar)
 
-        const controlcheck = document.getElementById("checklayer_" + name_layer[0])
-        controlcheck.checked = true
-        controlcheck.onchange = () => {
-            const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
-            if (controlcheck.checked == true) {
-                activeLayer[0][1].addTo(map)
-            } else {
-                map.removeLayer(activeLayer[0][1])
-            }
-        }
-
-        btnAplicar.onclick = () => {
-            let layers = capa[0][1]._layers
-
-            for (const property in layers) {
-                const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
-                if (att == sel_Valor.value.trim()) {
-                    capa[0][1]._layers[property].options[sel_Att.value] = int_Valor.value.trim()
-                    capa[0][1]._layers[property].on('click', function (e) {
-                        capa[0][1]._layers[property].bindPopup(att, { pane: "labels" })
-                        capa[0][1]._layers[property].openPopup()
-                    })
-
-
+            const controlcheck = document.getElementById("checklayer_" + name_layer[0])
+            controlcheck.checked = true
+            controlcheck.onchange = () => {
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+                if (controlcheck.checked == true) {
+                    activeLayer[0][1].addTo(map)
+                } else {
+                    map.removeLayer(activeLayer[0][1])
                 }
             }
-            map.removeLayer(capa[0][1])
-            capa[0][1].addTo(map)
 
+            btnAplicar.onclick = () => {
+                let layers = capa[0][1]._layers
+
+                for (const property in layers) {
+                    const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+                    if (att == sel_Valor.value.trim()) {
+                        capa[0][1]._layers[property].options[sel_Att.value] = int_Valor.value.trim()
+                        capa[0][1]._layers[property].on('click', function (e) {
+                            capa[0][1]._layers[property].bindPopup(`Capa ${name}: ${att}`, { pane: "labels" })
+                            capa[0][1]._layers[property].openPopup()
+                        })
+                    }
+                }
+                //Agregamos los atributos al objeto formato de la capa
+
+
+
+                const formatlayer = format_layer["layer_" + name_layer[0]]
+                const nameAtt = sel_Campo.value + sel_Att.value + sel_Valor.value.trim()
+                if (formatlayer.atributes[nameAtt] == null) {
+
+
+                    if (sel_Att.value == "fillColor") {
+                        const newAtributo = [
+                            {
+                                "valor": sel_Valor.value.trim(),
+                                "backcolor": int_Valor.value.trim(),
+                                "linecolor": int_Valor.value.trim(),
+                                "opacity": formatlayer.format.opacidad,
+                            }
+                        ]
+                        formatlayer.atributes[nameAtt] = newAtributo
+                    } else if (sel_Att.value == "fillColor") {
+                        const newAtributo = 
+                            {
+                                "valor": sel_Valor.value.trim(),
+                                "backcolor": formatlayer.format.color_fondo,
+                                "linecolor": formatlayer.format.color_linea,
+                                "opacity": int_Valor.value.trim()
+                            }
+                        
+                        formatlayer.atributes[nameAtt] = newAtributo
+                    }
+
+                } else {
+                    
+                    if (sel_Att.value == "fillColor") {
+                        formatlayer.atributes[nameAtt][0].backcolor=int_Valor.value.trim()
+                        formatlayer.atributes[nameAtt][0].linecolor=int_Valor.value.trim()
+                    } else if (sel_Att.value == "fillColor") {
+                        formatlayer.atributes[nameAtt][0].opacity=int_Valor.value.trim()
+                    }
+                }
+
+                map.removeLayer(capa[0][1])
+                capa[0][1].addTo(map)
+
+                const div =document.createElement("div")
+                div.style.width="200px"
+                div.className="bg-white shadow p-4"
+
+
+                for (const atributoL in formatlayer.atributes){
+                    const formato = (formatlayer.atributes[atributoL][0])
+                    const divF= document.createElement("div")
+
+
+                    const i= document.createElement("i")
+                    i.className="bi bi-square-fill fs-6 border border-1"
+                    i.style.background=formato.backcolor
+                    i.style.color=formato.linecolor
+                    i.style.opacity=formato.opacity
+                    i.innerHTML=`<div class="ms-1 text-info"> ${formato.valor}</div>`
+
+                    divF.appendChild(i)
+
+
+
+                    div.appendChild(divF)
+
+                }
+
+
+                L.marker([5.1, -75.55], {draggable:true, pane:"labels",
+                    icon: L.divIcon({
+                      html: div,
+                       // Specify something to get rid of the default class.
+                    })
+                  }).addTo(map);
+            }
 
         }
+
 
     };
     lector.readAsText(archivo);
@@ -609,7 +772,7 @@ const layers = {
                             propiedades.push(property)
                         }
                     }
-                    console.log(eval(format_layer[layer_name].format.color_fondo))
+
                     return {
                         color: eval(format_layer[layer_name].format.color_linea),
                         fillColor: eval(format_layer[layer_name].format.color_fondo),
@@ -654,7 +817,7 @@ function config_format(layer_name, controlname) {
     const cCollapseBody = document.getElementById(controlname)
     cCollapseBody.innerHTML = ""
 
-    console.log(cCollapseBody)
+
     const btngroup = document.createElement("div")
     btngroup.role = "group"
     btngroup.className = "btn-group border-1 border border-info p-2"
@@ -765,7 +928,7 @@ function config_format(layer_name, controlname) {
         } catch (error) {
             btnLineColor.hidden = true
         }
-        
+
         btnLineColor.appendChild(i)
 
         //Colocamos los colores en el ul control
