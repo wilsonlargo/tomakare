@@ -32,11 +32,7 @@
 
   <script src="./config/map-config.js"></script>
 
-  <script src="./layers/001tableto.js"></script>
-  <script src="./layers/002basemap.js"></script>
-  <script src="./layers/003departamentos.js"></script>
-  <script src="./layers/004resguardos.js"></script>
-  <script src="./layers/004municipios.js"></script>
+
 
 </head>
 <nav class="navbar navbar-expand-lg bg-primary sticky-top">
@@ -75,16 +71,14 @@
   </div>
 </nav>
 
-<body>
+<body onload="loadlayers()">
+  <div id="layerjsdiv"></div>
   <div id="panel-mapa">
     <div class="row justify-content-center align-items-center">
       <div>
         <div id="map"></div>
       </div>
     </div>
-
-
-
   </div>
 </body>
 <script>
@@ -134,130 +128,8 @@
         <i class="bi bi-download"></i>
       </button>
     </div>
-    <!--Control collapse tablero-->
-    <div class="accordion-item border border-1 p-1 mb-1">
-      <div class="form-check">
-        <div class="row">
-          <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseTablero"
-              onclick="config_format('layer_tablero')">
-              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-            </a>
-          </div>
-          <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_tablero')"
-              id="checklayer_tablero">
-            <label class="form-check-label" for="flexCheckDefault">
-              Ver tablero
-            </label>
-          </div>
-        </div>
-      </div>
-      <div id="collapseTablero" class="accordion-collapse collapse ms-1">
-        <div class="accordion-body container-fluid" id="layer_tablero">
+    <div id="panel_control_layers">
 
-        </div>
-      </div>
-    </div>
-    <!--Control collapse basemap-->
-    <div class="accordion-item border border-1 p-1 mb-1">
-      <div class="form-check">
-        <div class="row">
-          <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseBasemap"
-              onclick="config_format('layer_basemap')">
-              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-            </a>
-          </div>
-          <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_basemap')"
-              id="checklayer_basemap">
-            <label class="form-check-label" for="flexCheckDefault">
-              Ver mapa base
-            </label>
-          </div>
-        </div>
-      </div>
-      <div id="collapseBasemap" class="accordion-collapse collapse ms-1">
-        <div class="accordion-body container-fluid" id="layer_basemap">
-
-        </div>
-      </div>
-    </div>
-    <!--Control collapse departamentos-->
-    <div class="accordion-item border border-1 p-1 mb-1">
-      <div class="form-check">
-        <div class="row">
-          <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapsedepartamentos"
-              onclick="config_format('layer_departamentos')">
-              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-            </a>
-          </div>
-          <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_departamentos')"
-              id="checklayer_departamentos">
-            <label class="form-check-label" for="flexCheckDefault">
-              Departamentos
-            </label>
-          </div>
-        </div>
-      </div>
-      <div id="collapsedepartamentos" class="accordion-collapse collapse ms-1">
-        <div class="accordion-body container-fluid" id="layer_departamentos">
-
-        </div>
-      </div>
-    </div>
-            <!--Control collapse municipios-->
-            <div class="accordion-item border border-1 p-1 mb-1">
-              <div class="form-check">
-                  <div class="row">
-                      <div class="col-auto me-2">
-                          <a data-bs-toggle="collapse" href="#" data-bs-target="#collapsemunicipios"
-                              onclick="config_format('layer_municipios')">
-                              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-                          </a>
-                      </div>
-                      <div class="col-auto">
-                          <input class="form-check-input" type="checkbox"
-                              onchange="layers['put_layer'](this,'layer_municipios')" id="checklayer_municipios">
-                          <label class="form-check-label" for="flexCheckDefault">
-                              Municipios
-                          </label>
-                      </div>
-                  </div>
-              </div>
-              <div id="collapsemunicipios" class="accordion-collapse collapse ms-1">
-                  <div class="accordion-body container-fluid" id="layer_municipios">
-  
-                  </div>
-              </div>
-          </div>
-    <!--Control collapse resguardos-->
-    <div class="accordion-item border border-1 p-1 mb-1">
-      <div class="form-check">
-        <div class="row">
-          <div class="col-auto me-2">
-            <a data-bs-toggle="collapse" href="#" data-bs-target="#collapseresguardos"
-              onclick="config_format('layer_resguardos')">
-              <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
-            </a>
-          </div>
-          <div class="col-auto">
-            <input class="form-check-input" type="checkbox" onchange="layers['put_layer'](this,'layer_resguardos')"
-              id="checklayer_resguardos">
-            <label class="form-check-label" for="checklayer_resguardos">
-              Resguardos
-            </label>
-          </div>
-        </div>
-      </div>
-      <div id="collapseresguardos" class="accordion-collapse collapse ms-1">
-        <div class="accordion-body container-fluid" id="layer_resguardos">
-
-        </div>
-      </div>
     </div>
     <div id="body_layers">
 

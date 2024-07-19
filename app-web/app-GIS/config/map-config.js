@@ -1,4 +1,4 @@
-const ColorList = [
+const ColorLayer = [
     "#F0F8FF", "white", "#FAEBD7", "#00FFFF", "#7FFFD4", "#F5F5DC", "#000000", "#D2691E",
     "#0000FF", "#8A2BE2", "#A52A2A", "#DEB887", "#5F9EA0", "#7FFF00", "#D2691E",
     "#FF7F50", "#6495ED", "#FFF8DC", "#DC143C", "#00FFFF", "#00008B", "#008B8B",
@@ -9,71 +9,356 @@ const ColorList = [
     "#4B0082", "#F0E68C", "#90EE90", "#FFB6C1", "#FFA500", "#FF4500", "#FF0000",
     "#8B4513", "#FFFF00", "#FF6347", "#40E0D0", "#00FF7F"
 ]
-
-
-let format_layer = {
-    //                 linea,  fondo,  opacidad, grueso, pane, atributos
-    "layer_tablero": ["white", "white", 1, 1, "1", [{
-        "formato": "fw-bold text-info",
-        "label": "Tablero",
-        "text": "DPTO_CNMBR"
-    }], "nolocal"],
-    "layer_basemap": ["black", "orange", 1, 1, "2", [
-        {
-            "formato": "fw-bold text-info",
-            "label": "Mapa base",
-            "text": "DPTO_CNMBR"
-        }
-    ], "nolocal"],
-    "layer_departamentos": ["black", "orange", 1, 1, "3",
-        [
-            {
-                "formato": "fw-bold",
-                "label": "Departamento:",
-                "text": "DPTO_CNMBR"
-            },
-            {
-                "formato": "fw-bold",
-                "label": "Código DEP:",
-                "text": "DPTO_CCDGO"
-            },
-        ],
-        "nolocal"
-    ],
-    "layer_resguardos": ["black", "red", 1, 1, "3",
-        [
-            {
-                "formato": "fw-bold",
-                "label": "Territorio:",
-                "text": "NOMBRE"
-            },
-            {
-                "formato": "fw-bold",
-                "label": "Pueblo:",
-                "text": "PUEBLO"
-            },
-        ],
-        "nolocal"
-    ],
-    "layer_municipios": ["black", "pink", 1, 1, "3",
-        [
-            {
-                "formato": "fw-bold",
-                "label": "Municipio:",
-                "text": "nombre_mpi"
-            },
-            {
-                "formato": "fw-bold",
-                "label": "Departamento:",
-                "text": "nombre_dpt"
-            },
-        ],
-        "nolocal"
-    ],
-}
-
 let lis_layers = []
 let lis_layers_open = []
+let format_layer = {
+    "layer_tablero": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'white'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'1'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold text-info",
+                "contenido": "Tablero",
+                "campo": ""
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": [
+
+        ]
+
+    },
+    "layer_basemap": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'orange'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'2'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold text-info",
+                "contenido": "Mapa base",
+                "campo": ""
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": [
+
+        ]
+
+    },
+    "layer_departamentos": {
+        "format": {
+            color_linea: "'blue'",
+            color_fondo: "'lightblue'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold text-info",
+                "contenido": "Departamento",
+                "campo": "DPTO_CNMBR"
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_municipios": {
+        "format": {
+            color_linea: "'blue'",
+            color_fondo: "'lightblue'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold text-info",
+                "contenido": "Municipio",
+                "campo": "nombre_mpi"
+            },
+            {
+                "clase": "fw-bold",
+                "contenido": "Departamento",
+                "campo": "nombre_dpt"
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_amazonia": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'orange'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Departamento",
+                "campo": "Departamen"
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_macroterritorioscv": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "feature.properties.backColor",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Macroregión",
+                "campo": "MacroT"
+            },
+            {
+                "clase": "fw-bold",
+                "contenido": "Departamento",
+                "campo": "nombre_dpt"
+            }
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": [
+
+        ]
+    },
+    "layer_resguardos": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'red'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Nombre",
+                "campo": "NOMBRE"
+            },
+            {
+                "clase": "fw-bold",
+                "contenido": "Pueblo",
+                "campo": "PUEBLO"
+            }
+
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_reservasc": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'lime'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Nombre",
+                "campo": "NOMBRE_ZONA_RESERVA_CAMPESINA"
+            },
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_pdet": {
+        "format": {
+            color_linea: "'white'",
+            color_fondo: "'green'",
+            opacidad: 1,
+            ancho_linea: 1,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Nombre",
+                "campo": "MpNombre"
+            },
+            {
+                "clase": "fw-bold",
+                "contenido": "Departamento",
+                "campo": "Depto"
+            },
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_ganepares": {
+        "format": {
+            color_linea: "feature.properties.backcolor",
+            color_fondo: "feature.properties.backcolor",
+            opacidad: 1,
+            ancho_linea: 6,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Nombre",
+                "campo": "NombreAA"
+            },
+            {
+                "clase": "fw-bold",
+                "contenido": "Zona",
+                "campo": "Zona"
+            },
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    },
+    "layer_clusterodpi2024": {
+        "format": {
+            color_linea: "'black'",
+            color_fondo: "'black'",
+            opacidad: 1,
+            ancho_linea: 3,
+            pane: "'3'"
+        },
+        "label": [
+            {
+                "clase": "fw-bold",
+                "contenido": "Cluster de afectaciones a los DPI OBSERVATORIO ODPI ONIC 2016-2023",
+                "campo": ""
+            },
+        ],
+        "target": {
+            "local": "nolocal",
+        },
+        "atributes": []
+    }
+}
+function loadlayers() {
+    const jslayers = [
+        ["nolayer", "Mapa general"],//=================
+        ["001tableto", "tablero", "Tablero"],
+        ["002basemap", "basemap", "Mapa base"],
+        ["nolayer", "Unidades Territoriales"],//=================
+        ["003departamentos", "departamentos", "Departamentos"],
+        ["004municipios", "municipios", "Municipios"],
+        ["nolayer", "Macroregiones"],//=================
+        ["008macroterritorioscv", "macroterritorioscv", "Macroregiones CV"],
+        ["005mamazonia", "amazonia", "Macro amazonía"],
+        ["nolayer", "Territorios"],//=================
+        ["004resguardos", "resguardos", "Resguardos"],
+        ["006reservacampesina", "reservasc", "Reservas campecinas"],
+        ["007pdet", "pdet", "Municipios PDET"],
+        ["nolayer", "Grupos Armados no Estatales"],//=================
+        ["009ganepares", "ganepares", "Presencia GANE (Pares)"],
+        ["nolayer", "Información víctimas"],//=================
+        ["010clusterodpi2024", "clusterodpi2024", "Cluster ODPI ONIC 2024"],
+    ]
+
+    const panel_control_layers = document.getElementById("panel_control_layers")
+    panel_control_layers.innerHTML = ""
+
+    document.getElementById("layerjsdiv").innerHTML = ""
+    jslayers.forEach(item => {
+        if (item[0] !== "nolayer") {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `./layers/${item[0]}.js`;
+            document.getElementById("layerjsdiv").appendChild(script);
+            maker_coltrol_layer(item[1], item[2])
+        } else {
+            const sm = document.createElement("small")
+            sm.className = "text-info fw-bold"
+            sm.textContent = item[1]
+            document.getElementById("panel_control_layers").appendChild(sm)
+        }
+    })
+
+    function maker_coltrol_layer(name, title) {
+        const accordion_item = document.createElement("div")
+        accordion_item.className = "accordion-item border border-1 p-1 mb-1"
+
+        const btn_group = document.createElement("div")
+        btn_group.className = "btn-group"
+        btn_group.role = "group"
+
+        btn_group.innerHTML = `            
+        <a class="ms-1 me-2" data-bs-toggle="collapse" href="#" data-bs-target="#collapse${name}"
+          id=btnConfigLayer${name}>
+          <i class="bi bi-gear-fill" style="color:#CEECF5;"></i>
+        </a>`
+
+        const form_check = document.createElement("div")
+        form_check.className = "form-check"
+
+        const input = document.createElement("input")
+        input.className = "form-check-input"
+        input.type = "checkbox"
+        input.id = "checklayer_" + name
+        input.onchange = () => layers['put_layer'](input, 'layer_' + name)
+        form_check.appendChild(input)
+
+        const label = document.createElement("label")
+        label.className = "form-check-label"
+        label.for = "checklayer_" + name
+        label.textContent = title
+        form_check.appendChild(label)
+        btn_group.appendChild(form_check)
+        accordion_item.appendChild(btn_group)
+
+        const accordion_collapse = document.createElement("div")
+        accordion_collapse.className = "accordion-collapse collapse container-fluid"
+        accordion_collapse.id = "collapse" + name
+        accordion_collapse.innerHTML = `
+        <div class="accordion-body container-fluid" id="bodyCollapse${name}">
+                    
+        </div>
+        `
+
+
+        accordion_item.appendChild(accordion_collapse)
+
+        panel_control_layers.appendChild(accordion_item)
+
+        const btnConfigLayer = document.getElementById("btnConfigLayer" + name)
+        btnConfigLayer.onclick = () => config_format("layer_" + name, "bodyCollapse" + name)
+
+    }
+
+}
 
 function openfile(control) {
     const archivo = control.target.files[0];
@@ -99,11 +384,10 @@ function openfile(control) {
                     }
                 }
 
-
                 try {
                     propiedad_color = rango[feature.properties.CLASIFICAC][0]
                 } catch (error) {
-                    propiedad_color = rango["null"][0]
+                    propiedad_color = "blue"
                 }
                 return {
                     color: "blue",
@@ -116,7 +400,26 @@ function openfile(control) {
         }).addTo(map);
         lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
 
-        const newFormato = ["blue", "blue", 1, 1, "4", [], "local", propiedades]
+        const newFormato = {
+            "format": {
+                color_linea: "'black'",
+                color_fondo: "'lime'",
+                opacidad: 1,
+                ancho_linea: 3,
+                pane: "'3'"
+            },
+            "label": [
+                {
+                    "clase": "fw-bold",
+                    "contenido": "Label",
+                    "campo": ""
+                },
+            ],
+            "target": {
+                "local": "nolocal",
+            },
+            "atributes": []
+        }
         let layer_existe = format_layer["layer_" + name_layer[0]]
 
         if (layer_existe == null) {
@@ -266,12 +569,11 @@ function openfile(control) {
                 const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
                 if (att == sel_Valor.value.trim()) {
                     capa[0][1]._layers[property].options[sel_Att.value] = int_Valor.value.trim()
-                    capa[0][1]._layers[property].on('click', function(e) 
-                    {
-                        capa[0][1]._layers[property].bindPopup(att,{pane:"labels"})
-		                capa[0][1]._layers[property].openPopup()
+                    capa[0][1]._layers[property].on('click', function (e) {
+                        capa[0][1]._layers[property].bindPopup(att, { pane: "labels" })
+                        capa[0][1]._layers[property].openPopup()
                     })
-                    
+
 
                 }
             }
@@ -292,45 +594,46 @@ const layers = {
     //función que obtiene desde el control el nombre del control y nombre de la capa
     "put_layer"(control, layer_name) {
         const format = format_layer[layer_name]
+
         //Verifica si el contro check su estado
+        let propiedades = []
         if (control.checked == true) {
             //Si es activado crea uan capa con base al archivo local
             //..eval(layer_name)...usa el texto, lo convierte en uan variable que evoca la capa
 
             const layer = L.geoJSON(eval(layer_name), {
                 style: function (feature) {
-                    //Según sea la capa así mismo aplica el formato
-                    try {
-                        return {
-                            //Aplica el formato para la capa
-                            color: format[0],
-                            fillColor: format[1],
-                            fillOpacity: format[2],
-                            weight: format[3],
-                            pane: format[4]
-                        };
-                    } catch (error) {
-                        return { color: "", fillOpacity: 0 };
+                    //Identifica las propiedades de la capa
+                    for (const property in feature.properties) {
+                        if (propiedades.includes(property) !== true) {
+                            propiedades.push(property)
+                        }
                     }
+                    console.log(eval(format_layer[layer_name].format.color_fondo))
+                    return {
+                        color: eval(format_layer[layer_name].format.color_linea),
+                        fillColor: eval(format_layer[layer_name].format.color_fondo),
+                        fillOpacity: eval(format_layer[layer_name].format.opacidad),
+                        weight: eval(format_layer[layer_name].format.ancho_linea),
+                        pane: eval(format_layer[layer_name].format.pane),
+
+
+                    };
                 }
             }).bindPopup(function (layer) {
                 const contenido = document.createElement("div")
-                format[5].forEach(elemento => {
-
+                format_layer[layer_name].label.forEach(elemento => {
                     const label = document.createElement("div")
-                    label.className = elemento.formato
-                    label.textContent = elemento.label
+                    label.className = elemento.clase
+                    label.textContent = elemento.contenido
                     contenido.appendChild(label)
 
                     const div = document.createElement("div")
-                    div.textContent = layer.feature.properties[elemento.text]
+                    div.textContent = layer.feature.properties[elemento.campo]
                     contenido.appendChild(div)
-
-
                 })
                 return contenido.innerHTML;
-            },
-                { pane: "labels" }
+            }, { pane: "labels" }
             ).addTo(map);
 
             //Agrega esta capa a la lista de capas para activar o desactivar
@@ -343,16 +646,20 @@ const layers = {
             map.removeLayer(layer_remove[0][1])
             lis_layers = layer_noremove
         }
+
     }
 }
-function config_format(layer_name) {
-    const cCollapseBody = document.getElementById(layer_name)
+function config_format(layer_name, controlname) {
+
+    const cCollapseBody = document.getElementById(controlname)
     cCollapseBody.innerHTML = ""
 
-
+    console.log(cCollapseBody)
     const btngroup = document.createElement("div")
-    btngroup.className = "btn-group"
     btngroup.role = "group"
+    btngroup.className = "btn-group border-1 border border-info p-2"
+
+
     cCollapseBody.appendChild(btngroup)
 
     maker_control_backcolor()
@@ -363,11 +670,11 @@ function config_format(layer_name) {
     function maker_control_backcolor() {
         //Crearemos un control desplegable de color personalizado
         const dropdown = document.createElement("div")
-        dropdown.className = "dropdown"
+        dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="btn btn-outline-info 
-            dropdown-toggle" 
+        <button class="dropdown-toggle
+        border-1 btn btn-outline-secondary p-1" 
             type="button" 
             data-bs-toggle="dropdown"
             id="btnColor${layer_name}">
@@ -379,17 +686,20 @@ function config_format(layer_name) {
         dropdown.appendChild(ul)
         btngroup.appendChild(dropdown)
 
+        const btnColor = document.getElementById("btnColor" + layer_name)
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = "bi bi-square-fill rounded"
-        i.style.color = format_layer[layer_name][1]
-
-        const btnColor = document.getElementById("btnColor" + layer_name)
+        try {
+            i.style.color = eval(format_layer[layer_name].format.color_fondo)
+        } catch (error) {
+            btnColor.hidden = true
+        }
         btnColor.appendChild(i)
 
         //Colocamos los colores en el ul control
 
-        ColorList.forEach(color => {
+        ColorLayer.forEach(color => {
             const iColor = document.createElement("i")
             iColor.className = "bi bi-square-fill fs-3"
             iColor.style.color = color
@@ -397,27 +707,27 @@ function config_format(layer_name) {
             ul.appendChild(iColor)
             iColor.onclick = () => {
                 i.style.color = color
-                format_layer[layer_name][1] = color
+                format_layer[layer_name].format.color_fondo = `'${color}'`
                 const checkLayer = document.getElementById("check" + layer_name)
 
                 if (checkLayer.checked == true) {
                     //Crear dos filtros para mostrar o quitar la capa
                     //Solo para capas locales fijas, que siempre se presentarán en el programa
 
-                    if (format_layer[layer_name][6] == "nolocal") {
+                    if (format_layer[layer_name].target.local == "nolocal") {
                         let layer_remove = lis_layers.filter(value => value[0] == layer_name)
                         let layer_noremove = lis_layers.filter(value => value[0] !== layer_name)
                         map.removeLayer(layer_remove[0][1])
                         lis_layers = layer_noremove
                         layers.put_layer(checkLayer, layer_name)
-                    } else if (format_layer[layer_name][6] == "local") {
+                    } else if (format_layer[layer_name].target.local == "local") {
                         let layer_remove = lis_layers_open.filter(value => value[0] == layer_name)
                         map.removeLayer(layer_remove[0][1])
-                        //lis_layers_open["layer_name"][1]= newLayer(layer_remove)
+
                         let capa = lis_layers_open.filter(value => value[0] == layer_name)
                         let layers = capa[0][1]._layers
                         for (const property in layers) {
-                            capa[0][1]._layers[property].options.fillColor = format_layer[layer_name][1]
+                            capa[0][1]._layers[property].options.fillColor = eval(format_layer[layer_name].format.color_fondo)
                         }
                         capa[0][1].addTo(map)
                     }
@@ -430,10 +740,10 @@ function config_format(layer_name) {
     function maker_control_linecolor() {
         //Crearemos un control desplegable de color linea personalizado
         const dropdown = document.createElement("div")
-        dropdown.className = "dropdown"
+        dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="btn btn-outline-info 
+        <button class="border-1 btn btn-outline-secondary p-1
             dropdown-toggle" 
             type="button" 
             data-bs-toggle="dropdown"
@@ -449,14 +759,18 @@ function config_format(layer_name) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = "bi bi-square fw-bold"
-        i.style.color = format_layer[layer_name][0]
-
         const btnLineColor = document.getElementById("btnLineColor" + layer_name)
+        try {
+            i.style.color = eval(format_layer[layer_name].format.color_fondo)
+        } catch (error) {
+            btnLineColor.hidden = true
+        }
+        
         btnLineColor.appendChild(i)
 
         //Colocamos los colores en el ul control
 
-        ColorList.forEach(color => {
+        ColorLayer.forEach(color => {
             const iColor = document.createElement("i")
             iColor.className = "bi bi-square-fill fs-3"
             iColor.style.color = color
@@ -464,12 +778,12 @@ function config_format(layer_name) {
             ul.appendChild(iColor)
             iColor.onclick = () => {
                 i.style.color = color
-                format_layer[layer_name][0] = color
+                format_layer[layer_name].format.color_linea = `'${color}'`
                 const checkLayer = document.getElementById("check" + layer_name)
 
                 if (checkLayer.checked == true) {
 
-                    if (format_layer[layer_name][6] == "nolocal") {
+                    if (format_layer[layer_name].target.local == "nolocal") {
                         //Crear dos filtros para mostrar o quitar la capa
                         //Solo para capas locales fijas, que siempre se presentarán en el programa
                         let layer_remove = lis_layers.filter(value => value[0] == layer_name)
@@ -477,14 +791,14 @@ function config_format(layer_name) {
                         map.removeLayer(layer_remove[0][1])
                         lis_layers = layer_noremove
                         layers.put_layer(checkLayer, layer_name)
-                    } else if (format_layer[layer_name][6] == "local") {
+                    } else if (format_layer[layer_name].target.local == "local") {
                         let layer_remove = lis_layers_open.filter(value => value[0] == layer_name)
                         map.removeLayer(layer_remove[0][1])
                         //lis_layers_open["layer_name"][1]= newLayer(layer_remove)
                         let capa = lis_layers_open.filter(value => value[0] == layer_name)
                         let layers = capa[0][1]._layers
                         for (const property in layers) {
-                            capa[0][1]._layers[property].options.color = format_layer[layer_name][0]
+                            capa[0][1]._layers[property].options.color = eval(format_layer[layer_name].format.color_linea)
                         }
                         capa[0][1].addTo(map)
                     }
@@ -499,10 +813,10 @@ function config_format(layer_name) {
     function maker_control_lineWeight() {
         //Crearemos un control desplegable de color linea personalizado
         const dropdown = document.createElement("div")
-        dropdown.className = "dropdown"
+        dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="btn btn-outline-info 
+        <button class="border-1 btn btn-outline-secondary p-1
             dropdown-toggle" 
             type="button" 
             data-bs-toggle="dropdown"
@@ -517,7 +831,7 @@ function config_format(layer_name) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = "bi-arrows-collapse-vertical"
-        i.textContent = " " + format_layer[layer_name][3] + "px"
+        i.textContent = " " + format_layer[layer_name].format.ancho_linea + "px"
         i.style.color = "black"
 
 
@@ -545,31 +859,29 @@ function config_format(layer_name) {
 
             ul.appendChild(li)
             a.onclick = () => {
-                format_layer[layer_name][3] = value[0]
+                format_layer[layer_name].format.ancho_linea = value[0]
                 const checkLayer = document.getElementById("check" + layer_name)
                 i.textContent = " " + value[0] + "px"
 
                 if (checkLayer.checked == true) {
-                    if (format_layer[layer_name][6] == "nolocal") {
+                    if (format_layer[layer_name].target.local == "nolocal") {
                         let layer_remove = lis_layers.filter(value => value[0] == layer_name)
                         let layer_noremove = lis_layers.filter(value => value[0] !== layer_name)
                         map.removeLayer(layer_remove[0][1])
                         lis_layers = layer_noremove
                         layers.put_layer(checkLayer, layer_name)
-                    } else if (format_layer[layer_name][6] == "local") {
+                    } else if (format_layer[layer_name].target.local == "local") {
                         let layer_remove = lis_layers_open.filter(value => value[0] == layer_name)
                         map.removeLayer(layer_remove[0][1])
                         //lis_layers_open["layer_name"][1]= newLayer(layer_remove)
                         let capa = lis_layers_open.filter(value => value[0] == layer_name)
                         let layers = capa[0][1]._layers
                         for (const property in layers) {
-                            capa[0][1]._layers[property].options.weight = format_layer[layer_name][3]
+                            capa[0][1]._layers[property].options.weight = format_layer[layer_name].format.ancho_linea
                         }
                         capa[0][1].addTo(map)
                     }
                 }
-
-
             }
         })
 
@@ -577,10 +889,10 @@ function config_format(layer_name) {
     function maker_control_opacity() {
         //Crearemos un control desplegable de color linea personalizado
         const dropdown = document.createElement("div")
-        dropdown.className = "dropdown"
+        dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="btn btn-outline-info 
+        <button class="border-1 btn btn-outline-secondary p-1
             dropdown-toggle" 
             type="button" 
             data-bs-toggle="dropdown"
@@ -595,7 +907,7 @@ function config_format(layer_name) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = ""
-        i.textContent = format_layer[layer_name][2] * 100 + "%"
+        i.textContent = format_layer[layer_name].format.opacidad * 100 + "%"
         i.style.color = "black"
 
 
@@ -629,25 +941,25 @@ function config_format(layer_name) {
 
             ul.appendChild(li)
             a.onclick = () => {
-                format_layer[layer_name][2] = value[0]
+                format_layer[layer_name].format.opacidad = value[0]
                 const checkLayer = document.getElementById("check" + layer_name)
                 i.textContent = "" + value[1]
 
                 if (checkLayer.checked == true) {
-                    if (format_layer[layer_name][6] == "nolocal") {
+                    if (format_layer[layer_name].target.local == "nolocal") {
                         let layer_remove = lis_layers.filter(value => value[0] == layer_name)
                         let layer_noremove = lis_layers.filter(value => value[0] !== layer_name)
                         map.removeLayer(layer_remove[0][1])
                         lis_layers = layer_noremove
                         layers.put_layer(checkLayer, layer_name)
-                    } else if (format_layer[layer_name][6] == "local") {
+                    } else if (format_layer[layer_name].target.local == "local") {
                         let layer_remove = lis_layers_open.filter(value => value[0] == layer_name)
                         map.removeLayer(layer_remove[0][1])
                         //lis_layers_open["layer_name"][1]= newLayer(layer_remove)
                         let capa = lis_layers_open.filter(value => value[0] == layer_name)
                         let layers = capa[0][1]._layers
                         for (const property in layers) {
-                            capa[0][1]._layers[property].options.fillOpacity = format_layer[layer_name][2]
+                            capa[0][1]._layers[property].options.fillOpacity = format_layer[layer_name].format.opacidad
                         }
                         capa[0][1].addTo(map)
                     }
@@ -661,10 +973,10 @@ function config_format(layer_name) {
     function maker_control_pane() {
         //Crearemos un control desplegable de color linea personalizado
         const dropdown = document.createElement("div")
-        dropdown.className = "dropdown"
+        dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="btn btn-outline-info 
+        <button class="border-1 btn btn-outline-secondary p-1
             dropdown-toggle" 
             type="button" 
             data-bs-toggle="dropdown"
@@ -679,7 +991,7 @@ function config_format(layer_name) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = "bi-intersect"
-        i.textContent = format_layer[layer_name][4]
+        i.textContent = eval(format_layer[layer_name].format.pane)
         i.style.color = "black"
 
 
@@ -687,7 +999,7 @@ function config_format(layer_name) {
         btnOpacity.appendChild(i)
 
         //Colocamos los colores en el ul control
-        const Pane = ["1", "2", "3", "4", "5"]
+        const Pane = ["1", "2", "3", "4", "5", "6"]
 
         Pane.forEach(value => {
             const li = document.createElement("li")
@@ -701,28 +1013,27 @@ function config_format(layer_name) {
 
             ul.appendChild(li)
             a.onclick = () => {
-                format_layer[layer_name][4] = value
+                format_layer[layer_name].format.pane = `'${value}'`
                 const checkLayer = document.getElementById("check" + layer_name)
                 i.textContent = " " + value
 
                 if (checkLayer.checked == true) {
-                    if (format_layer[layer_name][6] == "nolocal") {
+                    if (format_layer[layer_name].target.local == "nolocal") {
                         let layer_remove = lis_layers.filter(value => value[0] == layer_name)
                         let layer_noremove = lis_layers.filter(value => value[0] !== layer_name)
                         map.removeLayer(layer_remove[0][1])
                         lis_layers = layer_noremove
                         layers.put_layer(checkLayer, layer_name)
-                    } else if (format_layer[layer_name][6] == "local") {
+                    } else if (format_layer[layer_name].target.local == "local") {
                         let layer_remove = lis_layers_open.filter(value => value[0] == layer_name)
                         map.removeLayer(layer_remove[0][1])
                         //lis_layers_open["layer_name"][1]= newLayer(layer_remove)
                         let capa = lis_layers_open.filter(value => value[0] == layer_name)
                         let layers = capa[0][1]._layers
                         for (const property in layers) {
-                            capa[0][1]._layers[property].options.pane = format_layer[layer_name][4]
+                            capa[0][1]._layers[property].options.pane = eval(format_layer[layer_name].format.pane)
                         }
                         capa[0][1].addTo(map)
-                        console.log(layer_remove)
                     }
                 }
 
@@ -731,16 +1042,4 @@ function config_format(layer_name) {
         })
 
     }
-}
-const modal_open_layer = {
-
-    modalAplicar(comando) {
-        const modal = new bootstrap.Modal(document.getElementById('modal_atributos'));
-        modal.show();
-        const btn = document.getElementById('btnAplicar')
-        btn.onclick = comando
-
-    }
-
-
 }
