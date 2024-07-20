@@ -9,6 +9,8 @@ const ColorLayer = [
     "#4B0082", "#F0E68C", "#90EE90", "#FFB6C1", "#FFA500", "#FF4500", "#FF0000",
     "#8B4513", "#FFFF00", "#FF6347", "#40E0D0", "#00FF7F"
 ]
+let mkCov = ""
+let latlngConv = [5.1, -75.55]
 let lis_layers = []
 let lis_layers_open = []
 let format_layer = {
@@ -648,6 +650,7 @@ function openfile(control) {
                 if (controlcheck.checked == true) {
                     activeLayer[0][1].addTo(map)
                 } else {
+                    map.removeLayer(mkCov)
                     map.removeLayer(activeLayer[0][1])
                 }
             }
@@ -685,63 +688,103 @@ function openfile(control) {
                         ]
                         formatlayer.atributes[nameAtt] = newAtributo
                     } else if (sel_Att.value == "fillColor") {
-                        const newAtributo = 
-                            {
-                                "valor": sel_Valor.value.trim(),
-                                "backcolor": formatlayer.format.color_fondo,
-                                "linecolor": formatlayer.format.color_linea,
-                                "opacity": int_Valor.value.trim()
-                            }
-                        
+                        const newAtributo =
+                        {
+                            "valor": sel_Valor.value.trim(),
+                            "backcolor": formatlayer.format.color_fondo,
+                            "linecolor": formatlayer.format.color_linea,
+                            "opacity": int_Valor.value.trim()
+                        }
+
                         formatlayer.atributes[nameAtt] = newAtributo
                     }
 
                 } else {
-                    
+
                     if (sel_Att.value == "fillColor") {
-                        formatlayer.atributes[nameAtt][0].backcolor=int_Valor.value.trim()
-                        formatlayer.atributes[nameAtt][0].linecolor=int_Valor.value.trim()
+                        formatlayer.atributes[nameAtt][0].backcolor = int_Valor.value.trim()
+                        formatlayer.atributes[nameAtt][0].linecolor = int_Valor.value.trim()
                     } else if (sel_Att.value == "fillColor") {
-                        formatlayer.atributes[nameAtt][0].opacity=int_Valor.value.trim()
+                        formatlayer.atributes[nameAtt][0].opacity = int_Valor.value.trim()
                     }
                 }
 
                 map.removeLayer(capa[0][1])
                 capa[0][1].addTo(map)
 
-                const div =document.createElement("div")
-                div.style.width="200px"
-                div.className="bg-white shadow p-4"
+            }
+            const btnLeyendas = document.createElement("button")
+            btnLeyendas.className = "btn btn-outline-secondary"
+            btnLeyendas.textContent = "Convenciones"
+            btnLeyendas.type = "button"
+            bodyCollaseAtt.appendChild(btnLeyendas)
+            btnLeyendas.onclick = () => {
 
+                const div = document.createElement("div")
+                div.style.width = "200px"
+                div.className = "bg-white shadow p-2 border border-1 border-info"
+                const formatlayer = format_layer["layer_" + name_layer[0]]
 
-                for (const atributoL in formatlayer.atributes){
+                for (const atributoL in formatlayer.atributes) {
                     const formato = (formatlayer.atributes[atributoL][0])
-                    const divF= document.createElement("div")
+                    const divF = document.createElement("div")
+                    divF.className = "row"
 
+                    const col1 = document.createElement("div")
+                    col1.className = "col-auto"
 
-                    const i= document.createElement("i")
-                    i.className="bi bi-square-fill fs-6 border border-1"
-                    i.style.background=formato.backcolor
-                    i.style.color=formato.linecolor
-                    i.style.opacity=formato.opacity
-                    i.innerHTML=`<div class="ms-1 text-info"> ${formato.valor}</div>`
+                    const i = document.createElement("i")
+                    i.className = "bi bi-square-fill fs-6 border border-2"
+                    i.style.borderColor = formato.linecolor
+                    i.style.color = formato.backcolor
+                    i.style.opacity = formato.opacity
+                    col1.appendChild(i)
+                    divF.appendChild(col1)
 
-                    divF.appendChild(i)
+                    const col2 = document.createElement("div")
+                    col2.className = "col-auto"
 
+                    const colText = document.createElement("div")
+                    colText.className = "text-dark fs-6"
+                    colText.textContent = formato.valor
 
+                    col2.appendChild(colText)
 
+                    divF.appendChild(col2)
                     div.appendChild(divF)
+
+
 
                 }
 
+                if (mkCov == "") {
+                    mkCov = L.marker(latlngConv, {
+                        draggable: true, pane: "labels",
+                        icon: L.divIcon({
+                            html: div,
+                            class: "border border-0"
+                            // Specify something to get rid of the default class.
+                        })
+                    }).addTo(map);
 
-                L.marker([5.1, -75.55], {draggable:true, pane:"labels",
-                    icon: L.divIcon({
-                      html: div,
-                       // Specify something to get rid of the default class.
-                    })
-                  }).addTo(map);
+                } else {
+                    map.removeLayer(mkCov)
+                    mkCov = L.marker(latlngConv, {
+                        draggable: true, pane: "labels",
+                        icon: L.divIcon({
+                            html: div,
+                            class: "border border-0"
+                            // Specify something to get rid of the default class.
+                        })
+                    }).addTo(map);
+                }
+                mkCov.on('dragend', function (e) {
+
+                    latlngConv = [e.target._latlng.lat, e.target._latlng.lng]
+                });
             }
+
+
 
         }
 
