@@ -9,6 +9,27 @@ const ColorLayer = [
     "#4B0082", "#F0E68C", "#90EE90", "#FFB6C1", "#FFA500", "#FF4500", "#FF0000",
     "#8B4513", "#FFFF00", "#FF6347", "#40E0D0", "#00FF7F"
 ]
+function getColor(color = false) {
+    if (color) {
+        //Si se le dice cuantos colores, regresa una lista de colores
+        const colors = []
+        for (let i = 0; i < color; i++) {
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color = color + ("0123456789ABCDEF")[Math.floor(Math.random() * 16)];
+            }
+            colors.push(color)
+        }
+        return colors
+    } else {
+        //Si no se le da ningun parametro a la funcion, regresa un solo color
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+            color = color + ("0123456789ABCDEF")[Math.floor(Math.random() * 16)];
+        }
+        return color
+    }
+}
 let mkCov = ""
 let latlngConv = [5.1, -75.55]
 let lis_layers = []
@@ -450,7 +471,7 @@ function openfile(control) {
                 }
             }
         }).addTo(map);
-        lis_layers_open.push(["layer_" + name_layer[0], LayerActive])
+        lis_layers_open.push(["layer_" + name_layer[0].replace(" ",""), LayerActive])
 
         const newFormato = {
             "format": {
@@ -474,12 +495,12 @@ function openfile(control) {
 
             }
         }
-        let layer_existe = format_layer["layer_" + name_layer[0]]
+        let layer_existe = format_layer["layer_" + name_layer[0].replace(" ","")]
 
         if (layer_existe == null) {
-            format_layer["layer_" + name_layer[0]] = newFormato
+            format_layer["layer_" + name_layer[0].replace(" ","")] = newFormato
         }
-        maker_coltrol_layer(name_layer[0], name_layer[0])
+        maker_coltrol_layer(name_layer[0].replace(" ",""), name_layer[0].replace(" ",""))
         function maker_coltrol_layer(name, title) {
             const accordion_item = document.createElement("div")
             accordion_item.className = "accordion-item border border-1 p-1 mb-1"
@@ -503,7 +524,7 @@ function openfile(control) {
             input.id = "checklayer_" + name
             input.checked = true
             input.onchange = () => {
-                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
                 if (input.checked == true) {
                     activeLayer[0][1].addTo(map)
                 } else {
@@ -595,7 +616,7 @@ function openfile(control) {
             bodyCollaseAtt.appendChild(sel_Valor)
 
 
-            let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+            let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
             sel_Campo.onchange = () => {
                 let atributos = []
                 sel_Valor.innerHTML = ""
@@ -643,10 +664,10 @@ function openfile(control) {
             btnAplicar.type = "button"
             bodyCollaseAtt.appendChild(btnAplicar)
 
-            const controlcheck = document.getElementById("checklayer_" + name_layer[0])
+            const controlcheck = document.getElementById("checklayer_" + name_layer[0].replace(" ",""))
             controlcheck.checked = true
             controlcheck.onchange = () => {
-                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0])
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
                 if (controlcheck.checked == true) {
                     activeLayer[0][1].addTo(map)
                 } else {
@@ -671,8 +692,7 @@ function openfile(control) {
                 //Agregamos los atributos al objeto formato de la capa
 
 
-
-                const formatlayer = format_layer["layer_" + name_layer[0]]
+                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ","")]
                 const nameAtt = sel_Campo.value + sel_Att.value + sel_Valor.value.trim()
                 if (formatlayer.atributes[nameAtt] == null) {
 
@@ -723,7 +743,7 @@ function openfile(control) {
                 const div = document.createElement("div")
                 div.style.width = "200px"
                 div.className = "bg-white shadow p-2 border border-1 border-info"
-                const formatlayer = format_layer["layer_" + name_layer[0]]
+                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ","")]
 
                 for (const atributoL in formatlayer.atributes) {
                     const formato = (formatlayer.atributes[atributoL][0])
@@ -782,6 +802,38 @@ function openfile(control) {
 
                     latlngConv = [e.target._latlng.lat, e.target._latlng.lng]
                 });
+            }
+            const btnAutomatico = document.createElement("button")
+            btnAutomatico.className = "btn btn-outline-secondary"
+            btnAutomatico.textContent = "auto"
+            btnAutomatico.type = "button"
+            bodyCollaseAtt.appendChild(btnAutomatico)
+            btnAutomatico.onclick = () => {
+                let atributos = []
+                let layers = capa[0][1]._layers
+                for (const property in layers) {
+                    const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+                    if(atributos.includes(att)!==true){
+                        atributos.push(att)
+                    }
+                }
+
+                
+                atributos.forEach(atrib=>{
+                    for (const property in layers) {
+                        const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+                        if (att == sel_Valor.value.trim()) {
+                            capa[0][1]._layers[property].options["fillColor"] = getColor()
+                            console.log(getColor())
+                        }
+
+                        
+                    }
+                })
+                
+                //newColors.push(getColor())
+
+
             }
 
 
