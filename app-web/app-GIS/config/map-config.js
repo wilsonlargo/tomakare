@@ -471,7 +471,7 @@ function openfile(control) {
                 }
             }
         }).addTo(map);
-        lis_layers_open.push(["layer_" + name_layer[0].replace(" ",""), LayerActive])
+        lis_layers_open.push(["layer_" + name_layer[0].replace(" ", ""), LayerActive])
 
         const newFormato = {
             "format": {
@@ -495,12 +495,12 @@ function openfile(control) {
 
             }
         }
-        let layer_existe = format_layer["layer_" + name_layer[0].replace(" ","")]
+        let layer_existe = format_layer["layer_" + name_layer[0].replace(" ", "")]
 
         if (layer_existe == null) {
-            format_layer["layer_" + name_layer[0].replace(" ","")] = newFormato
+            format_layer["layer_" + name_layer[0].replace(" ", "")] = newFormato
         }
-        maker_coltrol_layer(name_layer[0].replace(" ",""), name_layer[0].replace(" ",""))
+        maker_coltrol_layer(name_layer[0].replace(" ", ""), name_layer[0].replace(" ", ""))
         function maker_coltrol_layer(name, title) {
             const accordion_item = document.createElement("div")
             accordion_item.className = "accordion-item border border-1 p-1 mb-1"
@@ -524,7 +524,7 @@ function openfile(control) {
             input.id = "checklayer_" + name
             input.checked = true
             input.onchange = () => {
-                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ", ""))
                 if (input.checked == true) {
                     activeLayer[0][1].addTo(map)
                 } else {
@@ -616,7 +616,7 @@ function openfile(control) {
             bodyCollaseAtt.appendChild(sel_Valor)
 
 
-            let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
+            let capa = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ", ""))
             sel_Campo.onchange = () => {
                 let atributos = []
                 sel_Valor.innerHTML = ""
@@ -664,10 +664,10 @@ function openfile(control) {
             btnAplicar.type = "button"
             bodyCollaseAtt.appendChild(btnAplicar)
 
-            const controlcheck = document.getElementById("checklayer_" + name_layer[0].replace(" ",""))
+            const controlcheck = document.getElementById("checklayer_" + name_layer[0].replace(" ", ""))
             controlcheck.checked = true
             controlcheck.onchange = () => {
-                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ",""))
+                const activeLayer = lis_layers_open.filter(value => value[0] == "layer_" + name_layer[0].replace(" ", ""))
                 if (controlcheck.checked == true) {
                     activeLayer[0][1].addTo(map)
                 } else {
@@ -678,7 +678,6 @@ function openfile(control) {
 
             btnAplicar.onclick = () => {
                 let layers = capa[0][1]._layers
-
                 for (const property in layers) {
                     const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
                     if (att == sel_Valor.value.trim()) {
@@ -690,13 +689,9 @@ function openfile(control) {
                     }
                 }
                 //Agregamos los atributos al objeto formato de la capa
-
-
-                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ","")]
+                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
                 const nameAtt = sel_Campo.value + sel_Att.value + sel_Valor.value.trim()
                 if (formatlayer.atributes[nameAtt] == null) {
-
-
                     if (sel_Att.value == "fillColor") {
                         const newAtributo = [
                             {
@@ -739,11 +734,24 @@ function openfile(control) {
             btnLeyendas.type = "button"
             bodyCollaseAtt.appendChild(btnLeyendas)
             btnLeyendas.onclick = () => {
-
                 const div = document.createElement("div")
                 div.style.width = "200px"
                 div.className = "bg-white shadow p-2 border border-1 border-info"
-                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ","")]
+
+                const bardiv = document.createElement("div")
+                bardiv.className = "text-end text-info"
+                div.appendChild(bardiv)
+
+
+
+                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
+
+                const i = document.createElement("i")
+                i.className = "bi bi-x-square"
+                bardiv.appendChild(i)
+                i.onclick=()=>{
+                    map.removeLayer(mkCov)
+                }
 
                 for (const atributoL in formatlayer.atributes) {
                     const formato = (formatlayer.atributes[atributoL][0])
@@ -754,7 +762,8 @@ function openfile(control) {
                     col1.className = "col-auto"
 
                     const i = document.createElement("i")
-                    i.className = "bi bi-square-fill fs-6 border border-2"
+                    i.className = "bi bi-square-fill border border-2"
+                    i.style.fontSize="10px"
                     i.style.borderColor = formato.linecolor
                     i.style.color = formato.backcolor
                     i.style.opacity = formato.opacity
@@ -765,16 +774,15 @@ function openfile(control) {
                     col2.className = "col-auto"
 
                     const colText = document.createElement("div")
-                    colText.className = "text-dark fs-6"
+                    colText.className = "text-dark"
+                    colText.style.fontSize="10px"
+
                     colText.textContent = formato.valor
 
                     col2.appendChild(colText)
 
                     divF.appendChild(col2)
                     div.appendChild(divF)
-
-
-
                 }
 
                 if (mkCov == "") {
@@ -804,33 +812,48 @@ function openfile(control) {
                 });
             }
             const btnAutomatico = document.createElement("button")
+
             btnAutomatico.className = "btn btn-outline-secondary"
             btnAutomatico.textContent = "auto"
             btnAutomatico.type = "button"
             bodyCollaseAtt.appendChild(btnAutomatico)
+
             btnAutomatico.onclick = () => {
+                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
                 let atributos = []
                 let layers = capa[0][1]._layers
                 for (const property in layers) {
                     const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
-                    if(atributos.includes(att)!==true){
+                    if (atributos.includes(att) !== true) {
                         atributos.push(att)
                     }
                 }
 
-                
-                atributos.forEach(atrib=>{
-                    for (const property in layers) {
-                        const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
-                        if (att == sel_Valor.value.trim()) {
-                            capa[0][1]._layers[property].options["fillColor"] = getColor()
-                            console.log(getColor())
-                        }
 
-                        
+                let nameAtt;
+                atributos.forEach(atrib => {
+                    nameAtt = sel_Campo.value + sel_Att.value + atrib
+
+                    const colorNow = getColor()
+                    for (const property in layers) {
+
+                        const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
+                        if (att == atrib) {
+                            capa[0][1]._layers[property].options["fillColor"] = colorNow
+                        }
                     }
+                    let newAtributo = [
+                        {
+                            "valor": atrib,
+                            "backcolor": colorNow,
+                            "linecolor": colorNow,
+                            "opacity": formatlayer.format.opacidad,
+                        }
+                    ]
+                    formatlayer.atributes[nameAtt] = newAtributo
                 })
-                
+                map.removeLayer(capa[0][1])
+                capa[0][1].addTo(map)
                 //newColors.push(getColor())
 
 
