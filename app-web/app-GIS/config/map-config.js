@@ -736,6 +736,9 @@ function openfile(control) {
             btnLeyendas.onclick = () => {
                 const div = document.createElement("div")
                 div.style.width = "200px"
+                div.style.overflowY="scroll"
+                div.style.overflowX="hidden"
+                div.style.height = "200px"
                 div.className = "bg-white shadow p-2 border border-1 border-info"
 
                 const bardiv = document.createElement("div")
