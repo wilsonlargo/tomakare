@@ -735,11 +735,7 @@ function openfile(control) {
             bodyCollaseAtt.appendChild(btnLeyendas)
             btnLeyendas.onclick = () => {
                 const div = document.createElement("div")
-                div.style.width = "200px"
-                div.style.overflowY="scroll"
-                div.style.overflowX="hidden"
-                div.style.height = "200px"
-                div.className = "bg-white shadow p-2 border border-1 border-info"
+                div.className = "bg-white shadow p-2 border border-1 border-info divscroll resize-x rounded-md"
 
                 const bardiv = document.createElement("div")
                 bardiv.className = "text-end text-info"
