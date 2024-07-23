@@ -113,7 +113,7 @@ let format_layer = {
             {
                 "clase": "fw-bold text-info",
                 "contenido": "Municipio",
-                "campo": "MpNombre"
+                "campo": "nombre_mpi"
             },
             {
                 "clase": "fw-bold",
@@ -939,7 +939,8 @@ function config_format(layer_name, controlname) {
 
     const btngroup = document.createElement("div")
     btngroup.role = "group"
-    btngroup.className = "btn-group border-1 border border-info p-2"
+    btngroup.className = "btn-group"
+
 
 
     cCollapseBody.appendChild(btngroup)
@@ -954,13 +955,11 @@ function config_format(layer_name, controlname) {
         const dropdown = document.createElement("div")
         dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
-            `
-        <button class="dropdown-toggle
-        border-1 btn btn-outline-secondary p-1" 
-            type="button" 
+        `
+            <div type="button" class="border border-1 border-info text-dark ps-2 pe-2 me-1" 
             data-bs-toggle="dropdown"
-            id="btnColor${layer_name}">
-        </button>
+            id="btnColor${layer_name}" 
+            </div>
         `
         const ul = document.createElement("ul")
         ul.className = "dropdown-menu container-fluid p-1 shadow"
@@ -1025,12 +1024,10 @@ function config_format(layer_name, controlname) {
         dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="border-1 btn btn-outline-secondary p-1
-            dropdown-toggle" 
-            type="button" 
+            <div type="button" class="border border-1 border-info text-dark ps-2 pe-2 me-1" 
             data-bs-toggle="dropdown"
-            id="btnLineColor${layer_name}">
-        </button>
+            id="btnLineColor${layer_name}" 
+            </div>
         `
         const ul = document.createElement("ul")
         ul.className = "dropdown-menu container-fluid p-1"
@@ -1098,12 +1095,10 @@ function config_format(layer_name, controlname) {
         dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="border-1 btn btn-outline-secondary p-1
-            dropdown-toggle" 
-            type="button" 
+            <div type="button" class="border border-1 border-info text-dark ps-2 pe-2 me-1" 
             data-bs-toggle="dropdown"
-            id="btnLineWeight${layer_name}">
-        </button>
+            id="btnLineWeight${layer_name}" 
+            </div>
         `
         const ul = document.createElement("ul")
         ul.className = "dropdown-menu container-fluid p-1"
@@ -1174,12 +1169,10 @@ function config_format(layer_name, controlname) {
         dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
             `
-        <button class="border-1 btn btn-outline-secondary p-1
-            dropdown-toggle" 
-            type="button" 
+            <div type="button" class="border border-1 border-info text-dark ps-2 pe-2 me-1" 
             data-bs-toggle="dropdown"
-            id="btnOpacity${layer_name}">
-        </button>
+            id="btnOpacity${layer_name}" 
+            </div>
         `
         const ul = document.createElement("ul")
         ul.className = "dropdown-menu container-fluid p-1"
@@ -1257,13 +1250,11 @@ function config_format(layer_name, controlname) {
         const dropdown = document.createElement("div")
         dropdown.className = "dropdown me-1"
         dropdown.innerHTML =
-            `
-        <button class="border-1 btn btn-outline-secondary p-1
-            dropdown-toggle" 
-            type="button" 
+        `
+            <div type="button" class="border border-1 border-info text-dark ps-2 pe-2 me-1" 
             data-bs-toggle="dropdown"
-            id="btnPane${layer_name}">
-        </button>
+            id="btnPane${layer_name}" 
+            </div>
         `
         const ul = document.createElement("ul")
         ul.className = "dropdown-menu container-fluid p-1"
@@ -1273,7 +1264,7 @@ function config_format(layer_name, controlname) {
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
         i.className = "bi-intersect"
-        i.textContent = eval(format_layer[layer_name].format.pane)
+        i.textContent =" " + eval(format_layer[layer_name].format.pane)
         i.style.color = "black"
 
 
