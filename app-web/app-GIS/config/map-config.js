@@ -113,7 +113,7 @@ let format_layer = {
             {
                 "clase": "fw-bold text-info",
                 "contenido": "Municipio",
-                "campo": "nombre_mpi"
+                "campo": "MpNombre"
             },
             {
                 "clase": "fw-bold",
@@ -457,17 +457,13 @@ function openfile(control) {
                     }
                 }
 
-                try {
-                    propiedad_color = rango[feature.properties.CLASIFICAC][0]
-                } catch (error) {
-                    propiedad_color = "blue"
-                }
                 return {
                     color: "white",
                     fillColor: "lime",
                     pane: "4",
                     weight: 1,
-                    fillOpacity: 1
+                    fillOpacity: 1,
+                    display : 'none'
                 }
             }
         }).addTo(map);
@@ -564,15 +560,16 @@ function openfile(control) {
             a.innerHTML = `
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                <button class="accordion-button collapsed" 
+                <button class="accordion-button collapsed w-100" 
                     type="button" data-bs-toggle="collapse" 
                     data-bs-target="#collapsebody_att${name}" 
                     aria-expanded="false">
                     <div class="bg-info p-1 
                     rounded text-white 
-                    text-center fw-bold 
-                    border-primary border-1 
-                    border">Atributos de capa</div>
+                    text-center
+                    
+                    border"
+                    style="width: 100%;">Atributos de capa</div>
 
                 </button>
                 </h2>
@@ -735,10 +732,11 @@ function openfile(control) {
             bodyCollaseAtt.appendChild(btnLeyendas)
             btnLeyendas.onclick = () => {
                 const div = document.createElement("div")
-                div.className = "bg-white shadow p-2 border border-1 border-info divscroll resize-x rounded-md"
+                div.className = "bg-white shadow p-2 border border-1 border-info divscroll"
 
                 const bardiv = document.createElement("div")
-                bardiv.className = "text-end text-info"
+                bardiv.className = "text-end text-white fw-bold bg-primary mb-2"
+                bardiv.textContent = "Capa: " + name_layer[0].replace(" ", "") + "  "
                 div.appendChild(bardiv)
 
 
@@ -746,9 +744,9 @@ function openfile(control) {
                 const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
 
                 const i = document.createElement("i")
-                i.className = "bi bi-x-square"
+                i.className = "bi bi-x-square text-white me-1"
                 bardiv.appendChild(i)
-                i.onclick=()=>{
+                i.onclick = () => {
                     map.removeLayer(mkCov)
                 }
 
@@ -761,8 +759,8 @@ function openfile(control) {
                     col1.className = "col-auto"
 
                     const i = document.createElement("i")
-                    i.className = "bi bi-square-fill border border-2"
-                    i.style.fontSize="10px"
+                    i.className = "bi bi-square-fill"
+                    i.style.fontSize = "12px"
                     i.style.borderColor = formato.linecolor
                     i.style.color = formato.backcolor
                     i.style.opacity = formato.opacity
@@ -774,7 +772,7 @@ function openfile(control) {
 
                     const colText = document.createElement("div")
                     colText.className = "text-dark"
-                    colText.style.fontSize="10px"
+                    colText.style.fontSize = "12px"
 
                     colText.textContent = formato.valor
 
@@ -806,19 +804,19 @@ function openfile(control) {
                     }).addTo(map);
                 }
                 mkCov.on('dragend', function (e) {
-
                     latlngConv = [e.target._latlng.lat, e.target._latlng.lng]
                 });
             }
             const btnAutomatico = document.createElement("button")
-
             btnAutomatico.className = "btn btn-outline-secondary"
             btnAutomatico.textContent = "auto"
             btnAutomatico.type = "button"
             bodyCollaseAtt.appendChild(btnAutomatico)
 
+            const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
+
             btnAutomatico.onclick = () => {
-                const formatlayer = format_layer["layer_" + name_layer[0].replace(" ", "")]
+                formatlayer.atributes = []
                 let atributos = []
                 let layers = capa[0][1]._layers
                 for (const property in layers) {
@@ -826,8 +824,8 @@ function openfile(control) {
                     if (atributos.includes(att) !== true) {
                         atributos.push(att)
                     }
-                }
 
+                }
 
                 let nameAtt;
                 atributos.forEach(atrib => {
@@ -835,6 +833,10 @@ function openfile(control) {
 
                     const colorNow = getColor()
                     for (const property in layers) {
+                        capa[0][1]._layers[property].on('click', function (e) {
+                            capa[0][1]._layers[property].bindPopup(`Capa ${name}: ${att}`, { pane: "labels" })
+                            capa[0][1]._layers[property].openPopup()
+                        })
 
                         const att = capa[0][1]._layers[property].feature.properties[sel_Campo.value]
                         if (att == atrib) {
@@ -969,7 +971,7 @@ function config_format(layer_name, controlname) {
         const btnColor = document.getElementById("btnColor" + layer_name)
         //Colocamos un icono que cambiará de color cuando cambie la selección
         const i = document.createElement("i")
-        i.className = "bi bi-square-fill rounded"
+        i.className = "bi bi-square-fill"
         try {
             i.style.color = eval(format_layer[layer_name].format.color_fondo)
         } catch (error) {
