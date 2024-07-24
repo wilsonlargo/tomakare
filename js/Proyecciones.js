@@ -51,33 +51,33 @@ class Gestion {
         //Colocamos el ttulo de la consejería
         const Título = document.createElement('div');
         Título.className = "ps-2 bg-secondary text-white fw-bold"
-        Título.style.fontSize="18px"
+        Título.style.fontSize = "18px"
         Título.textContent = this.parent.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
         Título2.className = "ps-2 bg-secondary text-warning fw-medium"
-        Título2.style.fontSize="16px"
+        Título2.style.fontSize = "16px"
         Título2.textContent = this.nombre
         cEscritorio.appendChild(Título2)
 
         //Colocamos el título del programa
         const Título3 = document.createElement('div');
         Título3.className = "ps-2 bg-secondary text-info"
-        Título3.style.fontSize="15px"
+        Título3.style.fontSize = "15px"
         Título3.textContent = this.nombre
         cEscritorio.appendChild(Título3)
 
         //Colocamos el título del proyecto
         const Título4 = document.createElement('div');
         Título4.className = "pe-4 pb-2 bg-secondary shadow text-white text-end border border-top border-1 border-white sticky-top"
-        Título4.style.fontSize="16px"
+        Título4.style.fontSize = "16px"
         Título4.textContent = this.nombre
         cEscritorio.appendChild(Título4)
 
         const barraNavegar = document.getElementById("navbarplan")
-         barraNavegar.innerHTML = `
+        barraNavegar.innerHTML = `
             <a class="col-auto nav-link m-2 fw-bold"  href="#">PANEL PROYECTOS / </a>
             <a class="col-auto nav-link m-2"  href="#" id="lnkArea">Area / </a>
             <a class="col-auto nav-link m-2"  href="#" id="lnkLinea">Linea / </a>
@@ -87,7 +87,6 @@ class Gestion {
                 aria-controls="offcanvasExample" id="linkNotas">
                 <i class="bi bi-sticky me-2"></i> Notas
             </a>
-    
         `
         const linkArea = document.getElementById("lnkArea")
         linkArea.onclick = () => {
@@ -118,7 +117,6 @@ class Gestion {
             cargar_notas_consultor(area)
         }
         //============================================================
-
 
         //Ahora los input de cada dato
         //Creamos un input para el nombre del proyecto con retorno de valores
@@ -334,9 +332,9 @@ class Gestion {
         //===================================================
 
         //Collapse para articulacion / versión simplificada
-        const collapseArticulacion = HTML.collapseControl1("Articulación con Consejerías y mandatos", 
-        "cArticulacionCollapse", "articulacion", 
-        'bi-arrow-left-right',"text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
+        const collapseArticulacion = HTML.collapseControl1("Articulación con Consejerías y mandatos",
+            "cArticulacionCollapse", "articulacion",
+            'bi-arrow-left-right', "text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
         cEscritorio.appendChild(collapseArticulacion)
 
         const Título5 = document.createElement('div');
@@ -389,7 +387,7 @@ class Gestion {
 
         //Configuramos el botón agregar objetivos
         btAgregarEspecificos.onclick = () => {
-            const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0,this)
+            const ospecifico = new oespecificos('Objetivo específico', 0, 0, 0, this)
             this.addEspecificos(ospecifico)
             GuardarVigencia()
 
@@ -400,7 +398,6 @@ class Gestion {
                 especifico.parent = this
                 especifico.makerHTMLEspecificos(this)
             })
-           
         }
 
         //Cargar todos los específicos
@@ -424,7 +421,7 @@ class Gestion {
         btAgregarLibro.className = "btn btn-outline-secondary m-1"
         btAgregarLibro.innerHTML = `<i class="bi bi-plus"></i> Agregar documento`
         btAgregarLibro.onclick = () => {
-            const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion", 0, this)
+            const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion","Objetivo", 0, this)
             this.addEvidencias(evidencia)
             GuardarVigencia()
 
@@ -432,7 +429,7 @@ class Gestion {
         }
         document.getElementById("divlibreriabutton").appendChild(btAgregarLibro)
 
-        
+
         cEvidencias.innerHTML = ''
         let doc = 0;
         this.clsEvidencias.forEach(evidencia => {
@@ -480,7 +477,6 @@ class Gestion {
     }
 
 
-    
 
 
 }
@@ -562,7 +558,6 @@ class ArticulacionPrj {
 }
 
 
-
 class oespecificos {
     constructor(nombre, meta, avance, id, dominio) {
         this.nombre = nombre;
@@ -641,12 +636,13 @@ class oespecificos {
 }
 
 class Evidencia {
-    constructor(nombre, tipo, keys, link, descripcion, id, parentId) {
+    constructor(nombre, tipo, keys, link, descripcion, objetivo, id, parentId) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.keys = keys;
         this.link = link;
         this.descripcion = descripcion;
+        this.objetivo = objetivo;
         this.id = id
         this.parentId = parentId
     }
@@ -707,6 +703,11 @@ class Evidencia {
             <div class="collapse" id="collapseLibro${libro.id}">
                 <div class="card card-body">
                     <div class="form-floating mb-2">
+                        <textarea class="form-control" id="int-Objetivo-Documento${libro.id}"
+                            style="height: 50px"></textarea>
+                        <label for="int-Objetivo-Documento${libro.id}">Objetivo relacionado</label>
+                    </div>
+                    <div class="form-floating mb-2">
                         <textarea class="form-control" id="int-Nombre-Documento${libro.id}"
                             style="height: 50px"></textarea>
                         <label for="int-Nombre-Documento${libro.id}">Título del documento</label>
@@ -752,6 +753,19 @@ class Evidencia {
 
         collaseLibros.appendChild(item)
         //Configuración nombre del libro
+
+        const ref_objetivo_libro = document.getElementById(`int-Objetivo-Documento${libro.id}`)
+        //document.getElementById(`tituloLibro${libro.id}`)
+        //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
+        ref_objetivo_libro.oninput = () => {
+            libro.objetivo = ref_objetivo_libro.value
+            //Actualiza el título sin perder el numerador y el ícono
+             GuardarVigencia()
+        }
+        ref_objetivo_libro.value = libro.objetivo
+
+
+
         const ref_nombre_libro = document.getElementById(`int-Nombre-Documento${libro.id}`)
         //document.getElementById(`tituloLibro${libro.id}`)
         //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
