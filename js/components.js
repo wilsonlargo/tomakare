@@ -163,6 +163,7 @@ class clsProyecto {
                     evidencia.keys,
                     evidencia.link,
                     evidencia.descripcion,
+                    evidencia.objetivo,
                     evidencia.id
                 );
                 return newEvidencias;
