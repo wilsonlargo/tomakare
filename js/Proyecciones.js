@@ -402,7 +402,7 @@ class Gestion {
 
         //Cargar todos los específicos
         divObjetivos_Específicos.innerHTML = ""
-        console.log(this.clsEspecificos)
+
         let e = 0;
         this.clsEspecificos.forEach(especifico => {
             especifico.id = e++
@@ -415,25 +415,34 @@ class Gestion {
         const collapseEvidenicias = HTML.collapseControl1("Evidencias / Anexos", "cEvidenciasCollapse", "libreria",
             "bi-journals", "text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
         cEscritorio.appendChild(collapseEvidenicias)
+
+
         const cEvidencias = document.getElementById("cEvidenciasCollapse")
+
+
         //Agregar un boton para agregar un documento
+
         const btAgregarLibro = document.createElement("button")
         btAgregarLibro.className = "btn btn-outline-secondary m-1"
         btAgregarLibro.innerHTML = `<i class="bi bi-plus"></i> Agregar documento`
         btAgregarLibro.onclick = () => {
-            const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion","Objetivo", 0, this)
+            document.getElementById("divlibreriacollapse").innerHTML = ""
+            const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion", "Objetivo", 0, this)
             this.addEvidencias(evidencia)
             GuardarVigencia()
-
-
+            let doc = 0;
+            this.clsEvidencias.forEach(documento => {
+                evidencia.id = doc++
+                evidencia.parentId = this
+                evidencia.makerHtmlEvidencia(documento);
+            })
         }
         document.getElementById("divlibreriabutton").appendChild(btAgregarLibro)
 
 
-        cEvidencias.innerHTML = ''
+
         let doc = 0;
         this.clsEvidencias.forEach(evidencia => {
-
             evidencia.id = doc++
             evidencia.parentId = this
             evidencia.makerHtmlEvidencia(evidencia);
@@ -452,7 +461,6 @@ class Gestion {
                     programa.makerHTMLProgramaPanel(area, linea)
                 }
             )
-
 
         }
         cEscritorio.appendChild(btnBorrarGestion)
@@ -585,6 +593,7 @@ class oespecificos {
         textArea.oninput = () => {
             this.nombre = textArea.value
             GuardarVigencia()
+
         }
 
         const span2 = document.createElement("span")
@@ -613,8 +622,6 @@ class oespecificos {
             modal.modalDelete(
                 () => {
                     dominio.deleteEspecificos(this.id)
-                    GuardarVigencia()
-                    console.log(dominio.clsEspecificos)
                     contenedor.innerHTML = ""
                     let e = 0;
                     dominio.clsEspecificos.forEach(especifico => {
@@ -685,7 +692,9 @@ class Evidencia {
 
         }
 
-        const collaseLibros = document.getElementById("cEvidenciasCollapse")
+        const collaseLibros = document.getElementById("divlibreriacollapse")
+
+
         const item = document.createElement("ol")
         item.className = "list-group list-group-numbered"
         item.innerHTML = `
@@ -702,11 +711,9 @@ class Evidencia {
             </div>
             <div class="collapse" id="collapseLibro${libro.id}">
                 <div class="card card-body">
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control" id="int-Objetivo-Documento${libro.id}"
-                            style="height: 50px"></textarea>
-                        <label for="int-Objetivo-Documento${libro.id}">Objetivo relacionado</label>
-                    </div>
+                <small>Seleccionar objetivo referencia</small>
+                    <select class="form-select form-select mb-2 bg-info" id="sel-Objetivo-Documento${libro.id}">                    
+                    </select>
                     <div class="form-floating mb-2">
                         <textarea class="form-control" id="int-Nombre-Documento${libro.id}"
                             style="height: 50px"></textarea>
@@ -754,16 +761,33 @@ class Evidencia {
         collaseLibros.appendChild(item)
         //Configuración nombre del libro
 
-        const ref_objetivo_libro = document.getElementById(`int-Objetivo-Documento${libro.id}`)
-        //document.getElementById(`tituloLibro${libro.id}`)
-        //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
-        ref_objetivo_libro.oninput = () => {
-            libro.objetivo = ref_objetivo_libro.value
-            //Actualiza el título sin perder el numerador y el ícono
-             GuardarVigencia()
-        }
-        ref_objetivo_libro.value = libro.objetivo
+        //Contar cuantos objetivos hay en este proyecto
+        const sel_objetivo_libro = document.getElementById(`sel-Objetivo-Documento${libro.id}`)
+        sel_objetivo_libro.rows = "3"
+        sel_objetivo_libro.innerHTML = ""
 
+        const origenA= this
+        readObj(origenA)
+        const cTitulo = document.getElementById("tituloLibro" + libro.id)
+        cTitulo.onclick = () => {
+            readObj(origenA)
+        }
+
+
+        function readObj(origen) {
+            sel_objetivo_libro.innerHTML = ""
+            origen.parentId.clsEspecificos.forEach(ele => {
+                const option1 = document.createElement("option")
+                option1.textContent = ele.nombre
+                option1.value = ele.id
+                sel_objetivo_libro.appendChild(option1)
+            })
+        }
+
+        sel_objetivo_libro.onchange = () => {
+            libro.objetivo = sel_objetivo_libro.value
+        }
+        sel_objetivo_libro.value = libro.objetivo
 
 
         const ref_nombre_libro = document.getElementById(`int-Nombre-Documento${libro.id}`)
@@ -866,15 +890,16 @@ class Evidencia {
 
         //Agrega evento al boton borrar link
         document.getElementById(`btnEliminarLink${libro.id}`).onclick = () => {
-            this.parentId.deleteLibreria(libro.id)
+            this.parentId.deleteEvidencias(libro.id)
             GuardarVigencia()
+
             const cLibros = document.getElementById("divlibreriacollapse")
             cLibros.innerHTML = ''
             let i = 0;
-            this.parentId.cslLibrerias.forEach(libro => {
+            this.parentId.clsEvidencias.forEach(documento => {
                 libro.id = i++
                 libro.parentId = this.parentId
-                libro.makerHtmlLibro(libro);
+                libro.makerHtmlEvidencia(documento);
             })
         }
 
@@ -935,7 +960,6 @@ function listarGestiones() {
 
                     item.onclick = () => {
                         const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
-                        //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
                         elemento.makerHTMLProyeccion(area, linea, programa)
 
                     }
