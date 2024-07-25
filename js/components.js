@@ -150,7 +150,7 @@ class clsProyecto {
                     ProgramaNew);
                 GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
                 GestionNew.cslArticulacionPrj = loadArticulacionPrj(gestion.cslArticulacionPrj);
-                GestionNew.clsEvidencias= loadclsEvidencias(gestion.clsEvidencias);
+                GestionNew.clsEvidencias = loadclsEvidencias(gestion.clsEvidencias);
                 return GestionNew;
             });
         }
@@ -159,7 +159,7 @@ class clsProyecto {
 
             return fromClsEvidencias.map(evidencia => {
                 const newEvidencias = new Evidencia(
-                    evidencia.nombre, 
+                    evidencia.nombre,
                     evidencia.tipo,
                     evidencia.keys,
                     evidencia.link,
@@ -470,7 +470,7 @@ class Area {
         `
         const linkVisor = document.getElementById("lnkVisor")
         linkVisor.onclick = () => {
-            parametrizador(this)
+            parametrizador2(this)
         }
         const linkNotas = document.getElementById("linkNotas")
         linkNotas.onclick = () => {
@@ -1924,7 +1924,7 @@ class Programa {
         btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
 
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "",0, 0, 0, "","gestión", 0, this)
+            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "", 0, 0, 0, "", "gestión", 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 
@@ -2370,7 +2370,7 @@ function parametrizador(area) {
             td_program.appendChild(tr_programas)
 
             const td_programa = document.createElement("td")
-            td_programa.appendChild(_put_Programa(linea,programa))
+            td_programa.appendChild(_put_Programa(linea, programa))
 
             tr_programas.appendChild(td_programa)
 
@@ -2378,7 +2378,7 @@ function parametrizador(area) {
                 const tr_gestion = document.createElement("tr")
                 tr_programas.appendChild(tr_gestion)
                 const td_gestion = document.createElement("td")
-                td_gestion.appendChild(_put_Gestion(linea,programa,gestion))
+                td_gestion.appendChild(_put_Gestion(linea, programa, gestion))
                 tr_gestion.appendChild(td_gestion)
 
 
@@ -2423,7 +2423,7 @@ function parametrizador(area) {
 
         return td
     }
-    function _put_Programa(linea,programa) {
+    function _put_Programa(linea, programa) {
         const td = document.createElement("div")
         td.className = "item-schema border-warning bg-warning-subtle shadow-sm"
 
@@ -2457,7 +2457,7 @@ function parametrizador(area) {
 
         return td
     }
-    function _put_Gestion(linea,programa,gestion) {
+    function _put_Gestion(linea, programa, gestion) {
         const td = document.createElement("div")
         td.className = "item-schema border-secondary bg-light shadow-sm"
         td.innerHTML =
@@ -2487,7 +2487,7 @@ function parametrizador(area) {
             </div>      
         </div>
         `
-        
+
 
         return td
     }
@@ -2562,166 +2562,116 @@ function parametrizador2(area) {
     document.getElementById("navbarplan").innerHTML = ""
     const cEscritorio = document.getElementById("panel-escritorio")
     cEscritorio.innerHTML = ""
+
     //Colocamos el ttulo de la consejería
     const Título = document.createElement('div');
-    Título.className = "fs-3 fw-bold text-secondary"
+    Título.className = "ps-2 bg-secondary text-white fw-bold"
+    Título.style.fontSize = "18px"
     Título.textContent = area.nombre
     cEscritorio.appendChild(Título)
 
-    const Título4 = document.createElement('div');
-    Título4.className = "ms-4 fs-6 text-success border-bottom border-4 w-60 border-success"
-    Título4.textContent = "Esquema general de la consejería, indicadores y avances"
-    cEscritorio.appendChild(Título4)
+    const Título2 = document.createElement('div');
+    Título2.className = "ps-2 bg-secondary text-warning fw-medium pb-3"
+    Título2.style.fontSize = "16px"
+    Título2.textContent = "Esquema general de la consejería, indicadores y avances"
+    cEscritorio.appendChild(Título2)
 
+    //Creamos el inicio de la tabla
+    const tabla = document.createElement("tabla")
+    tabla.className = "table table-hover table-bordered"
+    cEscritorio.appendChild(tabla)
+
+
+
+    //Creamos cuerpo de la tabla
+    const tbody = document.createElement("tbody")
+    tabla.appendChild(tbody)
     area.cslLineas.forEach(linea => {
-        //Creamos un contenedor de líneas, es decir, pro cada línea una fila
-        const rowLinea = document.createElement("div")
-        rowLinea.className = "row p-2 align-items-center border-3 border-bottom border-warning"
+        const tr_linea = document.createElement("tr")
 
-        const colNombreLinea = document.createElement("div")
-        colNombreLinea.className = "col-2 border-ini-org rounded border-warning shadow p-2 m-2 bg-warning-subtle"
-        colNombreLinea.innerHTML = `
-        <a class="nav-link active rf-labels" aria-current="page" href="#" id="cOpenLinea${linea.id}">L${linea.id + 1}. ${linea.nombre}</a>
-        `
+        const td_linea = document.createElement("td")
+        td_linea.appendChild(_put_Linea(linea))
+        tr_linea.appendChild(td_linea)
 
+        const td_program = document.createElement("td")
+        tr_linea.appendChild(td_program)
 
 
+        tbody.appendChild(tr_linea)
 
-        rowLinea.appendChild(colNombreLinea)
-
-        const colAvanceLinea = document.createElement("div")
-        colAvanceLinea.className = "col-2"
-        colAvanceLinea.innerHTML = `
-
-        <div class="form-floating">
-            <input type="text" class="form-control" id="inAvanceLinea${linea.id}" value="${linea.meta}">
-            <label for="inAvanceLinea${linea.id}">Meta / Área</label>
-        </div>
-        <label class="rounded border mt-1 p-1 w-100 bg-warning-subtle text-end pe-2 border-warning">Avance: ${linea.avance}</label>
-        `
-        rowLinea.appendChild(colAvanceLinea)
-
-
-        //Creamos la columna para colocar los programas
-        const colProgramasLinea = document.createElement("div")
-        colProgramasLinea.className = "col"
-        rowLinea.appendChild(colProgramasLinea)
-
-
-        linea.clsPrograma.forEach(programa => {
-            //Creamos una fila por programa
-            const rowPrograma = document.createElement("div")
-            rowPrograma.className = "row align-items-center"
-            colProgramasLinea.appendChild(rowPrograma)
-            rowPrograma.innerHTML = `
-            <div class="col-2 col-sm-12 col-sm-4 col-lg-4 rf-labels border-ini-org rounded border-info bg-info-subtle shadow p-2 m-2">
-            
-            <a class="nav-link active rf-labels p-2" aria-current="page" href="#" id="cOpenPrograma${linea.id}${programa.id}">P${programa.id + 1}. ${programa.nombre}</a>
-            </div>
-            <div class="col-2 rf-labels">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="inMetaPrograma${linea.id}${programa.id}" value="${programa.meta}">
-                     <label class="" for="inMetaPrograma${linea.id}${programa.id}">Meta / Linea</label>
-                </div>
-                <label class="rounded border mt-1 w-100 text-end bg-info-subtle pe-2 border-info">Avance: ${programa.avance}</label>
-            </div>
-             `
-            const colProyectos = document.createElement("div")
-            colProyectos.className = "col"
-            rowPrograma.appendChild(colProyectos)
-            programa.clsGestion.forEach(gestion => {
-                const rowProyectos = document.createElement("div")
-                rowProyectos.className = "row mb-1 border-ini-org rounded border-secondary bg-light p-2 m-2 align-items-center shadow"
-                rowProyectos.innerHTML = `
-                <div class="col">
-                    <a class="nav-link active rf-labels" aria-current="page" href="#" id="cOpenGestion${linea.id}${programa.id}${gestion.id}">G${gestion.id + 1}. ${gestion.nombre}</a>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="inMetaGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.indicador}">
-                        <label class="" for="inMetaGestion${linea.id}${programa.id}${gestion.id}">Meta / Gestión</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="inAvanceGestion${linea.id}${programa.id}${gestion.id}" value="${gestion.cumplimiento}">
-                    <label class="" for="inAvanceGestion${linea.id}${programa.id}${gestion.id}">Avance</label>
-                </div>
-                </div>
-                `
-                colProyectos.appendChild(rowProyectos)
-
-            })
-
-        })
-
-        cEscritorio.appendChild(rowLinea)
 
 
     })
+    function _put_Linea(linea) {
+        const divBasic = document.createElement("div")
 
-    //Asignador de funciones no se peude colocar directo en el for
+        const row = document.createElement("div")
+        divBasic.appendChild(row)
+        row.className = "row align-items-center"
 
-    area.cslLineas.forEach(linea => {
-        //Configuramos para que se actualize la línea y su meta
-        const refAvanceLinea = document.getElementById("inAvanceLinea" + linea.id)
-        refAvanceLinea.oninput = () => {
-            linea.meta = refAvanceLinea.value
-            GuardarVigencia()
+        const col_btn = document.createElement("div")
+        row.appendChild(col_btn)
+        col_btn.className = "col-auto"
+        col_btn.innerHTML = `
+            <a class="btn border-1" 
+                data-bs-toggle="collapse" 
+                href="#collapse${linea.id}">
+                <i class="bi bi-folder2-open"></i>
+            </a>
+        `
+        const divCollapse = document.createElement("div")
+        divBasic.appendChild(divCollapse)
+        divCollapse.className = "collapse p-1 m-2 border border-1"
+        divCollapse.id = `collapse${linea.id}`
+        divCollapse.textContent = "hola sdfsa dfasdfsadf asdfsadf sadfsad f as"
 
-        }
-        refAvanceLinea.value = linea.meta
-        const cOpenLiena = document.getElementById("cOpenLinea" + linea.id)
-        cOpenLiena.onclick = () => {
-            const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id]
-            elemento.makerHTMLLineaPanel(area)
-        }
-        linea.clsPrograma.forEach(programa => {
-            //Configuramos para que se actualize el programa y su meta
-            const refAvancePrograma = document.getElementById("inMetaPrograma" + linea.id + programa.id)
-            refAvancePrograma.oninput = () => {
-                programa.meta = refAvancePrograma.value
+        const col_nombre = document.createElement("div")
+        row.appendChild(col_nombre)
+        col_nombre.className = "col-auto text-secondary"
+        col_nombre.style.width = "400px"
+        col_nombre.textContent = `${linea.id + 1}. ${linea.nombre}`
+
+        const col_meta = document.createElement("div")
+        row.appendChild(col_meta)
+        col_meta.className = "col-auto text-secondary"
+
+        const small1 = document.createElement("small")
+        small1.textContent = "Meta"
+        small1.className="text-warning"
+        col_meta.appendChild(small1)
+
+        const in_meta = document.createElement("input")
+        col_meta.appendChild(in_meta)
+        in_meta.className = "form-control"
+        in_meta.type = "text"
+        in_meta.style.width = "80px"
+        in_meta.value = linea.meta
+        in_meta.onchange = () => {
+            linea.meta = in_meta.value
+            var totalAvance = area.cslLineas.reduce((sum, value) => (sum + parseInt(value.meta)), 0);
+
+            if (totalAvance > 100) {
+                mensajes("La suma de las metas no debe superar el valor de 100", "orange")
+            }else{
                 GuardarVigencia()
+                mensajes("Total metas " + totalAvance, "green")
             }
-            refAvancePrograma.value = programa.meta
+        }
 
-            const cOpenPrograma = document.getElementById("cOpenPrograma" + linea.id + programa.id)
-            cOpenPrograma.onclick = () => {
-                const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id]
-                elemento.makerHTMLProgramaPanel(area, linea)
-            }
-            programa.clsGestion.forEach(gestion => {
-                //Configuramos para que se actualize la gestion y su meta
-                const refMetaGestion = document.getElementById("inMetaGestion" + linea.id + programa.id + gestion.id)
-                refMetaGestion.oninput = () => {
-                    gestion.indicador = refMetaGestion.value
-                    GuardarVigencia()
-                }
-                refMetaGestion.value = gestion.indicador
+        const in_avance = document.createElement("input")
+        col_meta.appendChild(in_meta)
+        in_meta.className = "form-control"
 
-                const refAvanceGestion = document.getElementById("inAvanceGestion" + linea.id + programa.id + gestion.id)
-                refAvanceGestion.oninput = () => {
-                    gestion.cumplimiento = refAvanceGestion.value
-                    GuardarVigencia()
-                }
-                refAvanceGestion.value = gestion.cumplimiento
+        linea
 
-                const cOpenProyecto = document.getElementById("cOpenGestion" + linea.id + programa.id + gestion.id)
-                cOpenProyecto.onclick = () => {
-                    const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
-
-                    elemento.makerHTMLProyeccion(area, linea, programa.nombre, programa)
-                }
+        return divBasic
+    }
 
 
-            })
 
 
-        })
-
-
-    })
 
 }
-
 
 function backupData() {
     const a = document.createElement("a");

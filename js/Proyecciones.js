@@ -145,7 +145,7 @@ class Gestion {
 
         selTipo.onchange=()=>{
             this.tipo=selTipo.value
-            GuardarVigencia()
+             GuardarVigencia()
         }
         selTipo.value=this.tipo
 
