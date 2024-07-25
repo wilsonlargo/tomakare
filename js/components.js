@@ -2590,19 +2590,20 @@ function parametrizador2(area) {
         const tr_linea = document.createElement("tr")
 
         const td_linea = document.createElement("td")
-        td_linea.appendChild(_put_Linea(linea))
+        
+        const td_program = document.createElement("td")
+
+
+        td_linea.appendChild(_put_Linea(linea,td_program))
         tr_linea.appendChild(td_linea)
 
-        const td_program = document.createElement("td")
         tr_linea.appendChild(td_program)
-
-
         tbody.appendChild(tr_linea)
 
 
 
     })
-    function _put_Linea(linea) {
+    function _put_Linea(linea, colProgramas) {
         const divBasic = document.createElement("div")
 
         const row = document.createElement("div")
@@ -2662,7 +2663,10 @@ function parametrizador2(area) {
         col_meta.appendChild(in_meta)
         in_meta.className = "form-control"
 
-        linea
+        linea.clsPrograma.forEach(programas=>{
+            let p= document
+            colProgramas.appendChild(p)
+        })
 
         return divBasic
     }
