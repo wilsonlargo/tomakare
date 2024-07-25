@@ -145,6 +145,7 @@ class clsProyecto {
                     gestion.indicador,
                     gestion.cumplimiento,
                     gestion.aclaraciones,
+                    gestion.tipo,
                     gestion.id,
                     ProgramaNew);
                 GestionNew.clsEspecificos = loadEspecificos(gestion.clsEspecificos);
@@ -1923,7 +1924,7 @@ class Programa {
         btAgregarGestion.innerHTML = `<i class="bi bi-plus"></i> Agregar proyecto`
 
         btAgregarGestion.onclick = () => {
-            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "", 0, 0, 0, "", 0, this)
+            const gestion = new Gestion('Nueva proyección', "Objetivo general", "Mandato en relación", "Administrador", false, "",0, 0, 0, "","gestión", 0, this)
             this.addGestion(gestion)
             GuardarVigencia()
 

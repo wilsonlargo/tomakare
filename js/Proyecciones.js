@@ -2,7 +2,7 @@
 //se desarrolla aparte pues tien otros elementos qu eharían grande este componente
 
 class Gestion {
-    constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, aclaraciones, id, dominio) {
+    constructor(nombre, ogeneral, mandato, manager, financiado, fuente, valor, indicador, cumplimiento, aclaraciones,tipo, id, dominio) {
         this.nombre = nombre;
         this.ogeneral = ogeneral;
         this.mandato = mandato;
@@ -13,6 +13,7 @@ class Gestion {
         this.indicador = indicador;
         this.cumplimiento = cumplimiento;
         this.aclaraciones = aclaraciones
+        this.tipo = tipo
         this.id = id;
         this.parent = dominio;
         this.cslArticulacionPrj = [];
@@ -126,6 +127,27 @@ class Gestion {
             <input type="text" class="form-control" id="${this.id + "input-gestion-nombre"}" value="${this.nombre}">
             <label for="${this.id + "input-programa-nombre"}">Nombre proyecto</label>
         `
+
+        //===================================================
+        let labelFreeA = document.createElement("label")
+        labelFreeA.className = "labelorg-orange-light text-secondary border border-1 border-warning mt-3"
+        labelFreeA.textContent = "Tipo de proyecto"
+        cEscritorio.appendChild(labelFreeA)
+
+        let selTipo = document.createElement("select")
+        selTipo.className="form-select"
+        selTipo.innerHTML=`
+                <option value="gestión">Gestión</option>
+                <option value="inversión">Inversión</option>
+                <option value="coperación">Coperación</option>
+        `
+        cEscritorio.appendChild(selTipo)
+
+        selTipo.onchange=()=>{
+            this.tipo=selTipo.value
+            GuardarVigencia()
+        }
+        selTipo.value=this.tipo
 
 
         //===================================================
