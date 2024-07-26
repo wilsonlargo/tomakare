@@ -470,7 +470,7 @@ class Area {
         `
         const linkVisor = document.getElementById("lnkVisor")
         linkVisor.onclick = () => {
-            parametrizador2(this)
+            parametrizador(this)
         }
         const linkNotas = document.getElementById("linkNotas")
         linkNotas.onclick = () => {
@@ -1967,12 +1967,13 @@ class Programa {
         document.getElementById("lstProyectos").innerHTML = ""
 
         //Cargar las gestiones
-        let g = 0;
+
 
         //Contadores para calculos de porcenctajes de avance
-
+        let g = 0;
         this.clsGestion.forEach(gestion => {
             gestion.id = g++
+            GuardarVigencia()
             gestion.parent = this
             const btGestion = document.createElement('a')
             btGestion.className = "list-group-item list-group-item-action"
@@ -2183,7 +2184,7 @@ async function AgregarMandato(parentId) {
         mandato.makerHtmlMandato();
 
     })
-    //GuardarVigencia()
+    GuardarVigencia()
     mensajes("Se creó un mandato", "green")
 }
 
@@ -2324,7 +2325,7 @@ function cargar_notas_consultor(dominio) {
 
 }
 
-function parametrizador(area) {
+function parametrizador2(area) {
     document.getElementById("navbarplan").innerHTML = ""
     const cEscritorio = document.getElementById("panel-escritorio")
     cEscritorio.innerHTML = ""
@@ -2356,6 +2357,7 @@ function parametrizador(area) {
         //Analizamos cuántas líneas hay por consejería
         //Cada línea será una fila de la tabla
         const tr_linea = document.createElement("tr")
+        tbody.appendChild(tr_linea)
 
         const td_linea = document.createElement("td")
         td_linea.appendChild(_put_Linea(linea))
@@ -2385,7 +2387,7 @@ function parametrizador(area) {
             })
 
         })
-        tbody.appendChild(tr_linea)
+
 
     })
 
@@ -2558,10 +2560,11 @@ function parametrizador(area) {
 
 }
 
-function parametrizador2(area) {
+function parametrizador(area) {
     document.getElementById("navbarplan").innerHTML = ""
     const cEscritorio = document.getElementById("panel-escritorio")
     cEscritorio.innerHTML = ""
+
 
     //Colocamos el ttulo de la consejería
     const Título = document.createElement('div');
@@ -2571,66 +2574,131 @@ function parametrizador2(area) {
     cEscritorio.appendChild(Título)
 
     const Título2 = document.createElement('div');
-    Título2.className = "ps-2 bg-secondary text-warning fw-medium pb-3"
+    Título2.className = "ps-2 bg-secondary text-warning fw-medium pb-3 mb-5"
     Título2.style.fontSize = "16px"
     Título2.textContent = "Esquema general de la consejería, indicadores y avances"
     cEscritorio.appendChild(Título2)
 
     //Creamos el inicio de la tabla
     const tabla = document.createElement("tabla")
-    tabla.className = "table table-hover table-bordered"
+    tabla.className = "table table-hover table-bordered m-2"
+    tabla.style.width = "100%"
     cEscritorio.appendChild(tabla)
 
 
 
     //Creamos cuerpo de la tabla
     const tbody = document.createElement("tbody")
+
     tabla.appendChild(tbody)
     area.cslLineas.forEach(linea => {
+        //Analizamos cuántas líneas hay por consejería
+        //Cada línea será una fila de la tabla
         const tr_linea = document.createElement("tr")
+        tbody.appendChild(tr_linea)
 
         const td_linea = document.createElement("td")
-        
-        const td_program = document.createElement("td")
-
-
-        td_linea.appendChild(_put_Linea(linea,td_program))
+        td_linea.style.verticalAlign = "middle"
+        td_linea.appendChild(_put_Linea(linea))
         tr_linea.appendChild(td_linea)
 
+        const td_program = document.createElement("td")
         tr_linea.appendChild(td_program)
-        tbody.appendChild(tr_linea)
+        linea.clsPrograma.forEach(programa => {
+            const tr_programas = document.createElement("tr")
+            td_program.appendChild(tr_programas)
+
+            const td_programa = document.createElement("td")
+            td_program.style.verticalAlign = "middle"
+            td_programa.appendChild(_put_Programa(linea, programa))
+
+            tr_programas.appendChild(td_programa)
+            let g = 0
+            programa.clsGestion.forEach(gestion => {
+                gestion.id = g++
+                const tr_gestion = document.createElement("tr")
+                tr_programas.appendChild(tr_gestion)
+                const td_gestion = document.createElement("td")
+                td_gestion.style.verticalAlign = "middle"
+                td_gestion.appendChild(_put_Gestion(linea, programa, gestion))
+                tr_gestion.appendChild(td_gestion)
+            })
+
+
+        })
+
+
 
 
 
     })
-    function _put_Linea(linea, colProgramas) {
+
+    function _put_Linea(linea) {
         const divBasic = document.createElement("div")
 
         const row = document.createElement("div")
         divBasic.appendChild(row)
-        row.className = "row align-items-center"
+        row.className = "row align-items-center mb-1"
 
         const col_btn = document.createElement("div")
         row.appendChild(col_btn)
         col_btn.className = "col-auto"
+        col_btn.style.width = "40px"
         col_btn.innerHTML = `
-            <a class="btn border-1" 
+            <a class="btn border-1"
                 data-bs-toggle="collapse" 
                 href="#collapse${linea.id}">
                 <i class="bi bi-folder2-open"></i>
             </a>
         `
+
+        const col_indice = document.createElement("div")
+        row.appendChild(col_indice)
+        col_indice.className = "col-auto text-warning fw-bold"
+        col_indice.style.width = "10px"
+        col_indice.style.fontSize = "12px"
+        col_indice.textContent = `${linea.id + 1}.`
+
+        //===================================================
         const divCollapse = document.createElement("div")
         divBasic.appendChild(divCollapse)
-        divCollapse.className = "collapse p-1 m-2 border border-1"
+        divCollapse.className = "collapse border border-1"
         divCollapse.id = `collapse${linea.id}`
-        divCollapse.textContent = "hola sdfsa dfasdfsadf asdfsadf sadfsad f as"
+
+        const rowInfo = document.createElement("div")
+        divCollapse.appendChild(rowInfo)
+        rowInfo.className = "row align-items-center"
+
+        const colLabel = document.createElement("div")
+        rowInfo.appendChild(colLabel)
+        colLabel.className = "col-auto text-info fw-bold"
+        colLabel.textContent = "Línea"
+
+        const colTextInfo = document.createElement("div")
+        rowInfo.appendChild(colTextInfo)
+        colTextInfo.className = "col"
+        colTextInfo.textContent = `${linea.id + 1}/${area.cslLineas.length}`
+
+        const colLabel2 = document.createElement("div")
+        rowInfo.appendChild(colLabel2)
+        colLabel2.className = "col-auto text-info fw-bold"
+        colLabel2.textContent = "Avance"
+
+        const colTextInfo2 = document.createElement("div")
+        rowInfo.appendChild(colTextInfo2)
+        colTextInfo2.className = "col"
+        colTextInfo2.textContent = `${linea.avance}%`
+        colTextInfo2.id = `textLinea${linea.id}`
+
+        //===================================================
+        //===================================================
 
         const col_nombre = document.createElement("div")
         row.appendChild(col_nombre)
         col_nombre.className = "col-auto text-secondary"
-        col_nombre.style.width = "400px"
-        col_nombre.textContent = `${linea.id + 1}. ${linea.nombre}`
+        col_nombre.style.fontSize = "13px"
+        col_nombre.style.width = "150px"
+        col_nombre.textContent = `${linea.nombre.trim()}`
 
         const col_meta = document.createElement("div")
         row.appendChild(col_meta)
@@ -2638,14 +2706,15 @@ function parametrizador2(area) {
 
         const small1 = document.createElement("small")
         small1.textContent = "Meta"
-        small1.className="text-warning"
+        small1.className = "text-warning"
         col_meta.appendChild(small1)
 
         const in_meta = document.createElement("input")
         col_meta.appendChild(in_meta)
         in_meta.className = "form-control"
         in_meta.type = "text"
-        in_meta.style.width = "80px"
+        in_meta.style.width = "50px"
+        in_meta.style.fontSize = "13px"
         in_meta.value = linea.meta
         in_meta.onchange = () => {
             linea.meta = in_meta.value
@@ -2653,7 +2722,7 @@ function parametrizador2(area) {
 
             if (totalAvance > 100) {
                 mensajes("La suma de las metas no debe superar el valor de 100", "orange")
-            }else{
+            } else {
                 GuardarVigencia()
                 mensajes("Total metas " + totalAvance, "green")
             }
@@ -2663,13 +2732,287 @@ function parametrizador2(area) {
         col_meta.appendChild(in_meta)
         in_meta.className = "form-control"
 
-        linea.clsPrograma.forEach(programas=>{
-            let p= document.createElement("p")
-            p.textContent=programas.nombre
-            colProgramas.appendChild(p)
+        return divBasic
+    }
+    function _put_Programa(linea, programa, inputAvanceLinea) {
+        const divBasic = document.createElement("div")
+        divBasic.className = " mb-1"
+
+
+        const row = document.createElement("div")
+        divBasic.appendChild(row)
+        row.className = "row align-items-center mb-1"
+
+        const col_btn = document.createElement("div")
+        row.appendChild(col_btn)
+        col_btn.className = "col-auto"
+        col_btn.style.width = "35px"
+        col_btn.innerHTML = `
+            <a class="btn border-1 text-btn" 
+                data-bs-toggle="collapse" 
+                href="#collapseP${linea.id}${programa.id}">
+                <i class="bi bi-folder2-open"></i>
+            </a>
+        `
+        const col_indice = document.createElement("div")
+        row.appendChild(col_indice)
+        col_indice.className = "col-auto text-warning fw-bold"
+        col_indice.style.width = "35px"
+        col_indice.style.fontSize = "12px"
+        col_indice.textContent = `${linea.id + 1}.${programa.id + 1}.`
+
+        const divCollapse = document.createElement("div")
+        divBasic.appendChild(divCollapse)
+        divCollapse.className = "collapse p-1 m-2 border border-1"
+        divCollapse.id = `collapseP${linea.id}${programa.id}`
+
+        const rowInfo = document.createElement("div")
+        divCollapse.appendChild(rowInfo)
+        rowInfo.className = "row align-items-center"
+
+        const colLabel = document.createElement("div")
+        rowInfo.appendChild(colLabel)
+        colLabel.className = "col-auto text-info fw-bold"
+        colLabel.textContent = "Programa"
+
+        const colTextInfo = document.createElement("div")
+        rowInfo.appendChild(colTextInfo)
+        colTextInfo.className = "col"
+        colTextInfo.textContent = `${programa.id + 1}/${linea.clsPrograma.length}`
+
+        const colLabel2 = document.createElement("div")
+        rowInfo.appendChild(colLabel2)
+        colLabel2.className = "col-auto text-info fw-bold"
+        colLabel2.textContent = "Avance"
+
+
+        const colTextInfo2 = document.createElement("div")
+        rowInfo.appendChild(colTextInfo2)
+        colTextInfo2.className = "col"
+        colTextInfo2.textContent = `${programa.avance}%`
+        colTextInfo2.id = `textPrograma${linea.id}${programa.id}`
+
+
+        const col_nombre = document.createElement("div")
+        row.appendChild(col_nombre)
+        col_nombre.className = "col-auto text-secondary text-inc"
+        col_nombre.style.fontSize = "13px"
+        col_nombre.style.width = "150px"
+        col_nombre.textContent = `${programa.nombre.trim()}`
+
+        const col_meta = document.createElement("div")
+        row.appendChild(col_meta)
+        col_meta.className = "col-auto text-secondary"
+
+        const small1 = document.createElement("small")
+        small1.textContent = "Meta"
+        small1.className = "text-warning"
+        col_meta.appendChild(small1)
+
+        const in_meta = document.createElement("input")
+        col_meta.appendChild(in_meta)
+        in_meta.className = "form-control"
+        in_meta.type = "text"
+        in_meta.style.width = "50px"
+        in_meta.style.fontSize = "13px"
+        in_meta.value = programa.meta
+        in_meta.onchange = () => {
+            programa.meta = in_meta.value
+            var totalAvance = linea.clsPrograma.reduce((sum, value) => (sum + parseInt(value.meta)), 0);
+
+            if (totalAvance > 100) {
+                mensajes("La suma de las metas no debe superar el valor de 100", "orange")
+            } else {
+                GuardarVigencia()
+                mensajes("Total metas " + totalAvance, "green")
+            }
+        }
+
+        col_meta.appendChild(in_meta)
+        in_meta.className = "form-control"
+        let i = 0
+        programa.clsGestion.forEach(gestion => {
+            //gestion.id = i++
+            //_Put_Gestion(area, linea, programa, gestion, colProyectos,colTextInfo2,inputAvanceLinea)
         })
+        return divBasic
+    }
+    function _put_Gestion(linea, programa, gestion) {
+
+        const divBasic = document.createElement("div")
+        divBasic.className = "border-bottom border-warning mb-1"
+        const row = document.createElement("div")
+        divBasic.appendChild(row)
+        row.className = "row align-items-center mb-1"
+
+        const col_btn = document.createElement("div")
+        row.appendChild(col_btn)
+        col_btn.className = "col"
+        col_btn.style.width = "35px"
+        col_btn.innerHTML = `
+            <a class="btn border-1 text-btn" 
+                data-bs-toggle="collapse" 
+                href="#collapseP${linea.id}${programa.id}${gestion.id}">
+                <i class="bi bi-folder2-open"></i>
+            </a>
+        `
+        const col_indice = document.createElement("div")
+        row.appendChild(col_indice)
+        col_indice.className = "col text-warning fw-bold"
+        col_indice.style.width = "35px"
+        col_indice.style.fontSize = "12px"
+        col_indice.textContent = `${linea.id + 1}.${programa.id + 1}.${gestion.id + 1}.`
+
+        const divCollapse = document.createElement("div")
+        divBasic.appendChild(divCollapse)
+        divCollapse.className = "collapse border border-1"
+        divCollapse.id = `collapseP${linea.id}${programa.id}${gestion.id}`
+
+        const rowInfo = document.createElement("div")
+        divCollapse.appendChild(rowInfo)
+        rowInfo.className = "row align-items-center"
+
+        const colLabel = document.createElement("div")
+        rowInfo.appendChild(colLabel)
+        colLabel.className = "col-auto text-info fw-bold"
+        colLabel.textContent = "Proyecto"
+
+        const colTextInfo = document.createElement("div")
+        rowInfo.appendChild(colTextInfo)
+        colTextInfo.className = "col"
+        colTextInfo.textContent = `${gestion.id + 1}/${programa.clsGestion.length}`
+
+
+        const col_nombre = document.createElement("div")
+        row.appendChild(col_nombre)
+        col_nombre.className = "col-auto text-secondary"
+        col_nombre.style.width = "200px"
+
+        const a = document.createElement("a")
+        col_nombre.appendChild(a)
+        a.textContent = `${gestion.nombre.trim()}`
+        a.className = "nav-link active text-inc"
+        a.href = "#"
+        a.onclick = () => {
+            gestion.parent = programa
+            const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
+            elemento.makerHTMLProyeccion(area, linea, programa)
+        }
+
+        const col_meta = document.createElement("div")
+        row.appendChild(col_meta)
+        col_meta.className = "col text-secondary"
+
+        const small1 = document.createElement("small")
+        small1.textContent = "Meta"
+        small1.className = "text-warning"
+        col_meta.appendChild(small1)
+
+        const in_meta = document.createElement("input")
+        col_meta.appendChild(in_meta)
+        in_meta.className = "form-control"
+        in_meta.type = "text"
+        in_meta.style.width = "50px"
+        in_meta.style.fontSize = "13px"
+
+        in_meta.value = gestion.indicador
+        in_meta.onchange = () => {
+            gestion.indicador = in_meta.value
+            var totalMeta = programa.clsGestion.reduce((sum, value) => (sum + parseInt(value.indicador)), 0);
+            var totalAvance = programa.clsGestion.reduce((sum, value) => (sum + parseInt(value.cumplimiento)), 0);
+
+            if (parseInt(in_meta.value) >= parseInt(in_Avance.value)) {
+
+                if (totalMeta > 100) {
+                    mensajes("La suma de las metas no debe superar el valor de 100", "orange")
+                } else {
+                    inputAPrograma.textContent = totalAvance + "%"
+
+                    mensajes("Total metas " + totalMeta, "green")
+                }
+
+            } else {
+                mensajes(`El valor de la meta no puede ser menor que el avance ${in_Avance.value} / ${in_meta.value}`, "orange")
+
+            }
+
+
+        }
+
+        const col_Avance = document.createElement("div")
+        row.appendChild(col_Avance)
+        col_Avance.className = "col-auto text-secondary"
+
+        const small2 = document.createElement("small")
+        small2.textContent = "Avance"
+        small2.className = "text-warning"
+        col_Avance.appendChild(small2)
+
+        const in_Avance = document.createElement("input")
+        col_Avance.appendChild(in_Avance)
+        in_Avance.className = "form-control"
+        in_Avance.type = "text"
+        in_Avance.style.width = "50px"
+        in_Avance.style.fontSize = "13px"
+
+        in_Avance.value = gestion.cumplimiento
+
+
+        const pAvanceGestion = parseInt(gestion.cumplimiento) / parseInt(gestion.indicador)
+        try {
+            const formato = colorRange(pAvanceGestion * 100)
+            in_Avance.style.backgroundColor = formato[0]
+            in_Avance.style.color = formato[1]
+        } catch (error) {
+            in_Avance.style.backgroundColor = "red"
+            in_Avance.style.color = "white"
+        }
+
+
+
+        in_Avance.onchange = () => {
+
+            gestion.cumplimiento = in_Avance.value
+            const pAvanceGestion2 = parseInt(gestion.cumplimiento) / parseInt(gestion.indicador)
+            const formato = colorRange(pAvanceGestion2 * 100)
+            in_Avance.style.backgroundColor = formato[0]
+            in_Avance.style.color = formato[1]
+
+            var totalAvance = programa.clsGestion.reduce((sum, value) => (sum + parseInt(value.cumplimiento)), 0);
+
+            if (parseInt(in_Avance.value) <= parseInt(in_meta.value)) {
+                if (totalAvance > 100) {
+                    mensajes("La suma de los avances no debe superar el valor de 100", "orange")
+                } else {
+                    document.getElementById(`textPrograma${linea.id}${programa.id}`).textContent = totalAvance + "%"
+                    programa.avance = totalAvance
+
+
+                    mensajes("Total avances " + totalAvance, "green")
+                    //Calcular avances en relación de proyectos y programas
+                    //Primero saco los porsentajes de cada meta
+
+                    let pa = 0
+                    programa.parent.clsPrograma.forEach(programa => {
+
+                        const avance = parseInt(programa.meta) * (parseInt(programa.avance) / 100)
+                        pa = pa + avance
+                    })
+                    programa.parent.avance = pa
+                    document.getElementById(`textLinea${linea.id}`).textContent = pa + "%"
+
+                    GuardarVigencia()
+
+                }
+
+            } else {
+                mensajes(`El valor del avance no puede ser mayor que la meta ${in_Avance.value} / ${in_meta.value}`, "orange")
+            }
+        }
 
         return divBasic
+
+
     }
 
 

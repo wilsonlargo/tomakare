@@ -1,20 +1,20 @@
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">
-                    <i class="bi bi-people-fill h5"></i>
-                </span>
-                <!--Guarda información texto del correo de ingreso afecta el archivo (credential.js)-->
-                <input id="inEmail" type="text" class="form-control" placeholder="nombre@email.com"
-                    aria-label="Correo eléctrónico" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">
-                    <i class="bi bi-key h4"></i>
-                </span>
-                <!--Guarda información contraseña de ingreso afecta el archivo (credential.js)-->
-                <input id="inPass" type="password" class="form-control" placeholder="******" aria-label="Contraseña"
-                    aria-describedby="basic-addon1">
-            </div>
-            <div class="d-flex justify-content-center mt-4 m-2">
-                <!--Evoca la función inicio de sesión en el archivo (credentials.js)-->
-                <button type="button" class="btn btn-success" onclick="IniCredential()">Ingresar</button>
-            </div>
+                    linea.clsPrograma.forEach(programa => {
+            const tr_programas = document.createElement("tr")
+            td_program.appendChild(tr_programas)
+
+            const td_programa = document.createElement("td")
+            td_programa.appendChild(_put_Programa(linea, programa))
+
+            tr_programas.appendChild(td_programa)
+
+            programa.clsGestion.forEach(gestion => {
+                const tr_gestion = document.createElement("tr")
+                tr_programas.appendChild(tr_gestion)
+                const td_gestion = document.createElement("td")
+                td_gestion.appendChild(_put_Gestion(linea, programa, gestion))
+                tr_gestion.appendChild(td_gestion)
+
+
+            })
+
+        })

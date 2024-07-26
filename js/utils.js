@@ -15,6 +15,49 @@ const GLOBAL = {
 };
 
 
+const colorRange = (valor) => {
+
+
+   try {
+    if (valor == "0") {
+        const backColor = "red"
+        const textColor = "white"
+        return [backColor, textColor]
+    } else if (valor <= "20") {
+        const backColor = "pink"
+        const textColor = "black"
+        return [backColor, textColor]
+
+    } else if (valor <= "40") {
+        const backColor = "yelow"
+        const textColor = "black"
+        return [backColor, textColor]
+
+    }else if (valor <= "60") {
+        const backColor = "gold"
+        const textColor = "black"
+        return [backColor, textColor]
+
+    }else if (valor <= "80") {
+        const backColor = "lime"
+        const textColor = "black"
+        return [backColor, textColor]
+
+    } else if (valor <= "100") {
+        const backColor = "green"
+        const textColor = "white"
+        return [backColor, textColor]
+
+    }
+   } catch (error) {
+    const backColor = "red"
+    const textColor = "white"
+    return [backColor, textColor]
+   }
+
+}
+
+
 
 let aUsers = []
 let activeEmail;
@@ -243,7 +286,7 @@ const HiddenControl = {
     }
 }
 
-function open_sig(){
+function open_sig() {
     location.href = "./app-GIS/index-gis.html";
 }
 

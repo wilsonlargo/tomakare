@@ -134,3 +134,12 @@ td-center {
     background-attachment: fixed;
     background-size: cover;
 }
+
+.text-inc:hover {
+    font-weight: bold;
+  }
+
+  .text-btn:hover {
+    color:orangered;
+    font-size: 18px;
+  }

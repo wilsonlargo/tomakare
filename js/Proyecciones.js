@@ -402,7 +402,6 @@ class Gestion {
 
         //Cargar todos los específicos
         divObjetivos_Específicos.innerHTML = ""
-        console.log(this.clsEspecificos)
         let e = 0;
         this.clsEspecificos.forEach(especifico => {
             especifico.id = e++
@@ -614,7 +613,6 @@ class oespecificos {
                 () => {
                     dominio.deleteEspecificos(this.id)
                     GuardarVigencia()
-                    console.log(dominio.clsEspecificos)
                     contenedor.innerHTML = ""
                     let e = 0;
                     dominio.clsEspecificos.forEach(especifico => {
@@ -784,7 +782,7 @@ class Evidencia {
         sel_objetivo_libro.change = () => {
             libro.objetivo = sel_objetivo_libro.value
             //Actualiza el título sin perder el numerador y el ícono
-            //GuardarVigencia()
+        /GuardarVigencia()
         }
         sel_objetivo_libro.value = libro.objetivo
 
@@ -921,14 +919,13 @@ function listarGestiones() {
     contenedor_listas.className = "list-group"
     document.getElementById("panel-escritorio").appendChild(contenedor_listas)
 
-    let i = 0
-    let g = 1
     ActiveProyect.clsAreas.forEach(area => {
         area.cslLineas.forEach(linea => {
             linea.clsPrograma.forEach(programa => {
-
+                let g=0
                 programa.clsGestion.forEach(gestion => {
-
+                    gestion.id= g++
+                    gestion.parent=programa
                     const item = document.createElement("li")
                     item.className = "list-group-item d-flex justify-content-between align-items-start"
 
@@ -950,7 +947,7 @@ function listarGestiones() {
                     <span class="input-group-text bg-warning"><i class="bi bi-file-earmark-text-fill"></i></span>
                     <div class="ms-2 me-auto">
                         <div class=""> <b>${area.nombre}</b> / ${linea.nombre} / ${programa.nombre}</div>
-                        ${g++}. ${gestion.nombre}
+                        ${g}. ${gestion.nombre}
                     </div>
                     <span class="badge ${color} rounded-pill ms-2 p-2"> (A) ${Math.trunc(porcentajeReal)} %</span>  
 
@@ -959,13 +956,16 @@ function listarGestiones() {
 
                     item.onclick = () => {
                         const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id].clsGestion[gestion.id]
-                        //console.log(ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma)
+
+
                         elemento.makerHTMLProyeccion(area, linea, programa)
 
                     }
-
+                    
 
                 })
+
+                
             })
         })
     });
