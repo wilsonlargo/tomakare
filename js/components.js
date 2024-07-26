@@ -2664,7 +2664,8 @@ function parametrizador2(area) {
         in_meta.className = "form-control"
 
         linea.clsPrograma.forEach(programas=>{
-            let p= document
+            let p= document.createElement("p")
+            p.textContent=programas.nombre
             colProgramas.appendChild(p)
         })
 
