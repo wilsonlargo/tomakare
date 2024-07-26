@@ -52,22 +52,17 @@ class Gestion {
         const Título = document.createElement('div');
         Título.className = "ps-2 bg-secondary text-white fw-bold"
         Título.style.fontSize = "18px"
-        Título.textContent = this.parent.nombre
+        Título.textContent = area.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
         Título2.className = "ps-2 bg-secondary text-warning fw-medium"
         Título2.style.fontSize = "16px"
-        Título2.textContent = this.nombre
+        Título2.textContent = linea.nombre
         cEscritorio.appendChild(Título2)
 
-        //Colocamos el título del programa
-        const Título3 = document.createElement('div');
-        Título3.className = "ps-2 bg-secondary text-info"
-        Título3.style.fontSize = "15px"
-        Título3.textContent = this.nombre
-        cEscritorio.appendChild(Título3)
+
 
         //Colocamos el título del proyecto
         const Título4 = document.createElement('div');
@@ -700,14 +695,9 @@ class Evidencia {
             </div>
             <div class="collapse" id="collapseLibro${libro.id}">
                 <div class="card card-body">
-                    <small>Objetivo referencia</samll>
-                    <select class="form-select form-select-sm mb-3" id="sel-Objetivo-Documento${libro.id}">
+                    <label class="labelorg-orange-light text-secondary border border-1 border-warning mt-3">Objetivo referencia</label>
+                    <select class="form-select mb-2 bg-info" id="sel_Objetivo_Documento${libro.id}">
                     </select>
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control" id="int-Objetivo-Documento${libro.id}"
-                            style="height: 50px"></textarea>
-                        <label for="int-Objetivo-Documento${libro.id}">Objetivo relacionado</label>
-                    </div>
                     <div class="form-floating mb-2">
                         <textarea class="form-control" id="int-Nombre-Documento${libro.id}"
                             style="height: 50px"></textarea>
@@ -756,33 +746,21 @@ class Evidencia {
         //Configuración nombre del libro
 
 
+        const sel_objetivo_libro = document.getElementById(`sel_Objetivo_Documento${libro.id}`)
 
-        const ref_objetivo_libro = document.getElementById(`int-Objetivo-Documento${libro.id}`)
-
-
-        //document.getElementById(`tituloLibro${libro.id}`)
-        //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
-        ref_objetivo_libro.oninput = () => {
-            libro.objetivo = ref_objetivo_libro.value
-            //Actualiza el título sin perder el numerador y el ícono
-            GuardarVigencia()
-        }
-        ref_objetivo_libro.value = libro.objetivo
-
-        const sel_objetivo_libro = document.getElementById(`sel-Objetivo-Documento${libro.id}`)
         this.parentId.clsEspecificos.forEach(objetivo => {
             const option = document.createElement("option")
             option.value=objetivo.nombre
-            option.tex="objetivo.nombre"
+            option.text=objetivo.nombre
             sel_objetivo_libro.appendChild(option)
         })
 
         //document.getElementById(`tituloLibro${libro.id}`)
         //Se vincula y actualiza el nombre del libro, junto al título del control y en la DB
-        sel_objetivo_libro.change = () => {
+        sel_objetivo_libro.onchange = () => {
             libro.objetivo = sel_objetivo_libro.value
             //Actualiza el título sin perder el numerador y el ícono
-        /GuardarVigencia()
+            GuardarVigencia()
         }
         sel_objetivo_libro.value = libro.objetivo
 

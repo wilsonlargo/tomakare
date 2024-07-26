@@ -1757,14 +1757,14 @@ class Programa {
         const Título = document.createElement('div');
         Título.className = "ps-2 bg-secondary text-white fw-bold"
         Título.style.fontSize = "18px"
-        Título.textContent = this.parent.nombre
+        Título.textContent = area.nombre
         cEscritorio.appendChild(Título)
 
         //Colocamos el título de la línea
         const Título2 = document.createElement('div');
         Título2.className = "ps-2 bg-secondary text-warning fw-medium"
         Título2.style.fontSize = "16px"
-        Título2.textContent = this.nombre
+        Título2.textContent = linea.nombre
         cEscritorio.appendChild(Título2)
 
         //Colocamos el título del programa
@@ -2798,7 +2798,17 @@ function parametrizador(area) {
         col_nombre.className = "col-auto text-secondary text-inc"
         col_nombre.style.fontSize = "13px"
         col_nombre.style.width = "150px"
-        col_nombre.textContent = `${programa.nombre.trim()}`
+
+        const a = document.createElement("a")
+        col_nombre.appendChild(a)
+        a.textContent = `${programa.nombre.trim()}`
+        a.className = "nav-link active text-inc"
+        a.href = "#"
+        a.onclick = () => {
+            programa.parent = linea
+            const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id]
+            elemento.makerHTMLProgramaPanel(area,linea)
+        }
 
         const col_meta = document.createElement("div")
         row.appendChild(col_meta)
