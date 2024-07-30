@@ -143,3 +143,11 @@ td-center {
     color:orangered;
     font-size: 18px;
   }
+
+  .div-fecha{
+    width: 200px;
+    height: 200px;
+    background-color: #840A54;
+    color: white;
+    margin: 1px;
+  }

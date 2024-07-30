@@ -58,6 +58,8 @@ const coleccionUsuarios = collection(db, "usuarios");
 
 const coleccionBiblioteca = collection(db, "biblioteca");
 
+const coleccionCalendario = collection(db, "calendario");
+
 
 
 /* Funciones base para manejar la base de datos de proyectos */
@@ -100,6 +102,19 @@ async function getBibliotecas() {
     return bibliotecas;
 }
 
+async function getCalendarios() {
+    const calendarios = [];
+    const querySnapshot = await getDocs(coleccionCalendario)
+    querySnapshot.forEach((doc) => {
+        calendarios.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    return calendarios;
+}
+
+
 // Función para agregar un objeto de proyecto a la base de datos
 async function addProyecto(objProyecto) {
     const docRef = await addDoc(coleccionProyectos, objProyecto);
@@ -113,10 +128,23 @@ async function addBiblioteca(objBiblioteca) {
     return docRef.id; 
 }
 
+async function addCalendario(objCalendario) {
+    const docRef = await addDoc(coleccionCalendario, objCalendario);
+    //cargarBibliotecas()
+    return docRef.id; 
+}
+
+
 async function borrarBiblioteca(id) {
     await deleteDoc(doc(db, "biblioteca", id));
     mensajes("se eliminó esta librería", "orange")
     cargarBibliotecas()
+}
+
+async function borrarCalendario(id) {
+    await deleteDoc(doc(db, "calendario", id));
+    mensajes("se eliminó esta librería", "orange")
+    //cargarBibliotecas()
 }
 
 // Funcion para eliminar un proyecto por id
@@ -148,6 +176,16 @@ async function getBiblioteca(id) {
     }) : null;
 }
 
+async function getCalendario(id) {
+    const docRef = doc(db, "calendario", id);
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.exists() ? ({
+        ...docSnap.data(),
+        id: docSnap.id,
+    }) : null;
+}
+
 // Función para actualizar un proyecto
 async function updateProyecto(proyecto) {
     const docRef = doc(db, "proyectos", proyecto.id);
@@ -157,6 +195,11 @@ async function updateProyecto(proyecto) {
 async function updateBiblioteca(biblioteca) {
     const docRef = doc(db, "biblioteca", biblioteca.id);
     await setDoc(docRef, biblioteca);
+}
+
+async function updateCalendario(calendario) {
+    const docRef = doc(db, "calendario", calendario.id);
+    await setDoc(docRef, calendario);
 }
 
 
@@ -194,6 +237,17 @@ onSnapshot(coleccionBiblioteca, (querySnapshot) => {
         });
     });
     GLOBAL.state.bibliotecas = bibliotecas;
+});
+
+onSnapshot(coleccionCalendario, (querySnapshot) => {
+    const calendarios = [];
+    querySnapshot.forEach((doc) => {
+        calendarios.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    GLOBAL.state.calendarios = calendarios;
 });
 
 //Función para autorizar ingreso a la base de datos
@@ -234,6 +288,12 @@ GLOBAL.firestore = {
     addBiblioteca,
     borrarBiblioteca,
     updateBiblioteca,
+    //////
+    getCalendarios,
+    getCalendario,
+    addCalendario,
+    borrarCalendario,
+    updateCalendario,
 }
 
 //Función que escucha el cambio en inicio o cerrar sesión

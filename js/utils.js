@@ -10,6 +10,8 @@ const GLOBAL = {
         usuarios: [],
         bibliotecas: [],
         biblioteca: null,
+        calendarios: [],
+        calendario: null,
     },
     firestore: {},
 };
