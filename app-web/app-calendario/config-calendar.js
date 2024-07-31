@@ -3,6 +3,7 @@ let active_data;
 function load_vigencias() {
     data_vigencia = GLOBAL.state.calendarios
     ver_vigencias()
+    byId("liCrearCalendario").hidden = false
 
 }
 function crear_Calendario() {
@@ -57,7 +58,7 @@ function mostrar_panel_vigencias(data) {
 
     const fecha = new Date()
     byId("selmesini").value = fecha.getMonth()
-    
+
     const mes = fecha.toLocaleString('default', { month: 'long' })
     byId("fecha-ini").textContent = ` ${mes}, ${fecha.getDate()}`
 
@@ -69,19 +70,19 @@ async function Guardar() {
 }
 function Mostrar_Calendario(m) {
     const diasSem = [
-        ["domingo", 0, 0],
-        ["lunes", 1, 1],
-        ["martes", 2, 2],
-        ["miercoles", 3, 3],
-        ["jueves", 4, 4],
-        ["viernes", 5, 5],
-        ["sabado", 6, 6],
+        ["domingo", 0],
+        ["lunes", 1],
+        ["martes", 2],
+        ["miercoles", 3],
+        ["jueves", 4],
+        ["viernes", 5],
+        ["sabado", 6],
     ]
 
     const fecha = new Date()
     const año = fecha.getFullYear()
     const mes = m
-
+    
 
     const tbody = document.getElementById("tbody-calendario")
     tbody.innerHTML = ""
@@ -107,41 +108,54 @@ function Mostrar_Calendario(m) {
     const l = j.getDay()
     let p = 1
     for (var h = l; h < ttt + l; h++) {
-        const fehaA = new Date(año, mes - 1, (p))
-        try {
-            p++
-            const divEvento = document.createElement("div")
-            divEvento.className = "div-fecha border-info"
-            divEvento.textContent = p - 1
-            if (fehaA.getDay() == 0) {
-                divEvento.style.background = "gray"
-                divEvento.style.color="white"
-            } else {
-                divEvento.style.background = "white"
-                divEvento.style.color="gray"
-            }
-            document.getElementById(`td_${h + 1}`).appendChild(divEvento)
-        } catch {
-
+        const fechaA = new Date(año, mes - 1, (p))
+        const nombremes = fechaA.toLocaleString('default', { month: 'long' })
+        p++
+        const dateInfo={
+            "vigencia":año,
+            "mes":nombremes,
+            "dia":p-1,
+            "agenda":active_data.id,
         }
+
+        crear_dia(dateInfo, `td_${h + 1}`)
 
 
 
     }
+}
+function crear_dia(dateInfo, id) {
+    const divEvento = document.createElement("div")
+    divEvento.className = "div-fecha border-info"
 
+    divEvento.onclick=()=>{
+        byId("fecha-ini").textContent=`${dateInfo.mes}, ${dateInfo.dia} de ${dateInfo.vigencia}`
+        mensajes(`${dateInfo.mes}, ${dateInfo.dia} de ${dateInfo.vigencia}`,"blue")
+    }
 
+    if (dateInfo.dia == 0) {
+        divEvento.style.background = "gray"
+        divEvento.style.color = "white"
+    } else {
+        divEvento.style.background = "white"
+        divEvento.style.color = "gray"
+    }
+    document.getElementById(id).appendChild(divEvento)
 
+    const bartitulo= cEl("div")
+    bartitulo.className="row align-items-center"
+    divEvento.appendChild(bartitulo)
 
-
-
+    const colDia= cEl("div")
+    colDia.className="col text-start text-warning"
+    colDia.textContent=dateInfo.dia
+    bartitulo.appendChild(colDia)
 
 }
 function remove_vigencia() {
     GLOBAL.firestore.borrarCalendario(active_data.id)
     ver_vigencias()
     byId("panel-escritorio").hidden = true
-
-
 }
 
 
