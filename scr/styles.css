@@ -118,17 +118,18 @@
     border-style: solid;
     border-radius: 8px;
     border-width: 1px;
-    padding:8px;
+    padding: 8px;
     margin: 8px;
     width: 300px;
     border-left: 1rem solid;
 }
+
 td-center {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
-.bgimg{
+.bgimg {
     background-image: url('./fondo.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -137,17 +138,24 @@ td-center {
 
 .text-inc:hover {
     font-weight: bold;
-  }
+}
 
-  .text-btn:hover {
-    color:orangered;
+.text-btn:hover {
+    color: orangered;
     font-size: 18px;
-  }
+}
 
-  .div-fecha{
+.div-fecha {
     width: 200px;
     height: 200px;
-    background-color: #840A54;
-    color: white;
-    margin: 1px;
-  }
+    color: gray;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: solid;
+}
+
+.div-fecha:hover {
+    
+    border-style: solid;
+    border-width: 5px;
+}

@@ -8,21 +8,7 @@ let vigencia_contol = {
     "calendario": {},
 }
 
-let año = {
-    "año": {
-        "id": "",
-        "vigencia": vy.getFullYear(),
-        "meses": {},
-    }
-}
 
-
-let mes = {
-    "mes": {
-        "id": "",
-        "dias": {},
-    }
-}
 
 
 
