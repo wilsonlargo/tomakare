@@ -115,6 +115,7 @@ function Mostrar_Calendario(m) {
             "vigencia":año,
             "mes":nombremes,
             "dia":p-1,
+            "diaSemana":fechaA.getDay(),
             "agenda":active_data.id,
         }
 
@@ -132,8 +133,8 @@ function crear_dia(dateInfo, id) {
         byId("fecha-ini").textContent=`${dateInfo.mes}, ${dateInfo.dia} de ${dateInfo.vigencia}`
         mensajes(`${dateInfo.mes}, ${dateInfo.dia} de ${dateInfo.vigencia}`,"blue")
     }
-
-    if (dateInfo.dia == 0) {
+//alert(dateInfo.diaSemana)
+    if (dateInfo.diaSemana == 0) {
         divEvento.style.background = "gray"
         divEvento.style.color = "white"
     } else {
@@ -147,7 +148,7 @@ function crear_dia(dateInfo, id) {
     divEvento.appendChild(bartitulo)
 
     const colDia= cEl("div")
-    colDia.className="col text-start text-warning"
+    colDia.className="col text-start"
     colDia.textContent=dateInfo.dia
     bartitulo.appendChild(colDia)
 
