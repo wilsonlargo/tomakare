@@ -136,5 +136,12 @@ function Mostrar_Calendario(m) {
 
 
 }
+function remove_vigencia() {
+    GLOBAL.firestore.borrarCalendario(active_data.id)
+    ver_vigencias()
+    byId("panel-escritorio").hidden = true
+
+
+}
 
 
