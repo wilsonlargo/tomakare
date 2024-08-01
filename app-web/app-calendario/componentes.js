@@ -8,10 +8,17 @@ let vigencia_contol = {
     "calendario": {},
 }
 
-
-
-
-
+let evento_control={
+    "evento":{
+        "id":"",
+        "ref":"",
+        "fecha":["DD","MM","AAAA"],
+        "actividad":"Detalle de la actividad",
+        "area":"Nombre de área",
+        "estado":"activo",
+        "hora":"",
+    }
+}
 
 const byId = (nombre) => {
     const control = document.getElementById(nombre)

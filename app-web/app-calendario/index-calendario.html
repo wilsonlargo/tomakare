@@ -42,7 +42,8 @@
                             Calendarios
                         </a>
                         <ul class="dropdown-menu">
-                            <li id="liCrearCalendario" hidden="true"><a class="dropdown-item" href="#" onclick="crear_vigencia()">Crear Calendario</a></li>
+                            <li id="liCrearCalendario" hidden="true"><a class="dropdown-item" href="#"
+                                    onclick="crear_vigencia()">Crear Calendario</a></li>
                             <li><a class="dropdown-item" href="#" onclick=""></a></li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -77,27 +78,28 @@
                 </div>
             </div>
         </div>
-        <div class="row p-1 align-items-center m-2">
-            <div class="col-auto">
-                <select class="form-select bg-info text-white fs-5" id="selmesini" style="width: 200px;"
-                    onchange="Mostrar_Calendario(this.value)">
-                    <option value=1 class="bg-white text-secondary">Enero</option>
-                    <option value=2 class="bg-white text-secondary">Febrero</option>
-                    <option value=3 class="bg-white text-secondary">Marzo</option>
-                    <option value=4 class="bg-white text-secondary">Abril</option>
-                    <option value=5 class="bg-white text-secondary">Mayo</option>
-                    <option value=6 class="bg-white text-secondary">Junio</option>
-                    <option value=7 class="bg-white text-secondary">Julio</option>
-                    <option value=8 class="bg-white text-secondary">Agosto</option>
-                    <option value=9 class="bg-white text-secondary">Septiembre</option>
-                    <option value=10 class="bg-white text-secondary">Octubre</option>
-                    <option value=11 class="bg-white text-secondary">Noviembre</option>
-                    <option value=12 class="bg-white text-secondary">Diciembre</option>
-                </select>
+
+        <div class=" div border border-1 border-info container-fluid" id="panel-calendario">
+            <div class="row p-1 align-items-center">
+                <div class="col-auto">
+                    <select class="form-select bg-info text-white fs-5" id="selmesini" style="width: 200px;"
+                        onchange="Mostrar_Calendario(this.value)">
+                        <option value=1 class="bg-white text-secondary">Enero</option>
+                        <option value=2 class="bg-white text-secondary">Febrero</option>
+                        <option value=3 class="bg-white text-secondary">Marzo</option>
+                        <option value=4 class="bg-white text-secondary">Abril</option>
+                        <option value=5 class="bg-white text-secondary">Mayo</option>
+                        <option value=6 class="bg-white text-secondary">Junio</option>
+                        <option value=7 class="bg-white text-secondary">Julio</option>
+                        <option value=8 class="bg-white text-secondary">Agosto</option>
+                        <option value=9 class="bg-white text-secondary">Septiembre</option>
+                        <option value=10 class="bg-white text-secondary">Octubre</option>
+                        <option value=11 class="bg-white text-secondary">Noviembre</option>
+                        <option value=12 class="bg-white text-secondary">Diciembre</option>
+                    </select>
+                </div>
+                <div class="col text-center fs-3 fw-bold text-info border border-1 border-info" id="fecha-ini"></div>
             </div>
-            <div class="col text-center fs-3 fw-bold text-info border border-1 border-info" id="fecha-ini"></div>
-        </div>
-        <div class=" row border border-1 border-info m-2 p-3 container-fluid" id="panel-calendario">
             <table class="table">
                 <thead>
                     <tr>
@@ -115,8 +117,73 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        <div id="panel-cronograma" hidden="true" class="m-1">
+            <div id="tl1" class="text-center fs-4 fw-bold text-info">Listado de eventos dia</div>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary active" aria-current="page" onclick="retornar_calendario()">
+                    <i class="bi bi-arrow-return-left"></i>
+                </a>
+                <a href="#" class="btn btn-primary" id="btn_nuevoevento" data-bs-toggle="modal"
+                    data-bs-target="#modal_nuevo_evento">
+                    <i class="bi bi-file-earmark-plus me-2"></i>
+                    Nuevo evento</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><i class="bi bi-clock-history"></i></th>
+                        <th scope="col">Actividad</th>
+                        <th scope="col">Área</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyEventos">
 
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>
+
+<!-- Modal nuevo evento -->
+<div class="modal fade" id="modal_nuevo_evento" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5" >
+                    <div class="row">
+                        <div class="col-auto"><i class="bi bi-calendar-week me-2 text-white"></i></div>
+                        <div class="col">
+                            <div id="titulo_evento">Crear un nuevo evento</div>
+                        </div>
+                    </div>
+                    
+                    
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <small class="fw-bold">Detalle del evento</small>
+                <textarea class="form-control" id="in_detalle_evento" rows="3"></textarea>
+                <small class="fw-bold">Consejería, Área</small>
+                <input type="text" class="form-control" id="in_area_evento">
+                <small class="fw-bold">Estado</small>
+                <select class="form-select form-select-sm" id="sel_estado_evento">
+                    <option value="Convocado">Convocado</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Cancelado">Cancelado</option>
+                    <option value="Reprogramado">Reprogramado</option>
+                </select>
+                <small class="fw-bold">Estado</small>
+                <input class="form-control" type="time" id="in_tiempo_evento">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btn_crear_evento">Crear</button>
+            </div>
+        </div>
+    </div>
+</div>
