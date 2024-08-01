@@ -1,3 +1,43 @@
+/*============================================================*/
+
+.bgorg-red{
+    background-color: #ff3131;
+}
+
+.bgorg-blue{
+    background-color: #1c516d;
+}
+
+.bgorg-green{
+    background-color: #2bad47;
+}
+
+.bgorg-yellow{
+    background-color: #fde68a;
+}
+
+.title-1 {
+    font-family:Montserrat;
+    font-weight: bold;
+  }
+
+
+
+
+
+
+
+
+
+
+
+/*Configuración de estilos para programa
+/*============================================================*/
+
+
+
+
+
 .border-ini-org {
     border-inline-start: 1rem solid;
     border-inline-end: 0.1rem solid;
