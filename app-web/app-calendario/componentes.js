@@ -17,6 +17,8 @@ let evento_control={
         "area":"Nombre de área",
         "estado":"activo",
         "hora":"",
+        "tipo":"",
+
     }
 }
 
