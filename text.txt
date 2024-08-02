@@ -1,20 +1,29 @@
-                    linea.clsPrograma.forEach(programa => {
-            const tr_programas = document.createElement("tr")
-            td_program.appendChild(tr_programas)
+<nav class="navbar navbar-expand-lg bar_ini">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#">
+            <img src="./scr/logo.png" width="50px" height="50px">
+            Organización Nacional Indígena de Colombia
+        </a>
+        <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="text-white fs-3">+</span>
+        </button>
+        <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" hidden="true">
+                    <a class="nav-link text-white" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown ms-5">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Servicios
+                    </a>
+                    <ul class="dropdown-menu" style="width: 200px;">
+                    </ul>
+                </li>
 
-            const td_programa = document.createElement("td")
-            td_programa.appendChild(_put_Programa(linea, programa))
-
-            tr_programas.appendChild(td_programa)
-
-            programa.clsGestion.forEach(gestion => {
-                const tr_gestion = document.createElement("tr")
-                tr_programas.appendChild(tr_gestion)
-                const td_gestion = document.createElement("td")
-                td_gestion.appendChild(_put_Gestion(linea, programa, gestion))
-                tr_gestion.appendChild(td_gestion)
-
-
-            })
-
-        })
+            </ul>
+        </div>
+    </div>
+</nav>

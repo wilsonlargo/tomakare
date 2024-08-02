@@ -142,7 +142,6 @@ function crear_dia(dateInfo, id,ocupado,neventos) {
 
 
     divEvento.onclick = () => {
-        //byId("fecha-ini").textContent = `${dateInfo.mes}, ${dateInfo.dia} de ${dateInfo.vigencia}`
         byId("panel-cronograma").hidden = false
         byId("panel-calendario").hidden = true
         let mesAgenda= new Date
