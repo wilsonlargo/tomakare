@@ -258,6 +258,22 @@ class clsProyecto {
         });
         intVigencia.value = this.vigencia;
 
+
+        //Configura datos de la configuración global
+        GLOBAL.firestore.getConfigs()
+        GLOBAL.state.configs[0].currentdata = this.id
+        const id = GLOBAL.firestore.updateConfig(GLOBAL.state.configs[0])
+        //==============================================
+
+        const a = document.createElement("a")
+        a.className = "btn btn-outline-secondary m-2"
+        a.textContent = "Informes"
+        contenedor.appendChild(a)
+        a.onclick = () => {
+            location.href = "./informes-app.html";
+        }
+
+
         //Evidencia cuantas areas hay en el proyecto y las muestra
         const cAreas = document.getElementById("panel-areas")
 
@@ -2068,8 +2084,6 @@ async function cargarProyectos() {
     document.getElementById("panel-biblioteca").hidden = true
     document.getElementById("panel-escritorio").innerHTML = ""
     try {
-
-
         const proyectos = GLOBAL.state.proyectos;
         if (proyectos.length === 0) {
             mensajes("No hay vigencias creadas", "orange")
@@ -2079,9 +2093,6 @@ async function cargarProyectos() {
             //Identifica el contenedor en la pagina index-app, y lo limpia
             const Contenedor = document.getElementById("panel-vigencias");
             Contenedor.innerHTML = ""
-
-
-
             let i = 1
             proyectos.forEach(vigencia => {
 
@@ -2807,7 +2818,7 @@ function parametrizador(area) {
         a.onclick = () => {
             programa.parent = linea
             const elemento = ActiveProyect.clsAreas[area.id].cslLineas[linea.id].clsPrograma[programa.id]
-            elemento.makerHTMLProgramaPanel(area,linea)
+            elemento.makerHTMLProgramaPanel(area, linea)
         }
 
         const col_meta = document.createElement("div")

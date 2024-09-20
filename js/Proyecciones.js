@@ -404,7 +404,7 @@ class Gestion {
             especifico.makerHTMLEspecificos(this)
         })
 
-
+//==========================================
         //Collapse para evidencias / versión simplificada
         const collapseEvidenicias = HTML.collapseControl1("Evidencias / Anexos", "cEvidenciasCollapse", "libreria",
             "bi-journals", "text-white collapse-org bg-primary bg-gradient shadow-sm mt-2")
@@ -414,24 +414,37 @@ class Gestion {
         const btAgregarLibro = document.createElement("button")
         btAgregarLibro.className = "btn btn-outline-secondary m-1"
         btAgregarLibro.innerHTML = `<i class="bi bi-plus"></i> Agregar documento`
+
+    
+        cEvidencias.innerHTML = ''
+        cEvidencias.appendChild(btAgregarLibro)
+        const divEvidencias= document.createElement("div")
+        divEvidencias.id="containerEvidencias"
+        cEvidencias.appendChild(divEvidencias)
+
         btAgregarLibro.onclick = () => {
+            divEvidencias.innerHTML=""
             const evidencia = new Evidencia('Nuevo documento', "texto", "Palabras clave", "#", "Descripcion", "Objetivo", 0, this)
             this.addEvidencias(evidencia)
             GuardarVigencia()
-
-
+            let doc = 0;
+            this.clsEvidencias.forEach(evidencia => {
+                evidencia.id = doc++
+                evidencia.parentId = this
+                evidencia.makerHtmlEvidencia(evidencia);
+            })
         }
-        document.getElementById("divlibreriabutton").appendChild(btAgregarLibro)
 
-
-        cEvidencias.innerHTML = ''
         let doc = 0;
         this.clsEvidencias.forEach(evidencia => {
-
             evidencia.id = doc++
             evidencia.parentId = this
             evidencia.makerHtmlEvidencia(evidencia);
         })
+
+
+
+
 
 
         //Agregamos un boton borrar gestion
@@ -678,7 +691,7 @@ class Evidencia {
 
         }
 
-        const collaseLibros = document.getElementById("cEvidenciasCollapse")
+        const collaseLibros = document.getElementById("containerEvidencias")
         const item = document.createElement("ol")
         item.className = "list-group list-group-numbered"
         item.innerHTML = `
@@ -747,6 +760,8 @@ class Evidencia {
 
 
         const sel_objetivo_libro = document.getElementById(`sel_Objetivo_Documento${libro.id}`)
+
+        console.log( this.parentId)
 
         this.parentId.clsEspecificos.forEach(objetivo => {
             const option = document.createElement("option")
@@ -866,15 +881,15 @@ class Evidencia {
 
         //Agrega evento al boton borrar link
         document.getElementById(`btnEliminarLink${libro.id}`).onclick = () => {
-            this.parentId.deleteLibreria(libro.id)
+            this.parentId.deleteEvidencias(libro.id)
             GuardarVigencia()
-            const cLibros = document.getElementById("divlibreriacollapse")
+            const cLibros = document.getElementById("containerEvidencias")
             cLibros.innerHTML = ''
-            let i = 0;
-            this.parentId.cslLibrerias.forEach(libro => {
-                libro.id = i++
-                libro.parentId = this.parentId
-                libro.makerHtmlLibro(libro);
+            let doc = 0;
+            this.parentId.clsEvidencias.forEach(evidencia => {
+                evidencia.id = doc++
+                evidencia.parentId = evidencia.parentId
+                evidencia.makerHtmlEvidencia(evidencia);
             })
         }
 

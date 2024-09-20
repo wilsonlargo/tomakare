@@ -12,6 +12,8 @@ const GLOBAL = {
         biblioteca: null,
         calendarios: [],
         calendario: null,
+        configs: [],
+        config: null,
     },
     firestore: {},
 };

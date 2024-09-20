@@ -60,6 +60,9 @@ const coleccionBiblioteca = collection(db, "biblioteca");
 
 const coleccionCalendario = collection(db, "calendario");
 
+const coleccionConfig = collection(db, "config-app");
+
+
 
 
 /* Funciones base para manejar la base de datos de proyectos */
@@ -102,6 +105,18 @@ async function getBibliotecas() {
     return bibliotecas;
 }
 
+async function getConfigs() {
+    const configs = [];
+    const querySnapshot = await getDocs(coleccionConfig)
+    querySnapshot.forEach((doc) => {
+        configs.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    return configs;
+}
+
 async function getCalendarios() {
     const calendarios = [];
     const querySnapshot = await getDocs(coleccionCalendario)
@@ -119,19 +134,19 @@ async function getCalendarios() {
 async function addProyecto(objProyecto) {
     const docRef = await addDoc(coleccionProyectos, objProyecto);
     cargarProyectos()
-    return docRef.id; 
+    return docRef.id;
 }
 
 async function addBiblioteca(objBiblioteca) {
     const docRef = await addDoc(coleccionBiblioteca, objBiblioteca);
     //cargarBibliotecas()
-    return docRef.id; 
+    return docRef.id;
 }
 
 async function addCalendario(objCalendario) {
     const docRef = await addDoc(coleccionCalendario, objCalendario);
     //cargarBibliotecas()
-    return docRef.id; 
+    return docRef.id;
 }
 
 
@@ -176,6 +191,16 @@ async function getBiblioteca(id) {
     }) : null;
 }
 
+async function getConfig(id) {
+    const docRef = doc(db, "config-app", id);
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.exists() ? ({
+        ...docSnap.data(),
+        id: docSnap.id,
+    }) : null;
+}
+
 async function getCalendario(id) {
     const docRef = doc(db, "calendario", id);
     const docSnap = await getDoc(docRef);
@@ -200,6 +225,11 @@ async function updateBiblioteca(biblioteca) {
 async function updateCalendario(calendario) {
     const docRef = doc(db, "calendario", calendario.id);
     await setDoc(docRef, calendario);
+}
+
+async function updateConfig(config) {
+    const docRef = doc(db, "config-app", config.id);
+    await setDoc(docRef, config);
 }
 
 
@@ -239,6 +269,17 @@ onSnapshot(coleccionBiblioteca, (querySnapshot) => {
     GLOBAL.state.bibliotecas = bibliotecas;
 });
 
+onSnapshot(coleccionConfig, (querySnapshot) => {
+    const configs = [];
+    querySnapshot.forEach((doc) => {
+        configs.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    GLOBAL.state.configs = configs;
+});
+
 onSnapshot(coleccionCalendario, (querySnapshot) => {
     const calendarios = [];
     querySnapshot.forEach((doc) => {
@@ -254,7 +295,7 @@ onSnapshot(coleccionCalendario, (querySnapshot) => {
 async function CredentialIn(email, password) {
     try {
         const crearcredencial = await signInWithEmailAndPassword(auth, email, password)
-        
+
         mensajes("A ingresado exitosamente", "green")
         location.href = "../app-web/index-app.html"
     } catch (error) {
@@ -294,13 +335,17 @@ GLOBAL.firestore = {
     addCalendario,
     borrarCalendario,
     updateCalendario,
+    //////
+    getConfigs,
+    getConfig,
+    updateConfig,
 }
 
 //Función que escucha el cambio en inicio o cerrar sesión
 onAuthStateChanged(auth, async (user) => {
     try {
         mensajes("Usuario registrado: " + user.email, "orange") //Muestra que usuarios está conectado
-        activeEmail=user.email;
+        activeEmail = user.email;
     } catch (error) {
         mensajes("Fuera de conexión", "red")
     }

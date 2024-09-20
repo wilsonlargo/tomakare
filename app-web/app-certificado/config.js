@@ -109,7 +109,6 @@ function crear_documento(organizacion,id,telefono,direccion,email) {
 
     var element = configJS_tamplate.template(organizacion, id, fecha,telefono,direccion,email)
     var worker = html2pdf().set(opt).from(element).save();
-
 }
 function mensajes(text, color) {
     Toastify({

@@ -84,22 +84,31 @@ function Mostrar_Calendario(m) {
     const mes = m
 
 
-    const tbody = document.getElementById("tbody-calendario")
-    tbody.innerHTML = ""
+    //const tbody = document.getElementById("tbody-calendario")
+    //tbody.innerHTML = ""
+    const contenedor= byId("div_calendario_new")
+    contenedor.innerHTML=""
 
     //Creamos la filas para cada semana
     const num_dias = new Date(año, mes, 0)
     let dia = 0
     for (var i = 0; i < 6; i++) {
-        const tr = document.createElement("tr")
+        //const tr = document.createElement("tr")
+        const row = document.createElement("div")
+        row.className="row"
+
         for (var d = 0; d < 7; d++) {
             const fehaA = new Date(año, mes - 1, d)
-            const td = document.createElement("td")
+            //const td = document.createElement("td")
+            const td = document.createElement("div")
+            td.className="col div-fecha m-1"
             td.id = `td_${dia}`
             dia++
-            tr.appendChild(td)
+            row.appendChild(td)
+            //tr.appendChild(td)
         }
-        tbody.appendChild(tr)
+        //tbody.appendChild(tr)
+        contenedor.appendChild(row)
     }
 
 
@@ -119,33 +128,34 @@ function Mostrar_Calendario(m) {
             "agenda": active_data.id,
         }
         const ref = `${dateInfo.vigencia}${dateInfo.mes}${dateInfo.dia}`
-        let contador=0
-        let ocupado=false
-        for (const evento in active_data.calendario){
-            const ref1=active_data.calendario[evento].ref
-            if(ref1==ref){
+        let contador = 0
+        let ocupado = false
+        for (const evento in active_data.calendario) {
+            const ref1 = active_data.calendario[evento].ref
+            if (ref1 == ref) {
                 console.log(active_data.calendario[evento].ref)
                 ocupado = true
-                contador= contador+1
+                contador = contador + 1
             }
         }
 
 
         //console.log(Object.values(active_data.calendario).length)
-        crear_dia(dateInfo, `td_${h + 1}`,ocupado,contador)
+        //byId(td_${h + 1}).textContent=
+        crear_dia(dateInfo, `td_${h + 1}`, ocupado, contador)
     }
 }
-function crear_dia(dateInfo, id,ocupado,neventos) {
+function crear_dia(dateInfo, id, ocupado, neventos) {
 
-    const divEvento = document.createElement("div")
-    divEvento.className = "div-fecha border-info"
+    const divEvento = byId(id)
+    //divEvento.className = "div-fecha border-info"
 
 
     divEvento.onclick = () => {
         byId("panel-cronograma").hidden = false
         byId("panel-calendario").hidden = true
-        let mesAgenda= new Date
-        let a=mesAgenda.getMonth(dateInfo.mes)
+        let mesAgenda = new Date
+        let a = mesAgenda.getMonth(dateInfo.mes)
 
 
         const nombremes = a.toLocaleString('default', { month: 'long' })
@@ -161,7 +171,7 @@ function crear_dia(dateInfo, id,ocupado,neventos) {
         divEvento.style.background = "white"
         divEvento.style.color = "gray"
     }
-    document.getElementById(id).appendChild(divEvento)
+    //document.getElementById(id).appendChild(divEvento)
 
     const bartitulo = cEl("div")
     bartitulo.className = "row align-items-center"
@@ -173,12 +183,12 @@ function crear_dia(dateInfo, id,ocupado,neventos) {
     bartitulo.appendChild(colDia)
 
     const divInfo = cEl("div")
-    
+
     divEvento.appendChild(divInfo)
-    if(ocupado==true){
-        divInfo.textContent=`Con ${neventos} eventos`
+    if (ocupado == true) {
+        divInfo.textContent = `Con ${neventos} eventos`
         divInfo.className = "div-fecha-info"
-        
+
     }
 
 
@@ -236,51 +246,51 @@ function listar_eventos(referencia) {
         const a = cEl("a")
         a.className = "nav-link active tooltip-container"
         a.href = "#"
-        tooltip(a,"Editar evento","gray")
+        tooltip(a, "Editar evento", "gray")
         td_editar.appendChild(a)
 
         const i = cEl("i")
         i.className = "bi bi-pencil-square"
         a.appendChild(i)
-        a.onclick=()=>{
+        a.onclick = () => {
             modalCalendario.modalEdit(
-               ()=> {
+                () => {
                     Guardar()
                     listar_eventos(evento.ref)
                 }
             )
-            byId("in_detalle_evento").value=evento.actividad
-            byId("in_detalle_evento").oninput=()=>{
-                evento.actividad=byId("in_detalle_evento").value
+            byId("in_detalle_evento").value = evento.actividad
+            byId("in_detalle_evento").oninput = () => {
+                evento.actividad = byId("in_detalle_evento").value
             }
 
-            byId("in_area_evento").value=evento.area
-            byId("in_area_evento").oninput=()=>{
-                evento.area=byId("in_area_evento").value
+            byId("in_area_evento").value = evento.area
+            byId("in_area_evento").oninput = () => {
+                evento.area = byId("in_area_evento").value
             }
 
-            byId("sel_estado_evento").value=evento.estado
-            byId("sel_estado_evento").onchange=()=>{
-                evento.estado=byId("sel_estado_evento").value
+            byId("sel_estado_evento").value = evento.estado
+            byId("sel_estado_evento").onchange = () => {
+                evento.estado = byId("sel_estado_evento").value
             }
 
-            byId("in_tiempo_evento").value=evento.hora
-            byId("in_tiempo_evento").onchange=()=>{
-                evento.hora=byId("in_tiempo_evento").value
+            byId("in_tiempo_evento").value = evento.hora
+            byId("in_tiempo_evento").onchange = () => {
+                evento.hora = byId("in_tiempo_evento").value
             }
         }
 
         const a2 = cEl("a")
         a2.className = "nav-link active tooltip-container"
         a2.href = "#"
-        tooltip(a2,"Borrar evento","orange")
+        tooltip(a2, "Borrar evento", "orange")
         td_editar.appendChild(a2)
 
         const i2 = cEl("i")
         i2.className = "ms-3 bi bi-trash3"
         a2.appendChild(i2)
 
-        a2.onclick=()=>{
+        a2.onclick = () => {
             delete active_data.calendario[evento.id]
             listar_eventos(evento.ref)
             Guardar()
@@ -293,8 +303,8 @@ function listar_eventos(referencia) {
 
 }
 function add_evento(data) {
-    byId("titulo_evento").textContent="Crear evento"
-    byId("btn_crear_evento").textContent="Crear"
+    byId("titulo_evento").textContent = "Crear evento"
+    byId("btn_crear_evento").textContent = "Crear"
     byId("btn_crear_evento").onclick = () => {
         let index = Math.random().toString(36).slice(2) + data.mes + data.dia
         const evento = evento_control.evento
@@ -317,17 +327,17 @@ function remove_vigencia() {
 function retornar_calendario() {
     byId("panel-cronograma").hidden = true
     byId("panel-calendario").hidden = false
-    Mostrar_Calendario(1) 
-    let fecha= new Date()
+    Mostrar_Calendario(1)
+    let fecha = new Date()
     Mostrar_Calendario(fecha.getMonth() + 1)
-    byId("selmesini").value=fecha.getMonth() + 1
+    byId("selmesini").value = fecha.getMonth() + 1
 }
-function tooltip(control,texto,color){
-const tooltip = cEl("span")
-tooltip.className="tooltip-text"
-tooltip.textContent=(texto)
-tooltip.style.background=color
-control.appendChild(tooltip)
+function tooltip(control, texto, color) {
+    const tooltip = cEl("span")
+    tooltip.className = "tooltip-text"
+    tooltip.textContent = (texto)
+    tooltip.style.background = color
+    control.appendChild(tooltip)
 
 
 }
@@ -341,7 +351,7 @@ const modalCalendario = {
 
         modal.show();
         const btn = document.getElementById('btn_crear_evento')
-        btn.textContent="Actualizar"
+        btn.textContent = "Actualizar"
         btn.onclick = comando
 
     }
