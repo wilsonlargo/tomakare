@@ -35,6 +35,7 @@ function makeReport(data) {
     const consejerias = data.clsAreas
 
     for (id in consejerias) {
+        const data= consejerias[id]
         const tit2 = newEl("div")
 
 
@@ -61,20 +62,20 @@ function makeReport(data) {
         tit3_mandatos.className = "treport-3"
         divDocumento.appendChild(tit3_mandatos)
 
-        mandatos(consejerias[id].cslMandatos)
+        mandatos(data)
 
         const tit3_articulacion = newEl("div")
         tit3_articulacion.textContent = "ARTICULACIÓN CON CONSEJERÍAS"
         tit3_articulacion.className = "treport-3"
         divDocumento.appendChild(tit3_articulacion)
 
-        //articulacion(consejerias[id].cslArticulacion)
-
-
+       
+        articulacion(data)
+       
 
     }
-    console.log(consejerias)
-
+    //console.log(consejerias)
+   
 
 
 
@@ -82,17 +83,18 @@ function makeReport(data) {
 
 function mandatos(mandatos) {
     const divDocumento = byId("body-print")
+    const data=mandatos.cslMandatos
     let i = 1
-    for (id in mandatos) {
-        const item1 = newEl("div")
+    for (id in data) {
+        const item1 = document.createElement("div")
         item1.className = "ms-3 mb-2"
         item1.innerHTML=`
         <div class="row">
             <div class="col-auto fw-bold">
                 ${i}
             </div>
-            <div class="col">
-             ${mandatos[id].nombre}
+            <div class="col report-justify">
+             ${data[id].nombre}
             </div>  
         </div>
         `
@@ -104,16 +106,19 @@ function mandatos(mandatos) {
 
 
 function articulacion(articulaciones) {
+    
     const divDocumento = byId("body-print")
-    for (id in articulaciones) {
-        const item1 = newEl("div")
+    const data=articulaciones.cslArticulacion
+
+    for (id in data) {
+        const item1 = document.createElement("div")
         item1.className = "ms-1 fw-bold mb-2"
-        item1.textContent = "Consejería: " + articulaciones[id].consejeria
+        item1.textContent = "Consejería: " + data[id].consejeria
         divDocumento.appendChild(item1)
 
         const item2 = newEl("div")
-        item2.className = "ms-2 mb-3"
-        item2.textContent = "Mandatos: " + articulaciones[id].mandatos
+        item2.className = "ms-2 mb-3 report-justify"
+        item2.textContent = "Mandatos: " + data[id].mandatos
         divDocumento.appendChild(item2)
     }
 
