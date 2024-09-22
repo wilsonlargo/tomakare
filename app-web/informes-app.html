@@ -31,27 +31,21 @@
     <script src="../js/informes.js"></script>
 </head>
 <header class="">
-    <div class="row fs-3 text-white fw-medium bg-warning">
+    <div class="row fs-3 text-white fw-medium align-items-center">
         <div class="col-auto">
             <img class="m-2" src="../scr/logo.png" width="50px" height="50px">
         </div>
-        <div class="col">
+        <div class="col text-success">
             Organización Nacional Indígena de Colombia ONIC
         </div>
-    </div>
-    <div class="row">
-        <div class="text-end text-white fs-5 pe-5 bg-secondary">
-            Sistema de Gestión de Plan Estratégico (Plansbgonic v.2.0)
-        </div>
-
     </div>
 </header>
 
 <body onload="">
-    <div class="text-center bg-warning" id="divbotones">
+    <div class="text-center" id="divbotones">
         <div class="btn-group mb-3 mt-3" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-outline-secondary" onclick="openReport()">Mostrar Informe</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="crear_documento()">
+            <button type="button" class="btn btn-outline-secondary" onclick="window.print();return false;">
                 Exportar Informe
             </button>
 
@@ -59,7 +53,9 @@
     </div>
     <div id="print" class="m-3">
         <div class="treport-1">Informe General</div>
-        <div id="body-print"></div>
+        <div id="body-print">
+            
+        </div>
      </div>
 
 </div>
@@ -70,7 +66,7 @@
     function crear_documento() {
         const fecha = new Date()
         var opt = {
-            margin: [1, 1, 1, 1], //top, left, buttom, right,
+            margin: [2, 2, 2, 2], //top, left, buttom, right,
             filename: `REPORT-ONIC.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
