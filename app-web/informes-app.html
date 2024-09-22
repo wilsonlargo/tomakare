@@ -30,7 +30,7 @@
     <script src="../js/utils.js"></script>
     <script src="../js/informes.js"></script>
 </head>
-<header class="sticky-top">
+<header class="">
     <div class="row fs-3 text-white fw-medium bg-warning">
         <div class="col-auto">
             <img class="m-2" src="../scr/logo.png" width="50px" height="50px">
@@ -48,8 +48,8 @@
 </header>
 
 <body onload="">
-    <div class="text-center">
-        <div class="btn-group m-3" role="group" aria-label="Basic example">
+    <div class="text-center bg-warning" id="divbotones">
+        <div class="btn-group mb-3 mt-3" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-outline-secondary" onclick="openReport()">Mostrar Informe</button>
             <button type="button" class="btn btn-outline-secondary" onclick="crear_documento()">
                 Exportar Informe
@@ -73,9 +73,10 @@
             margin: [1, 1, 1, 1], //top, left, buttom, right,
             filename: `REPORT-ONIC.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 3 },
+            html2canvas: { scale: 2 },
             jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: 'avoid-all', before: '#page2el' }
+            //pagebreak: { mode: 'avoid-all', before: '#page2el' },
+            pagebreak:{mode: ['css', 'legacy']}
         };
 
         var element = document.getElementById('print');
