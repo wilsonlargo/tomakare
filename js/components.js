@@ -3037,9 +3037,6 @@ function parametrizador(area) {
     }
 
 
-
-
-
 }
 
 function backupData() {

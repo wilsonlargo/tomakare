@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor riesgos</title>
+    <!--Toasty-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!--Bootstrapp-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script defer src="/js/dataconfig.js" type="module"></script>
+    <script src="/js/utils.js"></script>
+    <script src="./listas.js"></script>
+    <script src="/app-web/app-riesgos/config-riesgos.js"></script>
+    <link rel="stylesheet" href="./styles.css">
+
+
+</head>
+<header class="sticky-top">
+    <div class="row fs-5 text-white fw-medium bg-primary align-items-center">
+        <div class="col-auto">
+            <img class="m-2" src="/scr/logo.png" width="50px" height="50px">
+        </div>
+        <div class="col">
+            Monitor comunitario de riesgos
+        </div>
+    </div>
+
+
+    <div class="row text-white fw-medium bg-secondary align-items-center">
+
+        <div class="col-auto" style="width: 70px;">
+            <button type="button" class="btn btn-secondary" onclick="opendata()">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+        </div>
+        <div class="col ms-2 ps-1">
+            <div class="btn-group ms-2" role="group" aria-label="Basic example" id="tool_registros" hidden="true">
+                <button type="button" class="btn btn-secondary" onclick="crear_registro()">
+                    <i class="bi bi-file-earmark-plus"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="delete_registro()">
+                    <i class="bi bi-trash"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="goto_registro('ini')">
+                    <i class="bi bi-skip-start"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="goto_registro('back')">
+                    <i class="bi bi-skip-backward"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="goto_registro('next')">
+                    <i class="bi bi-skip-forward"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="goto_registro('fin')">
+                    <i class="bi bi-skip-end"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+
+<body id="inbody" onload="ini()">
+<div id="panel_formulario" hidden="true">
+    <div class="h5 m-2 text-secondary fw-bold">1. INFORMACIÓN GENERAL</div>
+    <div class="m-3">
+        <small class="fw-bold text-secondary">Fecha del evento</small>
+        <input type="date" class="form-control" id="int_fecha" style="width: 300px;">
+
+        <small class="fw-bold text-secondary">Departamento, Municipio, Vereda</small>
+        <div class="row">
+            <div class="col">
+                <select class="form-select" id="int_departamento">
+
+                </select>
+            </div>
+            <div class="col">
+                <select class="form-select" id="int_municipio">
+
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" id="int_vereda">
+
+                </input>
+            </div>
+        </div>
+        <small class="fw-bold text-secondary">Dirección, Tipo de sector, Nombre comunidad/resguardo</small>
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" id="int_direccion">
+
+                </input>
+            </div>
+            <div class="col">
+                <select class="form-select" id="int_sector">
+                    <option value="rural">Rural</option>
+                    <option value="urbano">Urbano</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" id="int_comunidad">
+
+                </input>
+            </div>
+        </div>
+        <div class="mt-2 mb-2">
+            <small class="fw-bold text-secondary">Detalle</small>
+            <textarea class="form-control" id="int_detalle" rows="3"></textarea>
+        </div>
+
+    </div>
+    <div class="h5 m-2 text-secondary fw-bold">2. TIPO DE EMERGENCIA O DESASTRE NATURAL </div>
+    <div class="m-3 mb-3">
+<div class="row">
+    <div class="col">
+        <small class="fw-bold text-secondary">Tipo de emergencia</small>
+        <select class="form-select" id="int_tipo">
+            <option value="natural">Desastre Natural</option>
+            <option value="medica">Emergencia médica</option>
+            <option value="otro">Otro</option>
+        </select>
+    </div>
+    <div class="col">
+        <small class="fw-bold text-secondary">Nombre</small>
+        <select class="form-select" id="int_nombre_tipo">
+
+        </select>
+    </div>
+</div>
+    </div>
+</div>
+</body>
+
+<footer class="bg-secondary ps-2 sticky-top">
+    <div class="row align-items-center">
+        <div class="col-auto fw-bold">
+            Registro:
+        </div>
+        <div class="col-auto" id="cont_reg">
+            #
+        </div>
+    </div>
+</footer>
+<script>
+
+    function ini() {
+        IniCredentialOpen()
+    }
+</script>
+
+</html>

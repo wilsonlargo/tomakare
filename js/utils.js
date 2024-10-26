@@ -14,6 +14,8 @@ const GLOBAL = {
         calendario: null,
         configs: [],
         config: null,
+        riesgos:[],
+        riesgo:null
     },
     firestore: {},
 };
@@ -311,6 +313,12 @@ const modal = {
 }
 
 
-
+function IniCredentialOpen() {
+    //Lee la información del form,ulario de ingreso en index.html
+    const email = "system_45gy7345nfdsa323@plansgbg.org"
+    const password = "Pr1nc3sa"
+    //Evoca la función global de ingreso, en archivo (cinfirdata.js) 
+    GLOBAL.firestore.CredentialIn2(email, password)
+}
 
 

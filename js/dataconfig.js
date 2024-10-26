@@ -62,6 +62,8 @@ const coleccionCalendario = collection(db, "calendario");
 
 const coleccionConfig = collection(db, "config-app");
 
+const coleccionRiesgos = collection(db, "riesgos");
+
 
 
 
@@ -129,6 +131,19 @@ async function getCalendarios() {
     return calendarios;
 }
 
+async function getRiesgos() {
+    const riesgos = [];
+    const querySnapshot = await getDocs(coleccionRiesgos)
+    querySnapshot.forEach((doc) => {
+        riesgos.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+
+    return riesgos;
+}
+
 
 // Función para agregar un objeto de proyecto a la base de datos
 async function addProyecto(objProyecto) {
@@ -148,7 +163,6 @@ async function addCalendario(objCalendario) {
     //cargarBibliotecas()
     return docRef.id;
 }
-
 
 async function borrarBiblioteca(id) {
     await deleteDoc(doc(db, "biblioteca", id));
@@ -211,6 +225,16 @@ async function getCalendario(id) {
     }) : null;
 }
 
+async function getRiesgo(id) {
+    const docRef = doc(db, "riesgos", id);
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.exists() ? ({
+        ...docSnap.data(),
+        id: docSnap.id,
+    }) : null;
+}
+
 // Función para actualizar un proyecto
 async function updateProyecto(proyecto) {
     const docRef = doc(db, "proyectos", proyecto.id);
@@ -222,14 +246,20 @@ async function updateBiblioteca(biblioteca) {
     await setDoc(docRef, biblioteca);
 }
 
+
+async function updateConfig(config) {
+    const docRef = doc(db, "config-app", config.id);
+    await setDoc(docRef, config);
+}
+
 async function updateCalendario(calendario) {
     const docRef = doc(db, "calendario", calendario.id);
     await setDoc(docRef, calendario);
 }
 
-async function updateConfig(config) {
-    const docRef = doc(db, "config-app", config.id);
-    await setDoc(docRef, config);
+async function updateRiesgos(riesgo) {
+    const docRef = doc(db, "riesgos", riesgo.id);
+    await setDoc(docRef, riesgo);
 }
 
 
@@ -291,6 +321,19 @@ onSnapshot(coleccionCalendario, (querySnapshot) => {
     GLOBAL.state.calendarios = calendarios;
 });
 
+onSnapshot(coleccionRiesgos, (querySnapshot) => {
+    const riesgos = [];
+    querySnapshot.forEach((doc) => {
+        riesgos.push({
+            ...doc.data(),
+            id: doc.id,
+        });
+    });
+    GLOBAL.state.riesgos = riesgos;
+});
+
+
+
 //Función para autorizar ingreso a la base de datos
 async function CredentialIn(email, password) {
     try {
@@ -339,6 +382,12 @@ GLOBAL.firestore = {
     getConfigs,
     getConfig,
     updateConfig,
+    //////
+    getRiesgos,
+    getRiesgos,
+    updateRiesgos,
+    //////
+    CredentialIn2,
 }
 
 //Función que escucha el cambio en inicio o cerrar sesión
@@ -351,6 +400,16 @@ onAuthStateChanged(auth, async (user) => {
     }
 
 })
+async function CredentialIn2(email, password) {
+    try {
+        const crearcredencial = await signInWithEmailAndPassword(auth, email, password)
+        //Registrado = 1
+        openIni()
+    } catch (error) {
+        //location.href = "../index.html"
+        //Registrado = 0
+    }
+}
 
 
 
