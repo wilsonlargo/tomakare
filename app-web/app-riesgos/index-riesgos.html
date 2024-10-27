@@ -62,82 +62,126 @@
                 </button>
             </div>
         </div>
+        <div class="col-auto text-end" style="width: 70px;">
+            <a class="nav-link active" aria-current="page" href="/index.html">
+                <button type="button" class="btn btn-secondary">
+                    <i class="bi bi-arrow-return-left"></i>
+                </button>
+            </a>
+
+        </div>
 
     </div>
 </header>
 
 
 <body id="inbody" onload="ini()">
-<div id="panel_formulario" hidden="true">
-    <div class="h5 m-2 text-secondary fw-bold">1. INFORMACIÓN GENERAL</div>
-    <div class="m-3">
-        <small class="fw-bold text-secondary">Fecha del evento</small>
-        <input type="date" class="form-control" id="int_fecha" style="width: 300px;">
+    <div id="panel_formulario" hidden="true">
+        <div class="h5 m-2 text-secondary fw-bold">1. INFORMACIÓN GENERAL</div>
+        <div class="m-3">
+            <small class="label-rg">Fecha del evento</small>
+            <input type="date" class="form-control m-2" id="int_fecha" style="width: 300px;">
+            <div class="row">
+                <div class="col">
+                    <small class="label-rg">Departamento</small>
+                    <select class="form-select m-2" id="int_departamento">
 
-        <small class="fw-bold text-secondary">Departamento, Municipio, Vereda</small>
-        <div class="row">
-            <div class="col">
-                <select class="form-select" id="int_departamento">
+                    </select>
+                </div>
+                <div class="col">
+                    <small class="label-rg">Municipio</small>
+                    <select class="form-select m-2" id="int_municipio">
 
-                </select>
+                    </select>
+                </div>
+                <div class="col">
+                    <small class="label-rg">Vereda</small>
+                    <input type="text" class="form-control m-2" id="int_vereda">
+
+                    </input>
+                </div>
             </div>
-            <div class="col">
-                <select class="form-select" id="int_municipio">
+            <div class="row">
+                <div class="col">
+                    <small class="label-rg">Dirección</small>
+                    <input type="text" class="form-control m-2" id="int_direccion">
 
-                </select>
+                    </input>
+                </div>
+                
+                <div class="col">
+                    <small class="label-rg">Tipo sector</small>
+                    <select class="form-select m-2" id="int_sector">
+                        <option value="rural">Rural</option>
+                        <option value="urbano">Urbano</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <small class="label-rg">Comunidad / Resguardo</small>
+                    <input type="text" class="form-control m-2" id="int_comunidad">
+
+                    </input>
+                </div>
             </div>
-            <div class="col">
-                <input type="text" class="form-control" id="int_vereda">
+            <div class="mt-2 mb-2">
+                <small class="label-rg">Detalle evento</small>
+                <textarea class="form-control m-2" id="int_detalle" rows="3"></textarea>
+            </div>
 
-                </input>
+        </div>
+        <div class="h5 m-2 text-secondary fw-bold">2. TIPO DE EMERGENCIA O DESASTRE NATURAL </div>
+        <div class="m-3 mb-3">
+            <div class="row">
+                <div class="col">
+                    <small class="label-rg">Tipo evento</small>
+                    <select class="form-select m-2" id="int_tipo">
+                        <option value="natural">Desastre Natural</option>
+                        <option value="medica">Emergencia médica</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <small class="label-rg">Nombre evento</small>
+                    <select class="form-select m-2" id="int_nombre_tipo">
+
+                    </select>
+                </div>
             </div>
         </div>
-        <small class="fw-bold text-secondary">Dirección, Tipo de sector, Nombre comunidad/resguardo</small>
-        <div class="row">
-            <div class="col">
-                <input type="text" class="form-control" id="int_direccion">
-
-                </input>
+        <div class="h5 m-2 text-secondary fw-bold">2. INFORMACIÓN DE POBLACIÓN </div>
+        <div class="m-3 mb-3">
+            <div class="row">
+                <div class="col-auto">
+                    <small class="label-rg">N. Familias</small>
+                    <input type="number" class="form-control m-2" id="int_nfamilias" style="width: 300px;">
+                    </input>
+                </div>
+                <div class="col-auto">
+                    <small class="label-rg">No. Mujeres</small>
+                    <input type="number" class="form-control m-2" id="int_nmujeres" style="width: 300px;">
+                    </input>
+                </div>
+                <div class="col-auto">
+                    <small class="label-rg">No. Hombres</small>
+                    <input type="number" class="form-control m-2" id="int_nhombres" style="width: 300px;">
+                    </input>
+                </div>
             </div>
-            <div class="col">
-                <select class="form-select" id="int_sector">
-                    <option value="rural">Rural</option>
-                    <option value="urbano">Urbano</option>
-                    <option value="otro">Otro</option>
-                </select>
-            </div>
-            <div class="col">
-                <input type="text" class="form-control" id="int_comunidad">
-
-                </input>
+            <div class="row">
+                <div class="col-auto">
+                    <small class="label-rg">No. menores de edad</small>
+                    <input type="number" class="form-control m-2" id="int_nmenores" style="width: 300px;">
+                    </input>
+                </div>
+                <div class="col-auto">
+                    <small class="label-rg">No. Tercera edad</small>
+                    <input type="number" class="form-control m-2" id="int_ntedad" style="width: 300px;">
+                    </input>
+                </div>
             </div>
         </div>
-        <div class="mt-2 mb-2">
-            <small class="fw-bold text-secondary">Detalle</small>
-            <textarea class="form-control" id="int_detalle" rows="3"></textarea>
-        </div>
-
     </div>
-    <div class="h5 m-2 text-secondary fw-bold">2. TIPO DE EMERGENCIA O DESASTRE NATURAL </div>
-    <div class="m-3 mb-3">
-<div class="row">
-    <div class="col">
-        <small class="fw-bold text-secondary">Tipo de emergencia</small>
-        <select class="form-select" id="int_tipo">
-            <option value="natural">Desastre Natural</option>
-            <option value="medica">Emergencia médica</option>
-            <option value="otro">Otro</option>
-        </select>
-    </div>
-    <div class="col">
-        <small class="fw-bold text-secondary">Nombre</small>
-        <select class="form-select" id="int_nombre_tipo">
-
-        </select>
-    </div>
-</div>
-    </div>
-</div>
 </body>
 
 <footer class="bg-secondary ps-2 sticky-top">
@@ -154,6 +198,7 @@
 
     function ini() {
         IniCredentialOpen()
+        
     }
 </script>
 

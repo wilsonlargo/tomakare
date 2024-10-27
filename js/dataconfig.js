@@ -393,7 +393,7 @@ GLOBAL.firestore = {
 //Función que escucha el cambio en inicio o cerrar sesión
 onAuthStateChanged(auth, async (user) => {
     try {
-        mensajes("Usuario registrado: " + user.email, "orange") //Muestra que usuarios está conectado
+        mensajes("Registrado", "orange") //Muestra que usuarios está conectado
         activeEmail = user.email;
     } catch (error) {
         mensajes("Fuera de conexión", "red")

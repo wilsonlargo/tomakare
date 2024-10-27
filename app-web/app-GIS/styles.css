@@ -43,3 +43,14 @@ canvas{
     text-align: justify;
     max-height: fit-content;
 }
+
+.btn-format{
+    border-radius: 5px;
+    border-color: 1px solid black;
+    border: solid;
+    padding: 5px;
+    background-color:#d3f0f9;
+}
+.btn-format:hover{
+    background-color:#749bfc;
+}

@@ -91,6 +91,8 @@ function crear_registro() {
         vigencia: fecha.getFullYear(),
         departamento: "Sin determinar",
         municipio: "",
+        lat:0,
+        lng:0,
         vereda: "",
         direccion: "",
         sector: "",
@@ -103,6 +105,12 @@ function crear_registro() {
         fecha_evento: "",
         tipo: "",
         nombre_tipo: "",
+        ///////////////////////////
+        nfamilias: 0,
+        nmujeres: 0,
+        nhombres: 0,
+        nmenores: 0,
+        ntedad: 0,
     }
 
     data_riesgos.registros[idR + fecha.getFullYear()] = newRegistro
@@ -197,6 +205,11 @@ function show_registro(registro) {
     int_municipio.value = registro.municipio
     int_municipio.oninput = () => {
         registro.municipio = int_municipio.value
+        //Coordenadas
+        const clave= (int_departamento.value.toLowerCase()) + (int_municipio.value.toLowerCase())
+        const key_filter=lugares.filter(mun => mun.key == clave)
+        registro.lat=key_filter[0].lat
+        registro.lng=key_filter[0].lng
         guardar_registro()
     }
 
@@ -275,7 +288,46 @@ function show_registro(registro) {
         guardar_registro()
     }
 
+    //Población
+    const int_nfamilias = document.getElementById("int_nfamilias")
+    int_nfamilias.value = ""
+    int_nfamilias.value = registro.nfamilias
+    int_nfamilias.oninput = () => {
+        registro.nfamilias = int_nfamilias.value
+        guardar_registro()
+    }
 
+    const int_nmujeres = document.getElementById("int_nmujeres")
+    int_nmujeres.value = ""
+    int_nmujeres.value = registro.nmujeres
+    int_nmujeres.oninput = () => {
+        registro.nmujeres = int_nmujeres.value
+        guardar_registro()
+    }
+
+    const int_nhombres = document.getElementById("int_nhombres")
+    int_nhombres.value = ""
+    int_nhombres.value = registro.nhombres
+    int_nhombres.oninput = () => {
+        registro.nhombres = int_nhombres.value
+        guardar_registro()
+    }
+
+    const int_nmenores = document.getElementById("int_nmenores")
+    int_nmenores.value = ""
+    int_nmenores.value = registro.nmenores
+    int_nmenores.oninput = () => {
+        registro.nmenores = int_nmenores.value
+        guardar_registro()
+    }
+
+    const int_ntedad = document.getElementById("int_ntedad")
+    int_ntedad.value = ""
+    int_ntedad.value = registro.ntedad
+    int_ntedad.oninput = () => {
+        registro.ntedad = int_ntedad.value
+        guardar_registro()
+    }
 
 
 }
