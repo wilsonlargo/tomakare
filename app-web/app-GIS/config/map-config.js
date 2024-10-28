@@ -2816,7 +2816,7 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
             draggable: true, pane: "labels",
             icon: L.divIcon({
                 html: div,
-                class: "border border-0"
+                class: ""
                 // Specify something to get rid of the default class.
             })
         })
