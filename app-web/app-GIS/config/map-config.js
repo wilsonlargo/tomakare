@@ -854,7 +854,7 @@ function loadlayers() {
         if (item[0] !== "nolayer") {
             var script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = `./Layers/${item[0]}.js`;
+            script.src = `./layers/${item[0]}.js`;
             document.getElementById("layerjsdiv").appendChild(script);
             maker_coltrol_layer(item[1], item[2], item[3])
         } else {
