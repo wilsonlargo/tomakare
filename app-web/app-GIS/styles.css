@@ -35,8 +35,6 @@ canvas{
   pointer-events:none;
 }
 .divscroll{
-
-    width: 200px;
     height: 200px;
     overflow-x: hidden;
     overflow-y: auto;
