@@ -50,7 +50,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasCapas" role="button"
-            aria-controls="offcanvasCapas">
+            aria-controls="offcanvasCapas" onclick="loadlayers()">
             Panel capas
           </a>
         </li>
@@ -98,7 +98,7 @@
         let ActiveTile;
 
         async function IniProgram() {
-            loadlayers()
+            
             try {
                 L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                     // Y un mapa con un límite de zoom.
