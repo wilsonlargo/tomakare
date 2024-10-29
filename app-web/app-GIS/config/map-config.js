@@ -2837,4 +2837,18 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
     }
 
 }
+function mark_icon(){
+    const newLey = L.marker([5.497917646590249,-73.8105448016415,], 
+        {
+        draggable: true, 
+        pane: "labels",
+        color:"red",
+        icon: L.divIcon({
+            html: `<div class="icon-map fa-solid fa-fire text-danger">` ,
+            class: "",
+            iconSize: [0,0]
+        })
+    }).addTo(map)
+
+}
 

@@ -37,6 +37,10 @@
   <script src="./config/data-gis.js"></script>
 
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+
 
 </head>
 <nav class="navbar navbar-expand-lg bg-primary sticky-top">
@@ -51,7 +55,7 @@
         <li class="nav-item dropdown text-white">
           <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Capas
+            <i class="bi bi-stack me-2 fsMy-12"></i>Capas</i>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -61,7 +65,7 @@
             </li>
             <li>
               <a class="dropdown-item" data-bs-toggle="offcanvas" href="#offcanvasMonitor">
-                Monitoreo
+                <i class="fa-solid fa-street-view"></i> Monitoreo 
               </a>
             </li>
           </ul>
@@ -69,11 +73,12 @@
         <li class="nav-item dropdown text-white">
           <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Eventos
+            <i class="bi bi-geo-alt me-2 fsMy-12"></i>Eventos
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#" onclick="open_data()">Ver todos</a></li>
             <li><a class="dropdown-item" href="#" onclick="clear_marcas()">Limpiar marcas</a></li>
+            <li><a class="dropdown-item" href="#" onclick="mark_icon()">Icono</a></li>
           </ul>
         </li>
       </ul>
