@@ -2723,11 +2723,11 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
     }
     function make_leyendas() {
         const div = document.createElement("div")
-        div.className = "bg-white shadow p-2 border border-1 border-white divscroll"
+        div.className = "bg-white shadow divscroll"
         div.style.width=200 + "px"
 
         const bardiv = document.createElement("div")
-        bardiv.className = "row text-white bg-secondary"
+        bardiv.className = "row text-white bg-secondary ps-1"
         div.appendChild(bardiv)
 
         const coltitle = document.createElement("div")
@@ -2777,7 +2777,7 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
         for (const atributoL in formatlayer.atributes) {
             const formato = (formatlayer.atributes[atributoL][0])
             const divF = document.createElement("div")
-            divF.className = "row"
+            divF.className = "row ms-1 mb-1"
 
             const col1 = document.createElement("div")
             col1.className = "col-auto"
@@ -2792,7 +2792,7 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
             divF.appendChild(col1)
 
             const col2 = document.createElement("div")
-            col2.className = "col-auto"
+            col2.className = "col"
 
             const colText = document.createElement("div")
             colText.className = "text-dark"

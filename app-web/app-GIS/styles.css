@@ -40,6 +40,10 @@ canvas{
     overflow-y: auto;
     text-align: justify;
     max-height: fit-content;
+    margin-left: -5pt;
+    margin-top: -5pt;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
 }
 
 .btn-format{
