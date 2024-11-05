@@ -2663,8 +2663,8 @@ function maker_coltrol_layer(layer_name, titulo, ind) {
 
     //Genera una lista automática de colores y campos
     const btnAutomatico = document.createElement("button")
-    btnAutomatico.className = "btn btn-outline-secondary"
-    btnAutomatico.textContent = "auto"
+    btnAutomatico.className = "btn btn-outline-secondary mt-2"
+    btnAutomatico.textContent = "Estilo automático"
     btnAutomatico.type = "button"
     bodyCollaseAtt.appendChild(btnAutomatico)
 
