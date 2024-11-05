@@ -35,10 +35,10 @@
   <script defer src="/js/dataconfig.js" type="module"></script>
   <script src="/js/utils.js"></script>
   <script src="./config/data-gis.js"></script>
+  <script src="./config/local-layers.js"></script>
 
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
 
@@ -65,7 +65,7 @@
             </li>
             <li>
               <a class="dropdown-item" data-bs-toggle="offcanvas" href="#offcanvasMonitor">
-                <i class="fa-solid fa-street-view"></i> Monitoreo 
+                <i class="fa-solid fa-street-view"></i> Monitoreo
               </a>
             </li>
           </ul>
@@ -79,6 +79,19 @@
             <li><a class="dropdown-item" href="#" onclick="open_data()">Ver todos</a></li>
             <li><a class="dropdown-item" href="#" onclick="clear_marcas()">Limpiar marcas</a></li>
             <li><a class="dropdown-item" href="#" onclick="mark_icon()">Icono</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown text-white">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Herramientas
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal_geojson">
+                Editor GeoJson
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -187,8 +200,6 @@
     <div id="body_layers">
 
     </div>
-    <input id="file-input-layers" style="visibility:hidden; width: 50px;" type="file" accept=".geojson"
-      onchange="openfile(event)">
   </div>
 </div>
 <!--////////////////////Panel monitor///////////////////////////////////////////////////////////////-->
@@ -209,10 +220,54 @@
         <i class="bi bi-download"></i>
       </button>
     </div>
-    <div id="panel_control_layers_monitor">
+    <div id="panel_localLayers">
 
     </div>
     <input id="file-input-layers" style="visibility:hidden; width: 50px;" type="file" accept=".geojson"
-      onchange="openfile(event)">
+      onchange="open_local_layer(event,'directo')">
   </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal_geojson" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+  data-bs-keyboard="false">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary">
+        <h1 class="modal-title fs-5  text-white" id="exampleModalLabel">Editor archivos Geojson</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <small class="fw-bold mb-2 mt-2">Abrir archivo</small>
+        <div class="input-group mb-3">
+          <span class="input-group-text boton-change-2">
+            <label for="file-open-geojson">
+              <i class="bi bi-folder2-open"></i>
+            </label>
+          </span>
+          <input id="file_input_layers" type="text" class="form-control" placeholder="archivo">
+        </div>
+        <small class="fw-bold mb-2 mt-2">Atributos en esta capa</small>
+        <div class="border border-1 border-secondary divscroll-y mt-2 mb-2">
+          <div class="row bg-secondary m-1 p-1">
+            <div class="col fw-bold text-white">Nombre atributo</div>
+            <div class="col fw-bold text-white">Editar atributo</div>
+            <div class="col fw-bold text-white">Ver valores</div>
+            <div class="col fw-bold text-white">Eliminar atributo</div>
+          </div>
+          <div id="panel_fields_gjson">
+
+          </div>
+        </div>
+        <small class="fw-bold mb-2 mt-2">Contenido del atributo</small>
+        <textarea class="form-control mb-2" id="int_valores_atributo" rows="2"></textarea>
+        <div>
+          <button type="button" class="btn btn-secondary" id="btn_aplicar_gjson">Procesar</button>
+          <button type="button" class="btn btn-secondary" id="btn_exportar_gjson">Exportar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input id="file-open-geojson" style="visibility:hidden; width: 50px;" type="file" accept=".geojson"
+    onchange="open_local_layer(event,'edit')">
 </div>

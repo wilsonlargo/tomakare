@@ -102,3 +102,87 @@ canvas{
     margin-left: -10pt;
     margin-top: -10pt;
   }
+  .boton-format {
+    color: #99a3a4;
+    cursor: pointer;
+}
+
+.boton-format:hover {
+    color: #424949;
+}
+
+.boton-change {
+    border: #99a3a4 solid 1px;
+    border-radius: 3px;
+    font-size: 20px;
+    width: 50px;
+    height: 34px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.boton-change:hover {
+    background-color: #f2f4f4;
+}
+.boton-change-2 {
+    border: #99a3a4 solid 1px;
+    border-radius: 3px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+.boton-change-2:hover {
+    background-color: #f2f4f4;
+}
+
+.line-layer {
+    border-radius: 3px;
+    border: #99a3a4 solid 1px;
+    padding: 3px;
+    margin: 3px;
+}
+
+.line-layer:hover {
+    background-color: #f2f4f4;
+}
+
+.line-number {
+    background-color: white;
+}
+
+.line-number:hover {
+    background-color: #f2f4f4;
+    font-weight: bold;
+}
+
+.divscroll{
+    height: 200px;
+    overflow-x: auto;
+    overflow-y: auto;
+    text-align: justify;
+    max-height: fit-content;
+    margin-left: -5pt;
+    margin-top: -5pt;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+}
+
+.divscroll-y{
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y:auto;
+    text-align: justify;
+    max-height: fit-content;
+    margin-left: -5pt;
+    margin-top: -5pt;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+}
+
+.list-items-odpi{
+    background-color: white;
+}
+.list-items-odpi:hover{
+    background-color:#f2f4f4;
+    font-weight: bold;
+}
