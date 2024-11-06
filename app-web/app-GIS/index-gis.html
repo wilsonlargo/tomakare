@@ -30,6 +30,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mwasil/Leaflet.Rainviewer/leaflet.rainviewer.css" />
+  <script src="https://cdn.jsdelivr.net/gh/mwasil/Leaflet.Rainviewer/leaflet.rainviewer.js"></script>
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet.path.drag@0.0.6/src/Path.Drag.min.js"></script>
@@ -154,18 +157,18 @@
           polygon: {
             shapeOptions: {
               color: "white",
-              pane:"6",
-              opacity:1,
-              fill:true,
-              fillOpacity : 0.5,
-              draggable:true
+              pane: "6",
+              opacity: 1,
+              fill: true,
+              fillOpacity: 0.5,
+              draggable: true
             }
           },
 
         }
       });
 
-      
+
 
 
 
@@ -178,6 +181,24 @@
         console.log(layer.toGeoJSON())
       })
       //////
+      //////////////////////
+      // Change default options
+      const rain = L.control.rainviewer(
+        {
+          position: 'bottomleft',
+          pane: "3",
+          nextButtonText: '>',
+          playStopButtonText: 'Play/Stop',
+          prevButtonText: '<',
+          positionSliderLabelText: "Hour:",
+          opacitySliderLabelText: "Opacity:",
+          animationInterval: 500,
+          opacity: 0.5,
+        },
+      )
+ 
+      rain.addTo(map)
+      ////////////////////////////
 
       CargarlstMap()
 

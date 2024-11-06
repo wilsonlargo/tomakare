@@ -358,7 +358,7 @@ function put_botones_formato(layer, contenedor) {
     menu4.style.height = "200px"
     col4.appendChild(menu4)
 
-    const list_opacity = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+    const list_opacity = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1,0]
     list_opacity.forEach(ele => {
         const number = document.createElement("div")
         number.textContent = (ele * 100) + "%"
