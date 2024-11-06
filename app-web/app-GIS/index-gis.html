@@ -27,6 +27,11 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/leaflet.path.drag@0.0.6/src/Path.Drag.min.js"></script>
 
   <script src="https://kit.fontawesome.com/3d0f9c201e.js" crossorigin="anonymous"></script>
@@ -136,6 +141,44 @@
         //attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
       }).addTo(map);
       //Carga las listas para búsqueda
+
+      ///////
+      var drawnItems = new L.FeatureGroup();
+      map.addLayer(drawnItems);
+
+      var drawControl = new L.Control.Draw({
+        edit: {
+          featureGroup: drawnItems,
+        },
+        draw: {
+          polygon: {
+            shapeOptions: {
+              color: "white",
+              pane:"6",
+              opacity:1,
+              fill:true,
+              fillOpacity : 0.5,
+              draggable:true
+            }
+          },
+
+        }
+      });
+
+      
+
+
+
+
+      map.addControl(drawControl);
+      map.on("draw:created", function (e) {
+        var tipo = e.layerType
+        var layer = e.layer
+        drawnItems.addLayer(layer)
+        console.log(layer.toGeoJSON())
+      })
+      //////
+
       CargarlstMap()
 
     } catch (error) {
