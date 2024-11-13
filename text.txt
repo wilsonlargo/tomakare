@@ -27,3 +27,25 @@
         </div>
     </div>
 </nav>
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mwasil/Leaflet.Rainviewer/leaflet.rainviewer.css" />
+  <script src="https://cdn.jsdelivr.net/gh/mwasil/Leaflet.Rainviewer/leaflet.rainviewer.js"></script>
+
+      // Change default options
+      const rain = L.control.rainviewer(
+        {
+          position: 'bottomleft',
+          pane: "3",
+          nextButtonText: '>',
+          playStopButtonText: 'Play/Stop',
+          prevButtonText: '<',
+          positionSliderLabelText: "Hour:",
+          opacitySliderLabelText: "Opacity:",
+          animationInterval: 500,
+          opacity: 0.5,
+        },
+      )
+ 
+      rain.addTo(map)
+      ////////////////////////////

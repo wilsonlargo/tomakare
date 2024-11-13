@@ -24,8 +24,11 @@
 
 
   <!-- leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
@@ -119,8 +122,9 @@
   </div>
 </body>
 <script>
+  let drawLayers = []
   const TileLayerA = {
-    openstreetmap: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    openstreetmap: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     opentopomap: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     stadiamaps: "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png",
   }
@@ -154,14 +158,47 @@
           featureGroup: drawnItems,
         },
         draw: {
+
           polygon: {
             shapeOptions: {
-              color: "white",
+              color: "green",
               pane: "6",
               opacity: 1,
               fill: true,
               fillOpacity: 0.5,
-              draggable: true
+              draggable: true,
+              id: 0
+            }
+          },
+          polyline: {
+            shapeOptions: {
+              color: "red",
+              pane: "6",
+              opacity: 1,
+              draggable: true,
+              id: 0
+            }
+          },
+          circle: {
+            shapeOptions: {
+              color: "purple",
+              pane: "6",
+              opacity: 1,
+              fill: true,
+              fillOpacity: 0.5,
+              draggable: true,
+              id: 0
+            }
+          },
+          rectangle: {
+            shapeOptions: {
+              color: "blue",
+              pane: "6",
+              opacity: 1,
+              fill: true,
+              fillOpacity: 0.5,
+              draggable: true,
+              id: 0
             }
           },
 
@@ -169,17 +206,50 @@
       });
 
 
-
-
-
-
       map.addControl(drawControl);
       map.on("draw:created", function (e) {
         var tipo = e.layerType
         var layer = e.layer
+        const idR = randomStr(10, '123456789abcdefghijklmnzx');
+        layer.options.id = idR
+
+        drawLayers[idR] = [layer]
         drawnItems.addLayer(layer)
-        console.log(layer.toGeoJSON())
+
+        //console.log(drawLayers[idR][0].toGeoJSON())
       })
+
+      map.on("draw:edited", function (e) {
+        var tipo = e.layerType
+        var layers = e.layers
+
+        layers.eachLayer(function (ly) {
+          //console.log(ly.options)
+          saveJson(JSON.stringify(ly.toGeoJSON()),'txt')
+        });
+
+      })
+      async function saveJson(data,type) {
+        const blob = new Blob([data], { type: type });
+
+        const newHandle = await window.showSaveFilePicker({
+          types: [{
+            description: 'Text Files',
+            accept: {
+              'text/plain': ['.geojson'],
+            },
+          }],
+          id: "save-json-file-picker",
+          excludeAcceptAllOption: true,
+        });
+
+        const writableStream = await newHandle.createWritable();
+        await writableStream.write(blob);
+        await writableStream.close();
+      }
+
+
+
       //////
       //////////////////////
       // Change default options
@@ -196,7 +266,7 @@
           opacity: 0.5,
         },
       )
- 
+
       rain.addTo(map)
       ////////////////////////////
 
